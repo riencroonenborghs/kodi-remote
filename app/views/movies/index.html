@@ -1,0 +1,19 @@
+<loading-screen loading="loading"></loading-screen>
+
+<md-list ng-if="!loading">
+  <md-list-item ng-repeat="movie in movies" class="md-2-line">
+    <art-poster art="movie.art" class="movie-avatar md-avatar"></art-poster>
+    <div class="md-list-item-text">
+      <h3>
+        {{movie.label}} ({{movie.year}})
+        <show-rating rating="movie.rating"></stars>              
+      </h3>
+      <h4>{{movie.tagline}}</h4>
+      <small>
+        {{movie.plot}}
+        <br />
+        Runtime: {{movie.runtime | secondsToDateTime | date:'HH:mm:ss'}}
+      </small>
+    </div>
+  </md-list-item>
+</md-list>

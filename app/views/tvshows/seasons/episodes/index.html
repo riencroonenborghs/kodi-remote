@@ -1,0 +1,21 @@
+<loading-screen loading="loading"></loading-screen>
+
+<md-content ng-if="!loading">
+  <md-subheader class="md-primary">{{tvShowDetails.label}}</md-subheader>
+  <md-list>
+    <md-list-item ng-repeat="episode in episodes" class="md-3-line pointer">
+      <tvshow-thumbnail thumbnail="episode.thumbnail" class="episode-avatar md-avatar"></tvshow-thumbnail>
+      <div class="md-list-item-text">
+        <h3>
+          {{episode.title}}
+          <show-rating rating="episode.rating"></stars>              
+        </h3>
+        <small>
+          {{episode.plot}}
+          <br />
+          Runtime: {{episode.runtime | secondsToDateTime | date:'HH:mm:ss'}}
+        </small>
+      </div>
+    </md-list-item>
+  </md-list>
+</show-rating>

@@ -1,0 +1,13 @@
+body { min-width: 500px; min-height: 375px; }
+.pointer, a:hover { cursor: pointer; }
+
+.content { padding: 20px; }   
+.error { color: red; }
+
+
+circle-avatar { background: #2196F3; color: white; }
+circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
+.episode-avatar { min-width: 40px; min-height: 40px; }
+
+.fixed-content { position: fixed; width: 100%; z-index: 1; }
+.absolute-content { position: absolute; top: 64px; }

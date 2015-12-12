@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Kodi Remote</title>
+
+    <base href="/">
+
+    <script src="app/assets/javascripts/jquery/jquery-1.11.3.min.js"></script>
+    <script src="app/assets/javascripts/angular/angular.min.js"></script>
+    <script src="app/assets/javascripts/angular/angular-route.min.js"></script>
+    <script src="app/assets/javascripts/angular/angular-animate.min.js"></script>
+    <script src="app/assets/javascripts/angular/angular-aria.min.js"></script>
+    <script src="app/assets/javascripts/angular/angular-material.min.js"></script>
+    <script src="app/assets/javascripts/angular/angular-material-icons.min.js"></script>
+    <script src="app/assets/javascripts/angular/ng-infinite-scroll.min.js"></script>
+
+    <script src="app/assets/javascripts/build/app.js"></script>
+    <script src="app/assets/javascripts/build/controllers.js"></script>
+    <script src="app/assets/javascripts/build/services.js"></script>
+    <script src="app/assets/javascripts/build/directives.js"></script>
+    <script src="app/assets/javascripts/build/tvshows/controllers.js"></script>
+    <script src="app/assets/javascripts/build/movies/controllers.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="app/assets/stylesheets/angular-material.css">
+    <link rel="stylesheet" type="text/css" href="app/assets/stylesheets/app.css">
+  </head>
+  <body ng-app="kodiRemote" ng-controller="AppController">
+
+    <!-- main panel -->
+    <md-content class="fixed-content">
+      <md-toolbar>
+        <div class="md-toolbar-tools">
+          <!-- title -->
+          <img src="app/assets/images/app.png" style="height: 32px; padding-right: 5px;" />
+          <span ng-if="Topbar.title">{{Topbar.title}}</span>
+          <span ng-if="Topbar.link">
+            <ng-md-icon icon="arrow_back" style="fill: white;" size="20" ng-click="visit(Topbar.link.url)" class="pointer"></ng-md-icon>
+            <a ng-href="Topbar.link.url">{{Topbar.link.label}}</a>
+          </span>
+          <span flex="true"></span>
+          <md-button class="md-icon-button" ng-click="visit('/tvshows')" aria-label="TV Shows">
+            <ng-md-icon icon="tv" style="fill: white;"></ng-md-icon>
+          </md-button>
+          <md-button class="md-icon-button" ng-click="visit('/movies')" aria-label="Movies">
+            <ng-md-icon icon="movie" style="fill: white;"></ng-md-icon>
+          </md-button>
+        </div>
+      </md-toolbar>
+    </md-content>  
+    
+
+    <!-- content panel -->
+    <md-content class="content absolute-content">
+
+      <div ng-view></div>
+
+    </md-content>
+
+  </body>
+</html>

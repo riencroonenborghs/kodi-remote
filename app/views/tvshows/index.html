@@ -1,0 +1,23 @@
+<md-input-container>
+  <label>Search TV Shows</label>
+  <input type="text" ng-model="search.query" ng-debounce="500" ng-change="searchTVShows()" placeholder="Start typing..." />
+</md-input-container>
+
+<div auto-scroll>
+  <md-list>
+    <md-list-item ng-repeat="tvShow in tvShows" 
+                  ng-click="visitSeasons(tvShow.tvshowid)" 
+                  class="md-2-line pointer">
+      <art-poster art="tvShow.art" class="tvshow-avatar md-avatar"></art-poster>
+      <div class="md-list-item-text">
+        <h3>
+          {{tvShow.label}} ({{tvShow.year}})
+          <show-rating rating="tvShow.rating"></stars>              
+        </h3>
+        <small>
+          {{tvShow.plot}}
+        </small>
+      </div>
+    </md-list-item>
+  </md-list>
+</div>  

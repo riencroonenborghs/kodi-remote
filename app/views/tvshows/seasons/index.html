@@ -1,0 +1,12 @@
+<loading-screen loading="loading"></loading-screen>
+
+<md-list ng-if="!loading">
+  <md-list-item ng-repeat="season in seasons" ng-click="visitEpisodes(tvShowId, season.seasonid)" class="md-1-line pointer">
+    <circle-avatar class="md-avatar" label="season.label"></circle-avatar>
+    <div class="md-list-item-text">
+      <h3>
+        {{season.label}}
+      </h3>
+    </div>
+  </md-list-item>
+</md-list>
