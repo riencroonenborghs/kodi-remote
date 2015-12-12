@@ -1,48 +1,21 @@
 app = angular.module "kodiRemote.tvshows.controllers", []
 
-app.controller "TvShowsController", [ "$scope", "Topbar", "Remote", ($scope, Topbar, Remote) ->
+app.controller "TvShowsController", [ "$scope", "$controller", "Topbar", "TvShows", ($scope, $controller, Topbar, TvShows) ->
   Topbar.reset()
   Topbar.addTitle "TV Shows"
 
-  $scope.search = {query: ""}
-  $scope.tvShows = []
-  $scope.morePages = true
-  page = 1
-  total = 0
+  $scope.listService = TvShows
+  $scope.pushItemsOntoList = (data) ->
+    for tvShow in data.tvshows
+      $scope.list.push tvShow
+    Topbar.addTitle "TV Shows (#{data.limits.total})"
+  $controller "PaginatedController", {$scope: $scope}
 
-  $scope.visitSeasons = (tvShowId) ->
-    $scope.visit("/tvshows/#{tvShowId}/seasons")
-  
-  $scope.nextPage = ->     
-    page += 1    
-    loadPage()
+  $scope.setItemsOnList = (data) -> $scope.list = data.tvshows
+  $scope.emptyList = -> $scope.list = []
+  $controller "SearchController", {$scope: $scope}
 
-  loadPage = ->    
-    $scope.loading = true    
-    Remote.videoLibrary.tvShows.index(page).then (data) -> 
-      $scope.loading = false            
-      for tvShow in data.tvshows
-        $scope.tvShows.push tvShow   
-      total = data.limits.total   
-      $scope.morePages = (page * 10) < total
-      Topbar.addTitle "TV Shows (#{data.limits.total})"
-      return
-
-  loadPage()
-
-  $scope.searchTVShows = ->    
-    if $scope.search.query.length > 2
-      $scope.loading = true
-      Remote.videoLibrary.tvShows.search($scope.search.query).then (data) ->
-        $scope.morePages = false
-        $scope.loading = false
-        $scope.tvShows = data.tvshows
-        return
-    else
-      page = 1
-      $scope.morePages = true
-      $scope.tvShows = []
-      loadPage()
+  $scope.visitSeasons = (tvShowId) -> $scope.visit("/tvshows/#{tvShowId}/seasons")
 ]
 
 app.controller "TvShowSeasonsController", [ "$scope", "$routeParams", "Topbar", "Remote", 
@@ -85,9 +58,8 @@ app.controller "TvShowSeasonEpisodesController", [ "$scope", "$routeParams", "To
         Topbar.reset()
         Topbar.addLink "/tvshows/#{$scope.tvShowId}/seasons", season.label
   
-  $scope.$watch "seasonNumber", (current, old) ->    
-    console.debug current
-    if current
+  $scope.$watch "seasonNumber", ->
+    if $scope.seasonNumber
       Remote.videoLibrary.tvShows.seasons.episodes.index($scope.tvShowId, $scope.seasonNumber).then (data) -> 
         $scope.loading = false
         $scope.episodes = data.episodes

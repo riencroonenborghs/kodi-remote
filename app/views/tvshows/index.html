@@ -1,11 +1,11 @@
 <md-input-container>
   <label>Search TV Shows</label>
-  <input type="text" ng-model="search.query" ng-debounce="500" ng-change="searchTVShows()" placeholder="Start typing..." />
+  <input type="text" ng-model="search.query" ng-model-options="{debounce: 500}" ng-change="performSearch()" placeholder="Start typing..." />
 </md-input-container>
 
 <div auto-scroll>
   <md-list>
-    <md-list-item ng-repeat="tvShow in tvShows" 
+    <md-list-item ng-repeat="tvShow in list" 
                   ng-click="visitSeasons(tvShow.tvshowid)" 
                   class="md-2-line pointer">
       <art-poster art="tvShow.art" class="tvshow-avatar md-avatar"></art-poster>

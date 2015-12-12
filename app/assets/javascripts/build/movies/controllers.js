@@ -5,15 +5,30 @@
   app = angular.module("kodiRemote.movies.controllers", []);
 
   app.controller("MoviesController", [
-    "$scope", "Topbar", "Remote", function($scope, Topbar, Remote) {
+    "$scope", "$controller", "Topbar", "Movies", function($scope, $controller, Topbar, Movies) {
       Topbar.reset();
       Topbar.addTitle("Movies");
-      $scope.loading = true;
-      $scope.movies = [];
-      return Remote.videoLibrary.movies.get().then(function(data) {
-        $scope.loading = false;
-        $scope.movies = data.movies;
-        Topbar.addTitle("Movies (" + data.limits.total + ")");
+      $scope.listService = Movies;
+      $scope.pushItemsOntoList = function(data) {
+        var i, len, movie, ref;
+        ref = data.movies;
+        for (i = 0, len = ref.length; i < len; i++) {
+          movie = ref[i];
+          $scope.list.push(movie);
+        }
+        return Topbar.addTitle("Movies (" + data.limits.total + ")");
+      };
+      $controller("PaginatedController", {
+        $scope: $scope
+      });
+      $scope.setItemsOnList = function(data) {
+        return $scope.list = data.movies;
+      };
+      $scope.emptyList = function() {
+        return $scope.list = [];
+      };
+      return $controller("SearchController", {
+        $scope: $scope
       });
     }
   ]);

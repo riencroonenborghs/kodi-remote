@@ -9,7 +9,9 @@ app = angular.module "kodiRemote", [
   "kodiRemote.services",
   "kodiRemote.directives",
   "kodiRemote.tvshows.controllers",
-  "kodiRemote.movies.controllers"
+  "kodiRemote.tvshows.services",
+  "kodiRemote.movies.controllers",
+  "kodiRemote.movies.services"
 ]
 
 app.config ($mdThemingProvider) ->

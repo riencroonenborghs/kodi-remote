@@ -5,54 +5,33 @@
   app = angular.module("kodiRemote.tvshows.controllers", []);
 
   app.controller("TvShowsController", [
-    "$scope", "Topbar", "Remote", function($scope, Topbar, Remote) {
-      var loadPage, page, total;
+    "$scope", "$controller", "Topbar", "TvShows", function($scope, $controller, Topbar, TvShows) {
       Topbar.reset();
       Topbar.addTitle("TV Shows");
-      $scope.search = {
-        query: ""
-      };
-      $scope.tvShows = [];
-      $scope.morePages = true;
-      page = 1;
-      total = 0;
-      $scope.visitSeasons = function(tvShowId) {
-        return $scope.visit("/tvshows/" + tvShowId + "/seasons");
-      };
-      $scope.nextPage = function() {
-        page += 1;
-        return loadPage();
-      };
-      loadPage = function() {
-        $scope.loading = true;
-        return Remote.videoLibrary.tvShows.index(page).then(function(data) {
-          var i, len, ref, tvShow;
-          $scope.loading = false;
-          ref = data.tvshows;
-          for (i = 0, len = ref.length; i < len; i++) {
-            tvShow = ref[i];
-            $scope.tvShows.push(tvShow);
-          }
-          total = data.limits.total;
-          $scope.morePages = (page * 10) < total;
-          Topbar.addTitle("TV Shows (" + data.limits.total + ")");
-        });
-      };
-      loadPage();
-      return $scope.searchTVShows = function() {
-        if ($scope.search.query.length > 2) {
-          $scope.loading = true;
-          return Remote.videoLibrary.tvShows.search($scope.search.query).then(function(data) {
-            $scope.morePages = false;
-            $scope.loading = false;
-            $scope.tvShows = data.tvshows;
-          });
-        } else {
-          page = 1;
-          $scope.morePages = true;
-          $scope.tvShows = [];
-          return loadPage();
+      $scope.listService = TvShows;
+      $scope.pushItemsOntoList = function(data) {
+        var i, len, ref, tvShow;
+        ref = data.tvshows;
+        for (i = 0, len = ref.length; i < len; i++) {
+          tvShow = ref[i];
+          $scope.list.push(tvShow);
         }
+        return Topbar.addTitle("TV Shows (" + data.limits.total + ")");
+      };
+      $controller("PaginatedController", {
+        $scope: $scope
+      });
+      $scope.setItemsOnList = function(data) {
+        return $scope.list = data.tvshows;
+      };
+      $scope.emptyList = function() {
+        return $scope.list = [];
+      };
+      $controller("SearchController", {
+        $scope: $scope
+      });
+      return $scope.visitSeasons = function(tvShowId) {
+        return $scope.visit("/tvshows/" + tvShowId + "/seasons");
       };
     }
   ]);
@@ -104,9 +83,8 @@
         }
         return results;
       });
-      return $scope.$watch("seasonNumber", function(current, old) {
-        console.debug(current);
-        if (current) {
+      return $scope.$watch("seasonNumber", function() {
+        if ($scope.seasonNumber) {
           return Remote.videoLibrary.tvShows.seasons.episodes.index($scope.tvShowId, $scope.seasonNumber).then(function(data) {
             $scope.loading = false;
             $scope.episodes = data.episodes;

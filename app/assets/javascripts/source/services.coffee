@@ -40,51 +40,54 @@ app.service "Remote", [ "SERVER", "PORT", "$q", "$http", (SERVER, PORT, $q, $htt
   perPage = 10
 
   service =
-    videoLibrary:
-      tvShows:
-        index: (page = 1) -> 
-          params =
-            properties: ["plot", "year", "rating", "genre", "art"]
-            sort:
-              order: "ascending"
-              method: "label"
-            limits:
-              start: (page - 1) * perPage
-              end: page * perPage
-          return methodRequest "VideoLibrary.GetTVShows", params
-        show:  (tvShowId) ->
-          return methodRequest "VideoLibrary.GetTVShowDetails", {tvshowid: tvShowId}
-        search: (query) ->
-          params =
-            properties: ["plot", "year", "rating", "genre", "art"]
-            filter:
-              field: "title"
-              operator: "contains"
-              value: query
-          return methodRequest "VideoLibrary.GetTVShows", params
-        seasons: 
-          index: (tvShowId) ->
-            params =
-              tvshowid: tvShowId
-            return methodRequest "VideoLibrary.GetSeasons", params
-          episodes:
-            index: (tvShowId, seasonId) ->
-              params =
-                tvshowid: tvShowId
-                season: seasonId
-                properties: ["title", "plot", "rating", "runtime", "art", "thumbnail"]
-              return methodRequest "VideoLibrary.GetEpisodes", params
-      movies:
-        get: ->
-          params =
-            properties: ["plot", "year", "rating", "genre", "art", "tagline", "runtime"]
-            sort:
-              order: "ascending"
-              method: "label"
-            limits:
-              start: 0
-              end: 10
-          return methodRequest "VideoLibrary.GetMovies", params
+    methodRequest: methodRequest
+
+  # service =
+  #   videoLibrary:
+  #     tvShows:
+  #       index: (page = 1) -> 
+  #         params =
+  #           properties: ["plot", "year", "rating", "genre", "art"]
+  #           sort:
+  #             order: "ascending"
+  #             method: "label"
+  #           limits:
+  #             start: (page - 1) * perPage
+  #             end: page * perPage
+  #         return methodRequest "VideoLibrary.GetTVShows", params
+  #       show:  (tvShowId) ->
+  #         return methodRequest "VideoLibrary.GetTVShowDetails", {tvshowid: tvShowId}
+  #       search: (query) ->
+  #         params =
+  #           properties: ["plot", "year", "rating", "genre", "art"]
+  #           filter:
+  #             field: "title"
+  #             operator: "contains"
+  #             value: query
+  #         return methodRequest "VideoLibrary.GetTVShows", params
+  #       seasons: 
+  #         index: (tvShowId) ->
+  #           params =
+  #             tvshowid: tvShowId
+  #           return methodRequest "VideoLibrary.GetSeasons", params
+  #         episodes:
+  #           index: (tvShowId, seasonId) ->
+  #             params =
+  #               tvshowid: tvShowId
+  #               season: seasonId
+  #               properties: ["title", "plot", "rating", "runtime", "art", "thumbnail"]
+  #             return methodRequest "VideoLibrary.GetEpisodes", params
+  #     movies:
+  #       get: ->
+  #         params =
+  #           properties: ["plot", "year", "rating", "genre", "art", "tagline", "runtime"]
+  #           sort:
+  #             order: "ascending"
+  #             method: "label"
+  #           limits:
+  #             start: 0
+  #             end: 10
+  #         return methodRequest "VideoLibrary.GetMovies", params
 
 
      
