@@ -105,6 +105,9 @@ app.directive "autoScroll", [ "$compile", ($compile) ->
 
     $(document).off "scroll", scrollHandler
     $(document).on "scroll", scrollHandler
+    scope.$watch "morePages", ->
+      button.show() if scope.morePages 
+      button.hide() unless scope.morePages 
 
   controller: ["$scope", ($scope) ->
     

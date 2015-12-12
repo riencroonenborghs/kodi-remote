@@ -30,16 +30,17 @@ app.controller "TvShowsController", [ "$scope", "Topbar", "Remote", ($scope, Top
 
   loadPage()
 
-  $scope.searchTVShows = ->
+  $scope.searchTVShows = ->    
     if $scope.search.query.length > 2
       $scope.loading = true
       Remote.videoLibrary.tvShows.search($scope.search.query).then (data) ->
+        $scope.morePages = false
         $scope.loading = false
         $scope.tvShows = data.tvshows
         return
     else
       page = 1
-      morePages = true
+      $scope.morePages = true
       $scope.tvShows = []
       loadPage()
 ]

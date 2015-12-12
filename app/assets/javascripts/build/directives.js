@@ -173,7 +173,15 @@
             }
           };
           $(document).off("scroll", scrollHandler);
-          return $(document).on("scroll", scrollHandler);
+          $(document).on("scroll", scrollHandler);
+          return scope.$watch("morePages", function() {
+            if (scope.morePages) {
+              button.show();
+            }
+            if (!scope.morePages) {
+              return button.hide();
+            }
+          });
         },
         controller: ["$scope", function($scope) {}]
       };

@@ -40,16 +40,16 @@
       };
       loadPage();
       return $scope.searchTVShows = function() {
-        var morePages;
         if ($scope.search.query.length > 2) {
           $scope.loading = true;
           return Remote.videoLibrary.tvShows.search($scope.search.query).then(function(data) {
+            $scope.morePages = false;
             $scope.loading = false;
             $scope.tvShows = data.tvshows;
           });
         } else {
           page = 1;
-          morePages = true;
+          $scope.morePages = true;
           $scope.tvShows = [];
           return loadPage();
         }
