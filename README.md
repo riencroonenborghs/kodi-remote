@@ -18,3 +18,13 @@ The extension comes pre-built, but you can easily build it yourself (eg after up
 - click `Load unpacked extension...` (top left)
 - point it to the extension (the folder with the manifest.json file)
 - click `Select`
+
+# Screenshots
+
+![Screenshot 1](https://raw.githubusercontent.com/riencroonenborghs/kodi-remote/master/screenshots/01.png)
+
+![Screenshot 2](https://raw.githubusercontent.com/riencroonenborghs/kodi-remote/master/screenshots/02.png)
+
+![Screenshot 3](https://raw.githubusercontent.com/riencroonenborghs/kodi-remote/master/screenshots/03.png)
+
+![Screenshot 4](https://raw.githubusercontent.com/riencroonenborghs/kodi-remote/master/screenshots/04.png)
