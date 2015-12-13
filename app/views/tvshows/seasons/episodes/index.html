@@ -18,9 +18,8 @@
           Runtime: {{episode.runtime | secondsToDateTime | date:'HH:mm:ss'}}
         </small>      
         <div>
-          <md-button class="md-icdon-button play-button" ng-click="play(episode)">
+          <md-button class="md-icon-button play-button" ng-click="play(episode)" aria-label="Play episode">
             <ng-md-icon icon="play_arrow"></ng-md-icon> 
-            Play
           </md-button>
         </div>
       </div>

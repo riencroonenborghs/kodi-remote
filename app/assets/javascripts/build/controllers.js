@@ -5,11 +5,37 @@
   app = angular.module("kodiRemote.controllers", []);
 
   app.controller("AppController", [
-    "$scope", "Topbar", "$location", function($scope, Topbar, $location) {
+    "$scope", "$interval", "Topbar", "$location", "Remote", function($scope, $interval, Topbar, $location, Remote) {
+      var whatsPlaying;
       Topbar.setTitle("Kodi Remote");
       $scope.Topbar = Topbar;
-      return $scope.visit = function(path) {
+      $scope.visit = function(path) {
         return $location.path(path);
+      };
+      $scope.playing = null;
+      $scope.playerId = null;
+      $scope.playPauseState = false;
+      whatsPlaying = function() {
+        return Remote.Player.activePlayers().then(function(data) {
+          if (data.length > 0) {
+            $scope.playerId = data[0].playerid;
+            return Remote.Player.playing($scope.playerId).then(function(data) {
+              return $scope.playing = data.item;
+            });
+          } else {
+            return $scope.playing = null;
+          }
+        });
+      };
+      whatsPlaying();
+      $interval(whatsPlaying, 5000);
+      $scope.stop = function() {
+        return Remote.Player.stop();
+      };
+      return $scope.playPause = function() {
+        return Remote.Player.playPause($scope.playerId).then(function(data) {
+          return $scope.playPauseState = !$scope.playPauseState;
+        });
       };
     }
   ]);

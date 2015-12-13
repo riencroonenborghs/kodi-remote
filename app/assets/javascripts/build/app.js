@@ -41,6 +41,17 @@
     }
   ]);
 
+  app.filter("zeroPrepend", [
+    function() {
+      return function(input, length) {
+        var inputString, zeroes;
+        inputString = new String(input);
+        zeroes = "0".repeat(length - inputString.length);
+        return "" + zeroes + input;
+      };
+    }
+  ]);
+
   kodiRemote = window.kodiRemote || (window.kodiRemote = {});
 
   kodiRemote.Loader = (function() {

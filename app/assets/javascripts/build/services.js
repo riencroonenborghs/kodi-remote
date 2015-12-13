@@ -79,6 +79,14 @@
           activePlayers: function() {
             return KodiRequest.methodRequest("Player.GetActivePlayers", {});
           },
+          playing: function(playerId) {
+            var params;
+            params = {
+              playerid: playerId,
+              properties: ["title", "showtitle", "year", "runtime", "season", "episode"]
+            };
+            return KodiRequest.methodRequest("Player.GetItem", params);
+          },
           open: function(playlistId, position) {
             var params;
             params = [
@@ -93,6 +101,9 @@
           },
           stop: function() {
             return KodiRequest.methodRequest("Player.Stop", [1]);
+          },
+          playPause: function(playerId) {
+            return KodiRequest.methodRequest("Player.PlayPause", [playerId]);
           }
         },
         Playlist: {

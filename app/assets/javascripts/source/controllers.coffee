@@ -1,10 +1,31 @@
 app = angular.module "kodiRemote.controllers", []
 
-app.controller "AppController", [ "$scope", "Topbar", "$location", ($scope, Topbar, $location) ->
+app.controller "AppController", [ "$scope", "$interval", "Topbar", "$location", "Remote", 
+($scope, $interval, Topbar, $location, Remote) ->
   Topbar.setTitle "Kodi Remote"
   $scope.Topbar = Topbar
 
   $scope.visit = (path) -> $location.path path
+
+  $scope.playing = null
+  $scope.playerId = null
+  $scope.playPauseState = false
+
+  whatsPlaying = ->    
+    Remote.Player.activePlayers().then (data) ->      
+      if data.length > 0
+        $scope.playerId = data[0].playerid
+        Remote.Player.playing($scope.playerId).then (data) ->
+          $scope.playing = data.item
+      else
+        $scope.playing = null
+  whatsPlaying()
+  $interval whatsPlaying, 5000
+
+  $scope.stop = -> Remote.Player.stop()
+  $scope.playPause = -> 
+    Remote.Player.playPause($scope.playerId).then (data) ->
+      $scope.playPauseState = !$scope.playPauseState
 ]
 
 app.controller "PaginatedController", [ "$scope", ($scope) ->

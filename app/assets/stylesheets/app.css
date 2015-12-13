@@ -10,6 +10,13 @@ circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
 .episode-avatar { min-width: 40px; min-height: 40px; }
 
 .fixed-content { position: fixed; width: 100%; z-index: 1; }
-.absolute-content { position: absolute; top: 64px; }
+.absolute-content { position: absolute; top: 120px; }
 
-.play-button svg { position: relative; top: 6px; }
+.play-button svg,
+.stop-button svg,
+.rew-button svg,
+.pause-button svg,
+.ffw-button svg { position: relative; top: 6px; }
+
+#playing .text h2 { font-size: 13pt; }
+#playing .text h3 { font-size: 10pt; }

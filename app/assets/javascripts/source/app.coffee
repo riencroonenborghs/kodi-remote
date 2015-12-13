@@ -49,6 +49,13 @@ app.filter "secondsToDateTime", [ ->
  (seconds) -> return new Date(1970, 0, 1).setSeconds(seconds);
 ]
 
+app.filter "zeroPrepend", [->
+  (input, length) ->
+    inputString = new String(input)
+    zeroes = "0".repeat (length - inputString.length)
+    "#{zeroes}#{input}"
+]
+
 kodiRemote = window.kodiRemote ||= {}
 kodiRemote.Loader = class
   constructor: (@scope, @service) -> return

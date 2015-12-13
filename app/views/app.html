@@ -31,25 +31,59 @@
 
     <!-- main panel -->
     <md-content class="fixed-content">
-      <md-toolbar>
-        <div class="md-toolbar-tools">
-          <!-- title -->
-          <img flex="10" src="app/assets/images/app.png" style="height: 32px; padding-right: 5px;" />
-          <span flex="65">
-            <span ng-if="Topbar.item.type == 'title'">{{Topbar.item.title}}</span>
-            <span ng-if="Topbar.item.type == 'link'">
-              <ng-md-icon icon="arrow_back" style="fill: white;" size="20" ng-click="visit(Topbar.item.url)" class="pointer"></ng-md-icon>
-              <a ng-href="Topbar.item.url">{{Topbar.item.label}}</a>
+      <md-toolbar class="md-tall" flex="column">
+        <div layout="column">
+          <div class="md-toolbar-tools">
+            <img flex="10" src="app/assets/images/app.png" style="height: 32px; padding-right: 5px;" />
+            <span flex="65">
+              <span ng-if="Topbar.item.type == 'title'">{{Topbar.item.title}}</span>
+              <span ng-if="Topbar.item.type == 'link'">
+                <ng-md-icon icon="arrow_back" style="fill: white;" size="20" ng-click="visit(Topbar.item.url)" class="pointer"></ng-md-icon>
+                <a ng-href="Topbar.item.url">{{Topbar.item.label}}</a>
+              </span>
             </span>
-          </span>
-          <span flex="true"></span>
-          <div flex="20" layout="row">
-            <md-button class="md-icon-button" ng-click="visit('/tvshows')" aria-label="TV Shows">
-              <ng-md-icon icon="tv" style="fill: white;"></ng-md-icon>
-            </md-button>
-            <md-button class="md-icon-button" ng-click="visit('/movies')" aria-label="Movies">
-              <ng-md-icon icon="movie" style="fill: white;"></ng-md-icon>
-            </md-button>
+            <span flex="true"></span>
+            <div flex="20" layout="row">
+              <md-button class="md-icon-button" ng-click="visit('/tvshows')" aria-label="TV Shows">
+                <ng-md-icon icon="tv" style="fill: white;"></ng-md-icon>
+              </md-button>
+              <md-button class="md-icon-button" ng-click="visit('/movies')" aria-label="Movies">
+                <ng-md-icon icon="movie" style="fill: white;"></ng-md-icon>
+              </md-button>
+            </div>
+          </div>
+
+          <div ng-if="playing != null" id="playing" layout="row">
+            <div class="md-toolbar-tools">
+              <md-button class="md-icon-button rew-button" aria-label="Rewind">
+                <ng-md-icon icon="fast_rewind" size="32" style="fill: white;"></ng-md-icon>
+              </md-button>
+                <md-button class="md-icon-button pause-button" ng-click="playPause()" ng-if="!playPauseState" aria-label="Pause">
+                  <ng-md-icon icon="pause" size="32" style="fill: white;"></ng-md-icon>
+                </md-button>
+                <md-button class="md-icon-button play-button" ng-click="playPause()" ng-if="playPauseState" aria-label="Play">
+                  <ng-md-icon icon="play_arrow" size="32" style="fill: white;"></ng-md-icon>
+                </md-button>
+              <md-button class="md-icon-button stop-button" ng-click="stop()" aria-label="Stop">
+                <ng-md-icon icon="stop" size="32" style="fill: white;"></ng-md-icon>
+              </md-button>
+              <md-button class="md-icon-button ffw-button" aria-label="Fast Forward">
+                <ng-md-icon icon="fast_forward" size="32" style="fill: white;"></ng-md-icon>
+              </md-button>
+
+              <span class="text">
+                <div ng-if="playing.type == 'episode'">
+                  <h2>{{playing.showtitle}}</h2>
+                  <h3>S{{playing.season | zeroPrepend : 2}}E{{playing.episode | zeroPrepend : 2}}: {{playing.title}}</h3>
+                </div>
+                <div ng-if="playing.type == 'movie'">
+                  <h2>
+                    {{playing.title}}
+                    <span ng-if="playing.year">({{playing.year}})</span>
+                  </h2>
+                </div>
+              </span>
+            </div>
           </div>
         </div>
       </md-toolbar>
@@ -57,7 +91,7 @@
     
 
     <!-- content panel -->
-    <md-content class="content absolute-content">
+    <md-content class="content absolute-content" ng-class="{'is-playing': playing != null}">
 
       <div ng-view></div>
 
