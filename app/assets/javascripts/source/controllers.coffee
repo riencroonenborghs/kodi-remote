@@ -22,6 +22,15 @@ app.controller "AppController", [ "$scope", "$interval", "Topbar", "$location", 
   whatsPlaying()
   $interval whatsPlaying, 1000
 
+  $scope.percentage = 0
+  $scope.timeElapsed = 0
+  getPercentage = ->
+    if $scope.playing
+      Remote.Player.properties($scope.playerId).then (data) ->
+        $scope.percentage = data.percentage
+        $scope.timeElapsed = data.time
+  $interval getPercentage, 1000
+
   $scope.stop = -> Remote.Player.stop()
   $scope.playPause = -> 
     Remote.Player.playPause($scope.playerId).then (data) ->

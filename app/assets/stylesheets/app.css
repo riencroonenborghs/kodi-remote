@@ -27,3 +27,6 @@ circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
 
 #playing #info-details h2 { font-size: 13pt; margin: 0; }
 #playing #info-details h3 { font-size: 10pt; margin: 0; }
+#playing #progress #time { font-size: 8pt; position: relative; top: -26px; }
+#playing #progress #time span { padding-left: 8px; padding-right: 8px; }
+#playing #progress md-progress-linear { position: relative; top: -31px; }

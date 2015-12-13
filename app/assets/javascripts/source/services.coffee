@@ -20,6 +20,7 @@ app.service "KodiRequest", [ "SERVER", "PORT", "$q", "$http", (SERVER, PORT, $q,
       return
 
     error = (response) -> 
+      console.debug error response
       deferred.reject response
       return
 
@@ -59,6 +60,7 @@ app.service "Remote", [ "KodiRequest", (KodiRequest) ->
         return KodiRequest.methodRequest "Player.Open", params
       stop: -> return KodiRequest.methodRequest "Player.Stop", [1]
       playPause: (playerId) -> return KodiRequest.methodRequest "Player.PlayPause", [playerId]
+      properties: (playerId) -> return KodiRequest.methodRequest "Player.GetProperties", params = [playerId, ["percentage", "time"]]
     Playlist:
       clear: -> return KodiRequest.methodRequest "Playlist.Clear", [1]
       addEpisode: (episodeId) -> return KodiRequest.methodRequest "Playlist.Add", [1, {episodeid: episodeId}]

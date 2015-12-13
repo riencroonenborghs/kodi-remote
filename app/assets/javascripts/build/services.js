@@ -43,6 +43,7 @@
           deferred.resolve(response.data.result);
         };
         error = function(response) {
+          console.debug(error(response));
           deferred.reject(response);
         };
         $http.post("http://" + SERVER + ":" + PORT + "/jsonrpc", payload).then(success, error);
@@ -104,6 +105,10 @@
           },
           playPause: function(playerId) {
             return KodiRequest.methodRequest("Player.PlayPause", [playerId]);
+          },
+          properties: function(playerId) {
+            var params;
+            return KodiRequest.methodRequest("Player.GetProperties", params = [playerId, ["percentage", "time"]]);
           }
         },
         Playlist: {

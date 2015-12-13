@@ -6,7 +6,7 @@
 
   app.controller("AppController", [
     "$scope", "$interval", "Topbar", "$location", "Remote", function($scope, $interval, Topbar, $location, Remote) {
-      var whatsPlaying;
+      var getPercentage, whatsPlaying;
       Topbar.setTitle("Kodi Remote");
       $scope.Topbar = Topbar;
       $scope.visit = function(path) {
@@ -29,6 +29,17 @@
       };
       whatsPlaying();
       $interval(whatsPlaying, 1000);
+      $scope.percentage = 0;
+      $scope.timeElapsed = 0;
+      getPercentage = function() {
+        if ($scope.playing) {
+          return Remote.Player.properties($scope.playerId).then(function(data) {
+            $scope.percentage = data.percentage;
+            return $scope.timeElapsed = data.time;
+          });
+        }
+      };
+      $interval(getPercentage, 1000);
       $scope.stop = function() {
         return Remote.Player.stop();
       };
