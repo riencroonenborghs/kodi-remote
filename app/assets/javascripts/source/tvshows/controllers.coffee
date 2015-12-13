@@ -32,8 +32,8 @@ app.controller "TvShowSeasonsController", [ "$scope", "$routeParams", "$controll
   seasonsLoader.index $scope.tvShowId
 ]
 
-app.controller "TvShowSeasonEpisodesController", [ "$scope", "$routeParams", "Topbar", "TvShowsLoader", "Remote",
-($scope, $routeParams, Topbar, TvShowsLoader, Remote) ->  
+app.controller "TvShowSeasonEpisodesController", [ "$scope", "$location", "$routeParams", "Topbar", "TvShowsLoader", "Remote",
+($scope, $location, $routeParams, Topbar, TvShowsLoader, Remote) ->  
   $scope.tvShowId = parseInt $routeParams.tvshowid  
   $scope.seasonId = parseInt $routeParams.id
 
@@ -53,6 +53,19 @@ app.controller "TvShowSeasonEpisodesController", [ "$scope", "$routeParams", "To
       episodesLoader = new TvShowsLoader.EpisodesLoader $scope
       episodesLoader.index $scope.tvShowId, $scope.seasonNumber
 
-  $scope.play = (episode) ->
-    Remote.playEpisode(episode.episodeid)
+  $scope.play = (episode) -> Remote.playEpisode(episode.episodeid)
+  $scope.download = (episode) -> 
+    $scope.url = null
+    episodeDownloader = new TvShowsLoader.EpisodeDownloader $scope
+    episodeDownloader.prepDownload episode.file
+    
+    $scope.$watch "url", ->
+      if $scope.url
+        $location.href = $scope.url
+
+    # TvShows.Seasons.Episodes.prepDownload(episode.file).then (data) ->
+    #   path = encodeURI decodeURIComponent(data.details.path)
+    #   url = "#{data.protocol}://#{SERVER}:#{PORT}/#{path}"
+    #   console.debug url
+
 ]

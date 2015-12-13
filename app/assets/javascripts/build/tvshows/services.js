@@ -2,7 +2,8 @@
 (function() {
   var app,
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
+    hasProp = {}.hasOwnProperty,
+    slice = [].slice;
 
   app = angular.module("kodiRemote.tvshows.services", []);
 
@@ -61,9 +62,12 @@
               params = {
                 tvshowid: tvShowId,
                 season: season,
-                properties: ["title", "plot", "rating", "runtime", "art", "thumbnail", "playcount"]
+                properties: ["title", "plot", "rating", "runtime", "art", "thumbnail", "playcount", "file"]
               };
               return KodiRequest.methodRequest("VideoLibrary.GetEpisodes", params);
+            },
+            prepDownload: function(filePath) {
+              return KodiRequest.methodRequest("Files.PrepareDownload", [filePath]);
             }
           }
         }
@@ -72,8 +76,8 @@
   ]);
 
   app.service("TvShowsLoader", [
-    "TvShows", function(TvShows) {
-      var SeasonsLoader, TvShowDetailsLoader, service;
+    "TvShows", "SERVER", "PORT", function(TvShows, SERVER, PORT) {
+      var Downloader, SeasonsLoader, TvShowDetailsLoader, service;
       service = {
         DetailsLoader: TvShowDetailsLoader = (function(superClass) {
           extend(TvShowDetailsLoader, superClass);
@@ -118,6 +122,33 @@
           };
 
           return SeasonsLoader;
+
+        })(kodiRemote.Loader),
+        EpisodeDownloader: Downloader = (function(superClass) {
+          extend(Downloader, superClass);
+
+          function Downloader(scope) {
+            this.scope = scope;
+            Downloader.__super__.constructor.call(this, this.scope, TvShows.Seasons.Episodes);
+          }
+
+          Downloader.prototype.handleData = function(data) {
+            var path;
+            path = encodeURI(decodeURIComponent(data.details.path));
+            return this.scope.url = data.protocol + "://" + SERVER + ":" + PORT + "/" + path;
+          };
+
+          Downloader.prototype.prepDownload = function() {
+            var params, ref;
+            params = 1 <= arguments.length ? slice.call(arguments, 0) : [];
+            return (ref = this.service).prepDownload.apply(ref, params).then((function(_this) {
+              return function(data) {
+                return _this.handleData(data);
+              };
+            })(this));
+          };
+
+          return Downloader;
 
         })(kodiRemote.Loader)
       };

@@ -53,7 +53,7 @@
   ]);
 
   app.controller("TvShowSeasonEpisodesController", [
-    "$scope", "$routeParams", "Topbar", "TvShowsLoader", "Remote", function($scope, $routeParams, Topbar, TvShowsLoader, Remote) {
+    "$scope", "$location", "$routeParams", "Topbar", "TvShowsLoader", "Remote", function($scope, $location, $routeParams, Topbar, TvShowsLoader, Remote) {
       var detailsLoader, seasonsLoader;
       $scope.tvShowId = parseInt($routeParams.tvshowid);
       $scope.seasonId = parseInt($routeParams.id);
@@ -83,8 +83,19 @@
           return episodesLoader.index($scope.tvShowId, $scope.seasonNumber);
         }
       });
-      return $scope.play = function(episode) {
+      $scope.play = function(episode) {
         return Remote.playEpisode(episode.episodeid);
+      };
+      return $scope.download = function(episode) {
+        var episodeDownloader;
+        $scope.url = null;
+        episodeDownloader = new TvShowsLoader.EpisodeDownloader($scope);
+        episodeDownloader.prepDownload(episode.file);
+        return $scope.$watch("url", function() {
+          if ($scope.url) {
+            return $location.href = $scope.url;
+          }
+        });
       };
     }
   ]);

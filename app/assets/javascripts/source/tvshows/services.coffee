@@ -34,11 +34,13 @@ app.service "TvShows", [ "KodiRequest", (KodiRequest) ->
           params =
             tvshowid: tvShowId
             season: season
-            properties: ["title", "plot", "rating", "runtime", "art", "thumbnail", "playcount"]
+            properties: ["title", "plot", "rating", "runtime", "art", "thumbnail", "playcount", "file"]
           return KodiRequest.methodRequest "VideoLibrary.GetEpisodes", params
+        prepDownload: (filePath) ->
+          return KodiRequest.methodRequest "Files.PrepareDownload", [filePath]
 ]
 
-app.service "TvShowsLoader", [ "TvShows", (TvShows) ->
+app.service "TvShowsLoader", [ "TvShows", "SERVER", "PORT", (TvShows, SERVER, PORT) ->
   service =
     DetailsLoader: class TvShowDetailsLoader extends kodiRemote.Loader
       constructor: (@scope) ->
@@ -55,5 +57,16 @@ app.service "TvShowsLoader", [ "TvShows", (TvShows) ->
       constructor: (@scope) ->
         super @scope, TvShows.Seasons.Episodes
       handleData: (data) -> @scope.episodes = data.episodes
+
+    EpisodeDownloader: class Downloader extends kodiRemote.Loader
+      constructor: (@scope) ->
+        super @scope, TvShows.Seasons.Episodes
+      handleData: (data) ->
+        path = encodeURI decodeURIComponent(data.details.path)
+        @scope.url = "#{data.protocol}://#{SERVER}:#{PORT}/#{path}"
+      prepDownload: (params...) -> 
+        @service.prepDownload(params...).then (data) => 
+          @handleData data
+
   service
 ]

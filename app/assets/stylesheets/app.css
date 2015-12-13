@@ -20,6 +20,8 @@ circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
 .stop-button svg,
 .rew-button svg,
 .pause-button svg,
+.tv-button svg,
+.movie-button svg,
 .ffw-button svg { position: relative; top: 6px; }
 
 
