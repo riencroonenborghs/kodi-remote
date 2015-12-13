@@ -7,21 +7,6 @@ app.directive "loadingScreen", [ ->
   templateUrl: "app/views/loading.html"
 ]
 
-app.directive "artPoster", [ ->
-  restrict: "E"
-  replace: true
-  scope:
-    art: "="
-  template: "<img src='{{poster}}' class='art-poster' />"
-  controller: [ "$scope", ($scope) ->
-    $scope.poster = ""
-    if $scope.art.poster
-      $scope.poster = decodeURIComponent $scope.art.poster.replace("image://", "")
-      $scope.poster = $scope.poster.slice(0, -1)    
-
-  ]
-]
-
 app.directive "tvshowThumbnail", [ ->
   restrict: "E"
   replace: true
@@ -119,4 +104,18 @@ app.directive "watchedIt", [->
   scope:
     model: "="
   template: "<ng-md-icon icon='check_circle' size='12' style='fill: #6FA67B;' ng-if='model.playcount == 1' title='Watched it'></ng-md-icon>"
+]
+
+
+app.directive "avatarImage", [ ->
+  restrict: "E"
+  replace: true
+  scope:
+    avatar: "="
+  template: "<img src='{{avatar}}' class='art-thumb' />"
+  controller: [ "$scope", ($scope) ->
+    $scope.viewMode = "avatar"
+    $scope.avatar = decodeURIComponent $scope.avatar.replace("image://", "")
+    $scope.avatar = $scope.avatar.slice(0, -1)
+  ]
 ]

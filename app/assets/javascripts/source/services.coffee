@@ -9,7 +9,7 @@ app.service "Topbar", [->
   service
 ]
 
-app.service "Remote", [ "SERVER", "PORT", "$q", "$http", (SERVER, PORT, $q, $http) ->
+app.service "KodiRequest", [ "SERVER", "PORT", "$q", "$http", (SERVER, PORT, $q, $http) ->
   request = (payload) ->
     deferred = $q.defer()
 
@@ -37,55 +37,35 @@ app.service "Remote", [ "SERVER", "PORT", "$q", "$http", (SERVER, PORT, $q, $htt
 
   service =
     methodRequest: methodRequest
+        
+  service
+]
 
-  # service =
-  #   videoLibrary:
-  #     tvShows:
-  #       index: (page = 1) -> 
-  #         params =
-  #           properties: ["plot", "year", "rating", "genre", "art"]
-  #           sort:
-  #             order: "ascending"
-  #             method: "label"
-  #           limits:
-  #             start: (page - 1) * perPage
-  #             end: page * perPage
-  #         return methodRequest "VideoLibrary.GetTVShows", params
-  #       show:  (tvShowId) ->
-  #         return methodRequest "VideoLibrary.GetTVShowDetails", {tvshowid: tvShowId}
-  #       search: (query) ->
-  #         params =
-  #           properties: ["plot", "year", "rating", "genre", "art"]
-  #           filter:
-  #             field: "title"
-  #             operator: "contains"
-  #             value: query
-  #         return methodRequest "VideoLibrary.GetTVShows", params
-  #       seasons: 
-  #         index: (tvShowId) ->
-  #           params =
-  #             tvshowid: tvShowId
-  #           return methodRequest "VideoLibrary.GetSeasons", params
-  #         episodes:
-  #           index: (tvShowId, seasonId) ->
-  #             params =
-  #               tvshowid: tvShowId
-  #               season: seasonId
-  #               properties: ["title", "plot", "rating", "runtime", "art", "thumbnail"]
-  #             return methodRequest "VideoLibrary.GetEpisodes", params
-  #     movies:
-  #       get: ->
-  #         params =
-  #           properties: ["plot", "year", "rating", "genre", "art", "tagline", "runtime"]
-  #           sort:
-  #             order: "ascending"
-  #             method: "label"
-  #           limits:
-  #             start: 0
-  #             end: 10
-  #         return methodRequest "VideoLibrary.GetMovies", params
+app.service "Remote", [ "KodiRequest", (KodiRequest) ->
+  service =
+    Player:
+      activePlayers: -> return KodiRequest.methodRequest "Player.GetActivePlayers", {}
+      open: (playlistId, position) -> 
+        params = [
+          {playlistid: playlistId, position: position}
+          {resume: true}
+        ]        
+        return KodiRequest.methodRequest "Player.Open", params
+      stop: -> return KodiRequest.methodRequest "Player.Stop", [1]
+    Playlist:
+      clear: -> return KodiRequest.methodRequest "Playlist.Clear", [1]
+      addEpisode: (episodeId) -> return KodiRequest.methodRequest "Playlist.Add", [1, {episodeid: episodeId}]
+      addMovie: (movieId) -> return KodiRequest.methodRequest "Playlist.Add", [1, {movieid: movieId}]
+    playEpisode: (episodeId) ->
+      @Player.stop().then =>
+        @Playlist.clear().then =>
+          @Playlist.addEpisode(episodeId).then =>
+            @Player.open(1, 0)
+    playMovie: (movieId) ->
+      @Player.stop().then =>
+        @Playlist.clear().then =>
+          @Playlist.addMovie(movieId).then =>
+            @Player.open(1, 0)
 
-
-     
   service
 ]

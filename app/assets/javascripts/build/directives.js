@@ -16,28 +16,6 @@
     }
   ]);
 
-  app.directive("artPoster", [
-    function() {
-      return {
-        restrict: "E",
-        replace: true,
-        scope: {
-          art: "="
-        },
-        template: "<img src='{{poster}}' class='art-poster' />",
-        controller: [
-          "$scope", function($scope) {
-            $scope.poster = "";
-            if ($scope.art.poster) {
-              $scope.poster = decodeURIComponent($scope.art.poster.replace("image://", ""));
-              return $scope.poster = $scope.poster.slice(0, -1);
-            }
-          }
-        ]
-      };
-    }
-  ]);
-
   app.directive("tvshowThumbnail", [
     function() {
       return {
@@ -196,6 +174,26 @@
           model: "="
         },
         template: "<ng-md-icon icon='check_circle' size='12' style='fill: #6FA67B;' ng-if='model.playcount == 1' title='Watched it'></ng-md-icon>"
+      };
+    }
+  ]);
+
+  app.directive("avatarImage", [
+    function() {
+      return {
+        restrict: "E",
+        replace: true,
+        scope: {
+          avatar: "="
+        },
+        template: "<img src='{{avatar}}' class='art-thumb' />",
+        controller: [
+          "$scope", function($scope) {
+            $scope.viewMode = "avatar";
+            $scope.avatar = decodeURIComponent($scope.avatar.replace("image://", ""));
+            return $scope.avatar = $scope.avatar.slice(0, -1);
+          }
+        ]
       };
     }
   ]);

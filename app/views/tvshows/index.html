@@ -8,7 +8,7 @@
     <md-list-item ng-repeat="tvShow in list" 
                   ng-click="visitSeasons(tvShow.tvshowid)" 
                   class="md-2-line pointer">
-      <art-poster art="tvShow.art" class="tvshow-avatar md-avatar"></art-poster>
+      <avatar-image avatar="tvShow.art.poster" class="tvshow-avatar md-avatar"></avatar-image>
       <div class="md-list-item-text">
         <h3>
           {{tvShow.label}} ({{tvShow.year}})

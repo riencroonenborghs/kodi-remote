@@ -76,13 +76,16 @@
         return results;
       };
       seasonsLoader.index($scope.tvShowId);
-      return $scope.$watch("seasonNumber", function() {
+      $scope.$watch("seasonNumber", function() {
         var episodesLoader;
         if ($scope.seasonNumber) {
           episodesLoader = new TvShowsLoader.EpisodesLoader($scope);
           return episodesLoader.index($scope.tvShowId, $scope.seasonNumber);
         }
       });
+      return $scope.play = function(episode) {
+        return Remote.playEpisode(episode.episodeid);
+      };
     }
   ]);
 

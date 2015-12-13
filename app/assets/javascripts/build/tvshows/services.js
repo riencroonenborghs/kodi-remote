@@ -7,7 +7,7 @@
   app = angular.module("kodiRemote.tvshows.services", []);
 
   app.service("TvShows", [
-    "Remote", function(Remote) {
+    "KodiRequest", function(KodiRequest) {
       var service;
       return service = {
         perPage: 10,
@@ -27,10 +27,10 @@
               end: page * this.perPage
             }
           };
-          return Remote.methodRequest("VideoLibrary.GetTVShows", params);
+          return KodiRequest.methodRequest("VideoLibrary.GetTVShows", params);
         },
         show: function(tvShowId) {
-          return Remote.methodRequest("VideoLibrary.GetTVShowDetails", {
+          return KodiRequest.methodRequest("VideoLibrary.GetTVShowDetails", {
             tvshowid: tvShowId
           });
         },
@@ -44,7 +44,7 @@
               value: query
             }
           };
-          return Remote.methodRequest("VideoLibrary.GetTVShows", params);
+          return KodiRequest.methodRequest("VideoLibrary.GetTVShows", params);
         },
         Seasons: {
           index: function(tvShowId) {
@@ -53,7 +53,7 @@
               properties: ["playcount"],
               tvshowid: tvShowId
             };
-            return Remote.methodRequest("VideoLibrary.GetSeasons", params);
+            return KodiRequest.methodRequest("VideoLibrary.GetSeasons", params);
           },
           Episodes: {
             index: function(tvShowId, season) {
@@ -63,7 +63,7 @@
                 season: season,
                 properties: ["title", "plot", "rating", "runtime", "art", "thumbnail", "playcount"]
               };
-              return Remote.methodRequest("VideoLibrary.GetEpisodes", params);
+              return KodiRequest.methodRequest("VideoLibrary.GetEpisodes", params);
             }
           }
         }

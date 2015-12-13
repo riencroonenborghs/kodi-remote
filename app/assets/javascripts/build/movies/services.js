@@ -5,7 +5,7 @@
   app = angular.module("kodiRemote.movies.services", []);
 
   app.service("Movies", [
-    "Remote", function(Remote) {
+    "KodiRequest", function(KodiRequest) {
       var service;
       return service = {
         perPage: 10,
@@ -25,7 +25,7 @@
               end: page * this.perPage
             }
           };
-          return Remote.methodRequest("VideoLibrary.GetMovies", params);
+          return KodiRequest.methodRequest("VideoLibrary.GetMovies", params);
         },
         search: function(query) {
           var params;
@@ -37,7 +37,7 @@
               value: query
             }
           };
-          return Remote.methodRequest("VideoLibrary.GetMovies", params);
+          return KodiRequest.methodRequest("VideoLibrary.GetMovies", params);
         }
       };
     }

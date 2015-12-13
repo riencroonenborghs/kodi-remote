@@ -1,6 +1,6 @@
 app = angular.module "kodiRemote.movies.services", []
 
-app.service "Movies", [ "Remote", (Remote) ->
+app.service "Movies", [ "KodiRequest", (KodiRequest) ->
   service =
     perPage: 10
     index: (page = 1) -> 
@@ -12,7 +12,7 @@ app.service "Movies", [ "Remote", (Remote) ->
         limits:
           start: (page - 1) * @perPage
           end: page * @perPage
-      return Remote.methodRequest "VideoLibrary.GetMovies", params      
+      return KodiRequest.methodRequest "VideoLibrary.GetMovies", params      
     search: (query) ->
       params =
         properties: ["plot", "year", "rating", "genre", "art", "tagline", "runtime"]
@@ -20,5 +20,5 @@ app.service "Movies", [ "Remote", (Remote) ->
           field: "title"
           operator: "contains"
           value: query
-      return Remote.methodRequest "VideoLibrary.GetMovies", params
+      return KodiRequest.methodRequest "VideoLibrary.GetMovies", params
 ]

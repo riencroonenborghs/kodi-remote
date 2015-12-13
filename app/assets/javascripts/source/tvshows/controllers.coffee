@@ -32,7 +32,7 @@ app.controller "TvShowSeasonsController", [ "$scope", "$routeParams", "$controll
   seasonsLoader.index $scope.tvShowId
 ]
 
-app.controller "TvShowSeasonEpisodesController", [ "$scope", "$routeParams", "Topbar", "TvShowsLoader", "Remote", 
+app.controller "TvShowSeasonEpisodesController", [ "$scope", "$routeParams", "Topbar", "TvShowsLoader", "Remote",
 ($scope, $routeParams, Topbar, TvShowsLoader, Remote) ->  
   $scope.tvShowId = parseInt $routeParams.tvshowid  
   $scope.seasonId = parseInt $routeParams.id
@@ -52,4 +52,7 @@ app.controller "TvShowSeasonEpisodesController", [ "$scope", "$routeParams", "To
     if $scope.seasonNumber
       episodesLoader = new TvShowsLoader.EpisodesLoader $scope
       episodesLoader.index $scope.tvShowId, $scope.seasonNumber
+
+  $scope.play = (episode) ->
+    Remote.playEpisode(episode.episodeid)
 ]

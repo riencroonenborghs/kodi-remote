@@ -1,6 +1,6 @@
 app = angular.module "kodiRemote.tvshows.services", []
 
-app.service "TvShows", [ "Remote", (Remote) ->
+app.service "TvShows", [ "KodiRequest", (KodiRequest) ->
   service =
     perPage: 10
     index: (page = 1) -> 
@@ -12,9 +12,9 @@ app.service "TvShows", [ "Remote", (Remote) ->
         limits:
           start: (page - 1) * @perPage
           end: page * @perPage
-      return Remote.methodRequest "VideoLibrary.GetTVShows", params
+      return KodiRequest.methodRequest "VideoLibrary.GetTVShows", params
     show: (tvShowId) ->
-      return Remote.methodRequest "VideoLibrary.GetTVShowDetails", {tvshowid: tvShowId}
+      return KodiRequest.methodRequest "VideoLibrary.GetTVShowDetails", {tvshowid: tvShowId}
     search: (query) ->
       params =
         properties: ["plot", "year", "rating", "genre", "art", "playcount"]
@@ -22,20 +22,20 @@ app.service "TvShows", [ "Remote", (Remote) ->
           field: "title"
           operator: "contains"
           value: query
-      return Remote.methodRequest "VideoLibrary.GetTVShows", params
+      return KodiRequest.methodRequest "VideoLibrary.GetTVShows", params
     Seasons: 
       index: (tvShowId) -> 
         params =
           properties: ["playcount"]
           tvshowid: tvShowId
-        return Remote.methodRequest "VideoLibrary.GetSeasons", params
+        return KodiRequest.methodRequest "VideoLibrary.GetSeasons", params
       Episodes: 
         index: (tvShowId, season) ->
           params =
             tvshowid: tvShowId
             season: season
             properties: ["title", "plot", "rating", "runtime", "art", "thumbnail", "playcount"]
-          return Remote.methodRequest "VideoLibrary.GetEpisodes", params
+          return KodiRequest.methodRequest "VideoLibrary.GetEpisodes", params
 ]
 
 app.service "TvShowsLoader", [ "TvShows", (TvShows) ->

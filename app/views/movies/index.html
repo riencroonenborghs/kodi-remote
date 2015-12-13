@@ -6,11 +6,12 @@
 <div auto-scroll>
   <md-list>
     <md-list-item ng-repeat="movie in list" 
-                  class="md-2-line pointer">
-      <art-poster art="movie.art" class="movie-avatar md-avatar"></art-poster>
+                  class="md-2-line">
+      <avatar-image avatar="movie.art.poster" class="episode-avatar md-avatar"></avatar-image>
       <div class="md-list-item-text">
         <h3>
         {{movie.label}} ({{movie.year}})
+        <watched-it model="movie"></watched-it>
         <show-rating rating="movie.rating"></stars>              
         </h3>
         <h4>{{movie.tagline}}</h4>
@@ -18,7 +19,13 @@
           {{movie.plot}}
           <br />
           Runtime: {{movie.runtime | secondsToDateTime | date:'HH:mm:ss'}}
-        </small>      
+        </small>
+        <div>
+          <md-button class="md-icdon-button play-button" ng-click="play(movie)">
+            <ng-md-icon icon="play_arrow"></ng-md-icon> 
+            Play
+          </md-button>
+        </div>   
       </div>
     </md-list-item>
   </md-list>

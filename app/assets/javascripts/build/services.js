@@ -27,7 +27,7 @@
     }
   ]);
 
-  app.service("Remote", [
+  app.service("KodiRequest", [
     "SERVER", "PORT", "$q", "$http", function(SERVER, PORT, $q, $http) {
       var methodRequest, perPage, request, service;
       request = function(payload) {
@@ -66,6 +66,76 @@
       perPage = 10;
       service = {
         methodRequest: methodRequest
+      };
+      return service;
+    }
+  ]);
+
+  app.service("Remote", [
+    "KodiRequest", function(KodiRequest) {
+      var service;
+      service = {
+        Player: {
+          activePlayers: function() {
+            return KodiRequest.methodRequest("Player.GetActivePlayers", {});
+          },
+          open: function(playlistId, position) {
+            var params;
+            params = [
+              {
+                playlistid: playlistId,
+                position: position
+              }, {
+                resume: true
+              }
+            ];
+            return KodiRequest.methodRequest("Player.Open", params);
+          },
+          stop: function() {
+            return KodiRequest.methodRequest("Player.Stop", [1]);
+          }
+        },
+        Playlist: {
+          clear: function() {
+            return KodiRequest.methodRequest("Playlist.Clear", [1]);
+          },
+          addEpisode: function(episodeId) {
+            return KodiRequest.methodRequest("Playlist.Add", [
+              1, {
+                episodeid: episodeId
+              }
+            ]);
+          },
+          addMovie: function(movieId) {
+            return KodiRequest.methodRequest("Playlist.Add", [
+              1, {
+                movieid: movieId
+              }
+            ]);
+          }
+        },
+        playEpisode: function(episodeId) {
+          return this.Player.stop().then((function(_this) {
+            return function() {
+              return _this.Playlist.clear().then(function() {
+                return _this.Playlist.addEpisode(episodeId).then(function() {
+                  return _this.Player.open(1, 0);
+                });
+              });
+            };
+          })(this));
+        },
+        playMovie: function(movieId) {
+          return this.Player.stop().then((function(_this) {
+            return function() {
+              return _this.Playlist.clear().then(function() {
+                return _this.Playlist.addMovie(movieId).then(function() {
+                  return _this.Player.open(1, 0);
+                });
+              });
+            };
+          })(this));
+        }
       };
       return service;
     }

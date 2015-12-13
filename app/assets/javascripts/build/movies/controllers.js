@@ -5,7 +5,7 @@
   app = angular.module("kodiRemote.movies.controllers", []);
 
   app.controller("MoviesController", [
-    "$scope", "$controller", "Topbar", "Movies", function($scope, $controller, Topbar, Movies) {
+    "$scope", "$controller", "Topbar", "Movies", "Remote", function($scope, $controller, Topbar, Movies, Remote) {
       Topbar.setTitle("Movies");
       $scope.listService = Movies;
       $scope.pushItemsOntoList = function(data) {
@@ -26,9 +26,12 @@
       $scope.emptyList = function() {
         return $scope.list = [];
       };
-      return $controller("SearchController", {
+      $controller("SearchController", {
         $scope: $scope
       });
+      return $scope.play = function(movie) {
+        return Remote.playMovie(movie.movieid);
+      };
     }
   ]);
 

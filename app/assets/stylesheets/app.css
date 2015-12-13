@@ -11,3 +11,5 @@ circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
 
 .fixed-content { position: fixed; width: 100%; z-index: 1; }
 .absolute-content { position: absolute; top: 64px; }
+
+.play-button svg { position: relative; top: 6px; }
