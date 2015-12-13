@@ -188,4 +188,16 @@
     }
   ]);
 
+  app.directive("watchedIt", [
+    function() {
+      return {
+        restrict: "E",
+        scope: {
+          model: "="
+        },
+        template: "<ng-md-icon icon='check_circle' size='12' style='fill: #6FA67B;' ng-if='model.playcount == 1' title='Watched it'></ng-md-icon>"
+      };
+    }
+  ]);
+
 }).call(this);

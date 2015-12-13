@@ -54,11 +54,11 @@ kodiRemote.Loader = class
   constructor: (@scope, @service) -> return
   handleData: (data) -> return
   afterCallback: (data) -> return
-  _baseMethod: (method, params = {}) ->
+  _baseMethod: (method, params...) ->
     @scope.loading = true
-    @service[method](params).then (data) => 
+    @service[method](params...).then (data) => 
       @scope.loading = false
       @handleData data
       @afterCallback data
-  index: (params = {}) -> @_baseMethod "index", params
-  show: (params = {}) -> @_baseMethod "show", params
+  index: (params...) -> @_baseMethod "index", params...
+  show: (params...) -> @_baseMethod "show", params...

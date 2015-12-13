@@ -5,7 +5,7 @@ app.service "TvShows", [ "Remote", (Remote) ->
     perPage: 10
     index: (page = 1) -> 
       params =
-        properties: ["plot", "year", "rating", "genre", "art"]
+        properties: ["plot", "year", "rating", "genre", "art", "playcount"]
         sort:
           order: "ascending"
           method: "label"
@@ -17,20 +17,24 @@ app.service "TvShows", [ "Remote", (Remote) ->
       return Remote.methodRequest "VideoLibrary.GetTVShowDetails", {tvshowid: tvShowId}
     search: (query) ->
       params =
-        properties: ["plot", "year", "rating", "genre", "art"]
+        properties: ["plot", "year", "rating", "genre", "art", "playcount"]
         filter:
           field: "title"
           operator: "contains"
           value: query
       return Remote.methodRequest "VideoLibrary.GetTVShows", params
     Seasons: 
-      index: (tvShowId) -> return Remote.methodRequest "VideoLibrary.GetSeasons", {tvshowid: tvShowId}
+      index: (tvShowId) -> 
+        params =
+          properties: ["playcount"]
+          tvshowid: tvShowId
+        return Remote.methodRequest "VideoLibrary.GetSeasons", params
       Episodes: 
         index: (tvShowId, season) ->
           params =
             tvshowid: tvShowId
             season: season
-            properties: ["title", "plot", "rating", "runtime", "art", "thumbnail"]
+            properties: ["title", "plot", "rating", "runtime", "art", "thumbnail", "playcount"]
           return Remote.methodRequest "VideoLibrary.GetEpisodes", params
 ]
 

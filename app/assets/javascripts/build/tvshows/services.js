@@ -17,7 +17,7 @@
             page = 1;
           }
           params = {
-            properties: ["plot", "year", "rating", "genre", "art"],
+            properties: ["plot", "year", "rating", "genre", "art", "playcount"],
             sort: {
               order: "ascending",
               method: "label"
@@ -37,7 +37,7 @@
         search: function(query) {
           var params;
           params = {
-            properties: ["plot", "year", "rating", "genre", "art"],
+            properties: ["plot", "year", "rating", "genre", "art", "playcount"],
             filter: {
               field: "title",
               operator: "contains",
@@ -48,9 +48,12 @@
         },
         Seasons: {
           index: function(tvShowId) {
-            return Remote.methodRequest("VideoLibrary.GetSeasons", {
+            var params;
+            params = {
+              properties: ["playcount"],
               tvshowid: tvShowId
-            });
+            };
+            return Remote.methodRequest("VideoLibrary.GetSeasons", params);
           },
           Episodes: {
             index: function(tvShowId, season) {
@@ -58,7 +61,7 @@
               params = {
                 tvshowid: tvShowId,
                 season: season,
-                properties: ["title", "plot", "rating", "runtime", "art", "thumbnail"]
+                properties: ["title", "plot", "rating", "runtime", "art", "thumbnail", "playcount"]
               };
               return Remote.methodRequest("VideoLibrary.GetEpisodes", params);
             }
