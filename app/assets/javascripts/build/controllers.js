@@ -28,7 +28,7 @@
         });
       };
       whatsPlaying();
-      $interval(whatsPlaying, 5000);
+      $interval(whatsPlaying, 1000);
       $scope.stop = function() {
         return Remote.Player.stop();
       };

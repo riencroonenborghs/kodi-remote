@@ -10,6 +10,10 @@ circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
 .episode-avatar { min-width: 40px; min-height: 40px; }
 
 .fixed-content { position: fixed; width: 100%; z-index: 1; }
+.fixed-content #topbar .md-toolbar-tools { height: inherit !important; max-height: inherit !important; }
+.fixed-content #playing #remote { text-align: center; position: relative; top: -12px; }
+.fixed-content #playing #info-details { text-align: center; position: relative; top: -20px; }
+
 .absolute-content { position: absolute; top: 120px; }
 
 .play-button svg,
@@ -18,5 +22,6 @@ circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
 .pause-button svg,
 .ffw-button svg { position: relative; top: 6px; }
 
-#playing .text h2 { font-size: 13pt; }
-#playing .text h3 { font-size: 10pt; }
+
+#playing #info-details h2 { font-size: 13pt; margin: 0; }
+#playing #info-details h3 { font-size: 10pt; margin: 0; }

@@ -20,7 +20,7 @@ app.controller "AppController", [ "$scope", "$interval", "Topbar", "$location", 
       else
         $scope.playing = null
   whatsPlaying()
-  $interval whatsPlaying, 5000
+  $interval whatsPlaying, 1000
 
   $scope.stop = -> Remote.Player.stop()
   $scope.playPause = -> 
