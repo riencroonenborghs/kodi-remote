@@ -34,19 +34,23 @@
       <md-toolbar>
         <div class="md-toolbar-tools">
           <!-- title -->
-          <img src="app/assets/images/app.png" style="height: 32px; padding-right: 5px;" />
-          <span ng-if="Topbar.title">{{Topbar.title}}</span>
-          <span ng-if="Topbar.link">
-            <ng-md-icon icon="arrow_back" style="fill: white;" size="20" ng-click="visit(Topbar.link.url)" class="pointer"></ng-md-icon>
-            <a ng-href="Topbar.link.url">{{Topbar.link.label}}</a>
+          <img flex="10" src="app/assets/images/app.png" style="height: 32px; padding-right: 5px;" />
+          <span flex="65">
+            <span ng-if="Topbar.item.type == 'title'">{{Topbar.item.title}}</span>
+            <span ng-if="Topbar.item.type == 'link'">
+              <ng-md-icon icon="arrow_back" style="fill: white;" size="20" ng-click="visit(Topbar.item.url)" class="pointer"></ng-md-icon>
+              <a ng-href="Topbar.item.url">{{Topbar.item.label}}</a>
+            </span>
           </span>
           <span flex="true"></span>
-          <md-button class="md-icon-button" ng-click="visit('/tvshows')" aria-label="TV Shows">
-            <ng-md-icon icon="tv" style="fill: white;"></ng-md-icon>
-          </md-button>
-          <md-button class="md-icon-button" ng-click="visit('/movies')" aria-label="Movies">
-            <ng-md-icon icon="movie" style="fill: white;"></ng-md-icon>
-          </md-button>
+          <div flex="20" layout="row">
+            <md-button class="md-icon-button" ng-click="visit('/tvshows')" aria-label="TV Shows">
+              <ng-md-icon icon="tv" style="fill: white;"></ng-md-icon>
+            </md-button>
+            <md-button class="md-icon-button" ng-click="visit('/movies')" aria-label="Movies">
+              <ng-md-icon icon="movie" style="fill: white;"></ng-md-icon>
+            </md-button>
+          </div>
         </div>
       </md-toolbar>
     </md-content>  

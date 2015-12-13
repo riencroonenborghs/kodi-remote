@@ -6,8 +6,7 @@
 
   app.controller("MoviesController", [
     "$scope", "$controller", "Topbar", "Movies", function($scope, $controller, Topbar, Movies) {
-      Topbar.reset();
-      Topbar.addTitle("Movies");
+      Topbar.setTitle("Movies");
       $scope.listService = Movies;
       $scope.pushItemsOntoList = function(data) {
         var i, len, movie, ref;
@@ -16,7 +15,7 @@
           movie = ref[i];
           $scope.list.push(movie);
         }
-        return Topbar.addTitle("Movies (" + data.limits.total + ")");
+        return Topbar.setTitle("Movies (" + data.limits.total + ")");
       };
       $controller("PaginatedController", {
         $scope: $scope

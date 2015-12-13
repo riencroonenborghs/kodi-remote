@@ -25,11 +25,31 @@ app.service "TvShows", [ "Remote", (Remote) ->
       return Remote.methodRequest "VideoLibrary.GetTVShows", params
     Seasons: 
       index: (tvShowId) -> return Remote.methodRequest "VideoLibrary.GetSeasons", {tvshowid: tvShowId}
-    Episodes: 
-      index: (tvShowId) ->
-        params =
-          tvshowid: tvShowId
-          season: seasonId
-          properties: ["title", "plot", "rating", "runtime", "art", "thumbnail"]
-        return Remote.methodRequest "VideoLibrary.GetEpisodes", params
+      Episodes: 
+        index: (tvShowId, season) ->
+          params =
+            tvshowid: tvShowId
+            season: season
+            properties: ["title", "plot", "rating", "runtime", "art", "thumbnail"]
+          return Remote.methodRequest "VideoLibrary.GetEpisodes", params
+]
+
+app.service "TvShowsLoader", [ "TvShows", (TvShows) ->
+  service =
+    DetailsLoader: class TvShowDetailsLoader extends kodiRemote.Loader
+      constructor: (@scope) ->
+        super @scope, TvShows
+      handleData: (data) -> 
+        @scope.tvShowDetails = data.tvshowdetails
+
+    SeasonsLoader: class SeasonsLoader extends kodiRemote.Loader
+      constructor: (@scope) ->
+        super @scope, TvShows.Seasons
+      handleData: (data) -> @scope.list = data.seasons
+
+    EpisodesLoader: class SeasonsLoader extends kodiRemote.Loader
+      constructor: (@scope) ->
+        super @scope, TvShows.Seasons.Episodes
+      handleData: (data) -> @scope.episodes = data.episodes
+  service
 ]

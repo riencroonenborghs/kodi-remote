@@ -1,14 +1,10 @@
 app = angular.module "kodiRemote.services", []
 
 app.service "Topbar", [->
-  service =
-    title: null
-    link: null
-    addTitle: (title) -> @title = title
-    addLink: (url, label) -> @link = {url: url, label: label}
-    reset: -> 
-      @title = null
-      @link = null
+  service =    
+    item: null
+    setTitle: (title) -> @item = {type: "title", title: title}
+    setLink: (url, label) -> @item = {type: "link", url: url, label: label}
 
   service
 ]

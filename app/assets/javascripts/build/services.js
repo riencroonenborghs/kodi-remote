@@ -8,20 +8,19 @@
     function() {
       var service;
       service = {
-        title: null,
-        link: null,
-        addTitle: function(title) {
-          return this.title = title;
+        item: null,
+        setTitle: function(title) {
+          return this.item = {
+            type: "title",
+            title: title
+          };
         },
-        addLink: function(url, label) {
-          return this.link = {
+        setLink: function(url, label) {
+          return this.item = {
+            type: "link",
             url: url,
             label: label
           };
-        },
-        reset: function() {
-          this.title = null;
-          return this.link = null;
         }
       };
       return service;

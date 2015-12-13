@@ -6,8 +6,7 @@
 
   app.controller("AppController", [
     "$scope", "Topbar", "$location", function($scope, Topbar, $location) {
-      Topbar.reset();
-      Topbar.addTitle("Kodi Remote");
+      Topbar.setTitle("Kodi Remote");
       $scope.Topbar = Topbar;
       return $scope.visit = function(path) {
         return $location.path(path);

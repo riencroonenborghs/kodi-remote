@@ -6,8 +6,7 @@
 
   app.controller("TvShowsController", [
     "$scope", "$controller", "Topbar", "TvShows", function($scope, $controller, Topbar, TvShows) {
-      Topbar.reset();
-      Topbar.addTitle("TV Shows");
+      Topbar.setTitle("TV Shows");
       $scope.listService = TvShows;
       $scope.pushItemsOntoList = function(data) {
         var i, len, ref, tvShow;
@@ -16,7 +15,7 @@
           tvShow = ref[i];
           $scope.list.push(tvShow);
         }
-        return Topbar.addTitle("TV Shows (" + data.limits.total + ")");
+        return Topbar.setTitle("TV Shows (" + data.limits.total + ")");
       };
       $controller("PaginatedController", {
         $scope: $scope
@@ -37,37 +36,31 @@
   ]);
 
   app.controller("TvShowSeasonsController", [
-    "$scope", "$routeParams", "Topbar", "Remote", function($scope, $routeParams, Topbar, Remote) {
+    "$scope", "$routeParams", "$controller", "Topbar", "TvShowsLoader", function($scope, $routeParams, $controller, Topbar, TvShowsLoader) {
+      var detailsLoader, seasonsLoader;
       $scope.tvShowId = parseInt($routeParams.id);
       $scope.visitEpisodes = function(tvShowId, seasonId) {
         return $scope.visit("/tvshows/" + tvShowId + "/seasons/" + seasonId + "/episodes");
       };
-      Remote.videoLibrary.tvShows.show($scope.tvShowId).then(function(data) {
-        $scope.tvShowDetails = data.tvshowdetails;
-        Topbar.reset();
-        return Topbar.addLink("/tvshows", data.tvshowdetails.label);
-      });
-      $scope.loading = true;
-      $scope.seasons = [];
-      return Remote.videoLibrary.tvShows.seasons.index($scope.tvShowId).then(function(data) {
-        $scope.loading = false;
-        $scope.seasons = data.seasons;
-      });
+      detailsLoader = new TvShowsLoader.DetailsLoader($scope);
+      detailsLoader.afterCallback = function(data) {
+        return Topbar.setLink("/tvshows", $scope.tvShowDetails.label);
+      };
+      detailsLoader.show($scope.tvShowId);
+      seasonsLoader = new TvShowsLoader.SeasonsLoader($scope);
+      return seasonsLoader.index($scope.tvShowId);
     }
   ]);
 
   app.controller("TvShowSeasonEpisodesController", [
-    "$scope", "$routeParams", "Topbar", "Remote", function($scope, $routeParams, Topbar, Remote) {
+    "$scope", "$routeParams", "Topbar", "TvShowsLoader", "Remote", function($scope, $routeParams, Topbar, TvShowsLoader, Remote) {
+      var detailsLoader, seasonsLoader;
       $scope.tvShowId = parseInt($routeParams.tvshowid);
       $scope.seasonId = parseInt($routeParams.id);
-      $scope.tvShowDetails = null;
-      $scope.episodes = [];
-      $scope.seasonNumber = null;
-      $scope.loading = true;
-      Remote.videoLibrary.tvShows.show($scope.tvShowId).then(function(data) {
-        return $scope.tvShowDetails = data.tvshowdetails;
-      });
-      Remote.videoLibrary.tvShows.seasons.index($scope.tvShowId).then(function(data) {
+      detailsLoader = new TvShowsLoader.DetailsLoader($scope);
+      detailsLoader.show($scope.tvShowId);
+      seasonsLoader = new TvShowsLoader.SeasonsLoader($scope);
+      seasonsLoader.afterCallback = function(data) {
         var i, index, len, ref, results, season;
         ref = data.seasons;
         results = [];
@@ -75,20 +68,19 @@
           season = ref[index];
           if (season.seasonid === $scope.seasonId) {
             $scope.seasonNumber = index + 1;
-            Topbar.reset();
-            results.push(Topbar.addLink("/tvshows/" + $scope.tvShowId + "/seasons", season.label));
+            results.push(Topbar.setLink("/tvshows/" + $scope.tvShowId + "/seasons", season.label));
           } else {
             results.push(void 0);
           }
         }
         return results;
-      });
+      };
+      seasonsLoader.index($scope.tvShowId);
       return $scope.$watch("seasonNumber", function() {
+        var episodesLoader;
         if ($scope.seasonNumber) {
-          return Remote.videoLibrary.tvShows.seasons.episodes.index($scope.tvShowId, $scope.seasonNumber).then(function(data) {
-            $scope.loading = false;
-            $scope.episodes = data.episodes;
-          });
+          episodesLoader = new TvShowsLoader.EpisodesLoader($scope);
+          return episodesLoader.index($scope.tvShowId, $scope.seasonNumber);
         }
       });
     }
