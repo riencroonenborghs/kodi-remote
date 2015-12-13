@@ -32,8 +32,8 @@ app.controller "TvShowSeasonsController", [ "$scope", "$routeParams", "$controll
   seasonsLoader.index $scope.tvShowId
 ]
 
-app.controller "TvShowSeasonEpisodesController", [ "$scope", "$location", "$routeParams", "Topbar", "TvShowsLoader", "Remote",
-($scope, $location, $routeParams, Topbar, TvShowsLoader, Remote) ->  
+app.controller "TvShowSeasonEpisodesController", [ "$scope", "$routeParams", "Topbar", "TvShowsLoader", "Remote",
+($scope, $routeParams, Topbar, TvShowsLoader, Remote) ->  
   $scope.tvShowId = parseInt $routeParams.tvshowid  
   $scope.seasonId = parseInt $routeParams.id
 
@@ -56,12 +56,24 @@ app.controller "TvShowSeasonEpisodesController", [ "$scope", "$location", "$rout
   $scope.play = (episode) -> Remote.playEpisode(episode.episodeid)
   $scope.download = (episode) -> 
     $scope.url = null
+    fileName = "#{$scope.tvShowDetails.label} - #{episode.title}.mp4"
     episodeDownloader = new TvShowsLoader.EpisodeDownloader $scope
     episodeDownloader.prepDownload episode.file
+
+    downloadFile = (url, success) ->
+      xhr = new XMLHttpRequest()
+      xhr.open "GET", url, true
+      xhr.responseType = "blob"
+      xhr.onreadystatechange = ->
+        if xhr.readyState == 4
+          success xhr.response
+      xhr.send null
+
     
     $scope.$watch "url", ->
       if $scope.url
-        $location.href = $scope.url
+        downloadFile $scope.url, (data) ->
+          saveAs data, fileName
 
     # TvShows.Seasons.Episodes.prepDownload(episode.file).then (data) ->
     #   path = encodeURI decodeURIComponent(data.details.path)

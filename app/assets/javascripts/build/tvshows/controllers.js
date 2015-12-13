@@ -53,7 +53,7 @@
   ]);
 
   app.controller("TvShowSeasonEpisodesController", [
-    "$scope", "$location", "$routeParams", "Topbar", "TvShowsLoader", "Remote", function($scope, $location, $routeParams, Topbar, TvShowsLoader, Remote) {
+    "$scope", "$routeParams", "Topbar", "TvShowsLoader", "Remote", function($scope, $routeParams, Topbar, TvShowsLoader, Remote) {
       var detailsLoader, seasonsLoader;
       $scope.tvShowId = parseInt($routeParams.tvshowid);
       $scope.seasonId = parseInt($routeParams.id);
@@ -87,13 +87,28 @@
         return Remote.playEpisode(episode.episodeid);
       };
       return $scope.download = function(episode) {
-        var episodeDownloader;
+        var downloadFile, episodeDownloader, fileName;
         $scope.url = null;
+        fileName = $scope.tvShowDetails.label + " - " + episode.title + ".mp4";
         episodeDownloader = new TvShowsLoader.EpisodeDownloader($scope);
         episodeDownloader.prepDownload(episode.file);
+        downloadFile = function(url, success) {
+          var xhr;
+          xhr = new XMLHttpRequest();
+          xhr.open("GET", url, true);
+          xhr.responseType = "blob";
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+              return success(xhr.response);
+            }
+          };
+          return xhr.send(null);
+        };
         return $scope.$watch("url", function() {
           if ($scope.url) {
-            return $location.href = $scope.url;
+            return downloadFile($scope.url, function(data) {
+              return saveAs(data, fileName);
+            });
           }
         });
       };
