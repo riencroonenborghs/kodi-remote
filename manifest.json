@@ -3,14 +3,15 @@
 
   "name": "Kodi Remote",
   "description": "A remote control for Kodi",
-  "version": "0.1",
+  "version": "0.2",
 
   "browser_action": {
     "default_icon": "app/assets/images/app.png",
     "default_popup": "app/views/app.html"
   },
   "permissions": [
-    "activeTab",    
+    "activeTab",
+    "storage",
     "http://*/"
   ]
 }

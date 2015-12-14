@@ -7,13 +7,12 @@
     <base href="/">
 
     <script src="app/assets/javascripts/jquery/jquery-1.11.3.min.js"></script>
-    <script src="app/assets/javascripts/angular/angular.min.js"></script>
-    <script src="app/assets/javascripts/angular/angular-route.min.js"></script>
-    <script src="app/assets/javascripts/angular/angular-animate.min.js"></script>
-    <script src="app/assets/javascripts/angular/angular-aria.min.js"></script>
-    <script src="app/assets/javascripts/angular/angular-material.min.js"></script>
+    <script src="app/assets/javascripts/angular/angular-1.3.15.min.js"></script>
+    <script src="app/assets/javascripts/angular/angular-route-1.3.15.min.js"></script>
+    <script src="app/assets/javascripts/angular/angular-animate-1.3.15.min.js"></script>
+    <script src="app/assets/javascripts/angular/angular-aria-1.3.15.min.js"></script>
+    <script src="app/assets/javascripts/angular/angular-material-0.10.1.min.js"></script>
     <script src="app/assets/javascripts/angular/angular-material-icons.min.js"></script>
-    <script src="app/assets/javascripts/angular/ng-infinite-scroll.min.js"></script>
     <script src="app/assets/javascripts/FileSaver.min.js"></script>
 
     <script src="app/assets/javascripts/build/app.js"></script>
@@ -25,104 +24,20 @@
     <script src="app/assets/javascripts/build/movies/controllers.js"></script>
     <script src="app/assets/javascripts/build/movies/services.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="app/assets/stylesheets/angular-material.css">
+    <link rel="stylesheet" type="text/css" href="app/assets/stylesheets/angular-material-0.10.1.min.css">
     <link rel="stylesheet" type="text/css" href="app/assets/stylesheets/app.css">
   </head>
   <body ng-app="kodiRemote" ng-controller="AppController">
 
-    <!-- main panel -->
-    <md-content class="fixed-content">
-      <md-toolbar class="md-tall" flex="column">
-        <div layout="column">
+    <ng-include src="'app/views/topbar.html'"></ng-include>
 
-          <!-- top         -->
-          <div id="topbar" layout="row">
-            <div class="md-toolbar-tools">
-              <img flex="10" src="app/assets/images/app.png" style="height: 32px; padding-right: 5px;" />
-              <span flex="65" id="title">
-                <span ng-if="Topbar.item.type == 'title'">{{Topbar.item.title}}</span>
-                <span ng-if="Topbar.item.type == 'link'">
-                  <ng-md-icon icon="arrow_back" style="fill: white;" size="20" ng-click="visit(Topbar.item.url)" class="pointer"></ng-md-icon>
-                  <a ng-href="Topbar.item.url">{{Topbar.item.label}}</a>
-                </span>
-              </span>
-              <span flex="true"></span>
-              <div flex="20" layout="row">
-                <md-button class="md-icon-button tv-button" aria-label="TV Shows" ng-click="visit('/tvshows')">
-                  <ng-md-icon icon="tv" size="24" style="fill: white;"></ng-md-icon>
-                </md-button>
-                <md-button class="md-icon-button movie-button" aria-label="Movies" ng-click="visit('/movies')">
-                  <ng-md-icon icon="movie" size="24" style="fill: white;"></ng-md-icon>
-                </md-button>
-              </div>
-            </div>
-          </div>
+    <md-content id="content" ng-class="{'remote-visible': remoteVisible}">      
+      <div ng-if="!showSearch" ng-view></div>
+      <ng-include src="'app/views/search-results.html'" ng-if="showSearch"></ng-include>      
+    <md-content>
 
-          <!-- bottom -->
-          <div ng-if="playing != null" id="playing" layout="column">
-            <!-- remote -->
-            <div id="remote">
-              <md-button class="md-icon-button rew-button" aria-label="Rewind">
-                <ng-md-icon icon="fast_rewind" size="32" style="fill: white;"></ng-md-icon>
-              </md-button>
-              
-              <md-button class="md-icon-button pause-button" ng-click="playPause()" ng-if="!playPauseState" aria-label="Pause">
-                <ng-md-icon icon="pause" size="32" style="fill: white;"></ng-md-icon>
-              </md-button>
-              <md-button class="md-icon-button play-button" ng-click="playPause()" ng-if="playPauseState" aria-label="Play">
-                <ng-md-icon icon="play_arrow" size="32" style="fill: white;"></ng-md-icon>
-              </md-button>
-            
-              <md-button class="md-icon-button stop-button" ng-click="stop()" aria-label="Stop">
-                <ng-md-icon icon="stop" size="32" style="fill: white;"></ng-md-icon>
-              </md-button>
-              <md-button class="md-icon-button ffw-button" aria-label="Fast Forward">
-                <ng-md-icon icon="fast_forward" size="32" style="fill: white;"></ng-md-icon>
-              </md-button>
-
-              <md-button class="md-icon-button" aria-label="Switch subtitle tracks">
-                <ng-md-icon icon="subtitles" size="16" style="fill: white;"></ng-md-icon>
-              </md-button>
-              <md-button class="md-icon-button" aria-label="Switch audio tracks">
-                <ng-md-icon icon="audiotrack" size="16" style="fill: white;"></ng-md-icon>
-              </md-button>
-                          
-            </div>
-
-            <!-- info/details -->
-            <div id="info-details">
-              <div ng-if="playing.type == 'episode'">
-                <h2>{{playing.showtitle}}</h2>
-                <h3>S{{playing.season | zeroPrepend : 2}}E{{playing.episode | zeroPrepend : 2}}: {{playing.title}}</h3>
-              </div>
-              <div ng-if="playing.type == 'movie'">
-                <h2>
-                  {{playing.title}}
-                  <span ng-if="playing.year">({{playing.year}})</span>
-                </h2>
-              </div>          
-            </div>
-
-            <!-- progress -->
-            <div id="progress">
-              <div id="time" layout="row">
-                <span id="elapsed" ng-if="timeElapsed">{{timeElapsed.hours | zeroPrepend : 2}}:{{timeElapsed.minutes | zeroPrepend : 2}}:{{timeElapsed.seconds | zeroPrepend : 2}}</span>
-                <span flex></span>
-                <span id="left">00:00:00</span>
-              </div>
-              <md-progress-linear md-mode="determinate" value="{{percentage}}"></md-progress-linear>
-            </div>
-          </div>
-        </div>
-      </md-toolbar>
-    </md-content>  
-    
-
-    <!-- content panel -->
-    <md-content class="content absolute-content" ng-class="{'is-playing': playing != null}">
-
-      <div ng-view></div>
-
+    <md-content>
+      <ng-include src="'app/views/remote-control.html'" ng-if="remoteVisible"></ng-include>
     </md-content>
 
   </body>

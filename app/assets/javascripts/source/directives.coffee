@@ -115,7 +115,8 @@ app.directive "avatarImage", [ ->
   template: "<img src='{{avatar}}' class='art-thumb' />"
   controller: [ "$scope", ($scope) ->
     $scope.viewMode = "avatar"
-    $scope.avatar = decodeURIComponent $scope.avatar.replace("image://", "")
-    $scope.avatar = $scope.avatar.slice(0, -1)
+    if $scope.avatar
+      $scope.avatar = decodeURIComponent $scope.avatar.replace("image://", "")
+      $scope.avatar = $scope.avatar.slice(0, -1)
   ]
 ]

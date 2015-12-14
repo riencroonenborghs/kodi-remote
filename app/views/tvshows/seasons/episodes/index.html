@@ -1,29 +1,25 @@
 <loading-screen loading="loading"></loading-screen>
 
 <md-content ng-if="!loading">
-  <md-subheader class="md-primary">{{tvShowDetails.label}}</md-subheader>
-  <md-list>
+  <md-subheader class="md-primary md-padding">{{tvShowDetails.label}}</md-subheader>
+  <md-list class="md-padding">
     <md-list-item ng-repeat="episode in episodes" class="md-3-line">
       <avatar-image avatar="episode.thumbnail" class="episode-avatar md-avatar"></avatar-image>
       <!-- <tvshow-thumbnail thumbnail="episode.thumbnail" class="episode-avatar md-avatar"></tvshow-thumbnail> -->
       <div class="md-list-item-text">
         <h3>
+          <show-rating rating="episode.rating"></show-rating>              
           {{episode.title}}
-          <watched-it model="episode"></watched-it>
-          <show-rating rating="episode.rating"></stars>              
+          <watched-it model="episode"></watched-it>   
+          <small class="runtime">{{episode.runtime | secondsToDateTime | date:'HH:mm:ss'}}</small>      
         </h3>
         <small>
-          {{episode.plot}}
-          <br />
-          Runtime: {{episode.runtime | secondsToDateTime | date:'HH:mm:ss'}}
+          {{episode.plot}}          
         </small>      
         <div>
           <md-button class="md-icon-button play-button" ng-click="play(episode)" aria-label="Play episode">
             <ng-md-icon icon="play_arrow"></ng-md-icon> 
-          </md-button>
-          <md-button class="md-icon-button play-button" ng-click="download(episode)" aria-label="Download episode">
-            <ng-md-icon icon="file_download"></ng-md-icon>             
-          </md-button>
+          </md-button>          
         </div>
       </div>
     </md-list-item>

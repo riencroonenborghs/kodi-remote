@@ -26,12 +26,9 @@
       $scope.emptyList = function() {
         return $scope.list = [];
       };
-      $controller("SearchController", {
+      return $controller("SearchController", {
         $scope: $scope
       });
-      return $scope.visitSeasons = function(tvShowId) {
-        return $scope.visit("/tvshows/" + tvShowId + "/seasons");
-      };
     }
   ]);
 
@@ -61,13 +58,17 @@
       detailsLoader.show($scope.tvShowId);
       seasonsLoader = new TvShowsLoader.SeasonsLoader($scope);
       seasonsLoader.afterCallback = function(data) {
-        var i, index, len, ref, results, season;
+        var i, len, ref, results, season;
         ref = data.seasons;
         results = [];
-        for (index = i = 0, len = ref.length; i < len; index = ++i) {
-          season = ref[index];
+        for (i = 0, len = ref.length; i < len; i++) {
+          season = ref[i];
           if (season.seasonid === $scope.seasonId) {
-            $scope.seasonNumber = index + 1;
+            if (season.label === "Specials") {
+              $scope.seasonNumber = 0;
+            } else {
+              $scope.seasonNumber = parseInt(season.label.match(/(\d)/)[0]);
+            }
             results.push(Topbar.setLink("/tvshows/" + $scope.tvShowId + "/seasons", season.label));
           } else {
             results.push(void 0);
@@ -78,39 +79,13 @@
       seasonsLoader.index($scope.tvShowId);
       $scope.$watch("seasonNumber", function() {
         var episodesLoader;
-        if ($scope.seasonNumber) {
+        if ($scope.seasonNumber !== null) {
           episodesLoader = new TvShowsLoader.EpisodesLoader($scope);
           return episodesLoader.index($scope.tvShowId, $scope.seasonNumber);
         }
       });
-      $scope.play = function(episode) {
+      return $scope.play = function(episode) {
         return Remote.playEpisode(episode.episodeid);
-      };
-      return $scope.download = function(episode) {
-        var downloadFile, episodeDownloader, fileName;
-        $scope.url = null;
-        fileName = $scope.tvShowDetails.label + " - " + episode.title + ".mp4";
-        episodeDownloader = new TvShowsLoader.EpisodeDownloader($scope);
-        episodeDownloader.prepDownload(episode.file);
-        downloadFile = function(url, success) {
-          var xhr;
-          xhr = new XMLHttpRequest();
-          xhr.open("GET", url, true);
-          xhr.responseType = "blob";
-          xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-              return success(xhr.response);
-            }
-          };
-          return xhr.send(null);
-        };
-        return $scope.$watch("url", function() {
-          if ($scope.url) {
-            return downloadFile($scope.url, function(data) {
-              return saveAs(data, fileName);
-            });
-          }
-        });
       };
     }
   ]);

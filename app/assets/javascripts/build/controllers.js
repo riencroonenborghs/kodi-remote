@@ -5,48 +5,125 @@
   app = angular.module("kodiRemote.controllers", []);
 
   app.controller("AppController", [
-    "$scope", "$interval", "Topbar", "$location", "Remote", function($scope, $interval, Topbar, $location, Remote) {
-      var getPercentage, whatsPlaying;
-      Topbar.setTitle("Kodi Remote");
+    "$scope", "$interval", "$timeout", "$location", "SearchService", "Topbar", "Remote", function($scope, $interval, $timeout, $location, SearchService, Topbar, Remote) {
+      var whatsPlaying;
       $scope.Topbar = Topbar;
+      Topbar.setTitle("Kodi Remote");
+      $scope.toggleSearch = function() {
+        $scope.showSearch = !$scope.showSearch;
+        $scope.search.query = "";
+        $scope.searchService.reset();
+        if ($scope.showSearch) {
+          return $timeout((function() {
+            return $("#search-query").focus();
+          }), 500);
+        }
+      };
+      $scope.showSearch = false;
+      $scope.search = {
+        query: ""
+      };
+      $scope.searchService = SearchService;
+      $scope.performSearch = function() {
+        return $scope.searchService.search($scope.search.query);
+      };
       $scope.visit = function(path) {
         return $location.path(path);
       };
+      $scope.visitSeasons = function(tvShowId) {
+        console.debug("visitSeasons " + tvShowId);
+        return $scope.visit("/tvshows/" + tvShowId + "/seasons");
+      };
+      $scope.remoteVisible = false;
       $scope.playing = null;
       $scope.playerId = null;
-      $scope.playPauseState = false;
       whatsPlaying = function() {
         return Remote.Player.activePlayers().then(function(data) {
           if (data.length > 0) {
             $scope.playerId = data[0].playerid;
             return Remote.Player.playing($scope.playerId).then(function(data) {
-              return $scope.playing = data.item;
+              $scope.playing = data.item;
+              return $scope.remoteVisible = true;
             });
           } else {
-            return $scope.playing = null;
+            $scope.playing = null;
+            return $scope.remoteVisible = false;
           }
         });
       };
       whatsPlaying();
-      $interval(whatsPlaying, 1000);
-      $scope.percentage = 0;
-      $scope.timeElapsed = 0;
-      getPercentage = function() {
-        if ($scope.playing) {
-          return Remote.Player.properties($scope.playerId).then(function(data) {
-            $scope.percentage = data.percentage;
-            return $scope.timeElapsed = data.time;
-          });
-        }
-      };
-      $interval(getPercentage, 1000);
+      return $interval(whatsPlaying, 1000);
+    }
+  ]);
+
+  app.controller("RemoteController", [
+    "$scope", "$interval", "Remote", function($scope, $interval, Remote) {
+      var availableAudioStreams, availableSubtitles, currentAudioStreams, currentSubtitle, getProperties;
       $scope.stop = function() {
         return Remote.Player.stop();
       };
-      return $scope.playPause = function() {
+      $scope.playPauseState = false;
+      $scope.playPause = function() {
         return Remote.Player.playPause($scope.playerId).then(function(data) {
           return $scope.playPauseState = !$scope.playPauseState;
         });
+      };
+      $scope.fastForward = function() {
+        return Remote.Player.seek($scope.playerId, $scope.percentage + 1);
+      };
+      $scope.rewind = function() {
+        return Remote.Player.seek($scope.playerId, $scope.percentage - 1);
+      };
+      availableSubtitles = ["on", "next", "off"];
+      currentSubtitle = 0;
+      $scope.subtitles = [];
+      $scope.switchSubtitle = function() {
+        var subtitle;
+        subtitle = availableSubtitles[currentSubtitle];
+        Remote.Player.setSubtitle($scope.playerId, subtitle);
+        currentSubtitle += 1;
+        if (currentSubtitle === availableSubtitles.length) {
+          return currentSubtitle = 0;
+        }
+      };
+      availableAudioStreams = ["next", "previous"];
+      currentAudioStreams = 0;
+      $scope.audioStreams = [];
+      $scope.switchAudioStream = function() {
+        var audioStream, currentAudioStream;
+        audioStream = availableAudioStreams[currentAudioStream];
+        Remote.Player.setAudioStream($scope.playerId, audioStream);
+        if (currentAudioStream === availableAudioStreams.length) {
+          return currentAudioStream = 0;
+        }
+      };
+      $scope.percentage = 0;
+      $scope.timeElapsed = 0;
+      $scope.timeRemaining = 0;
+      getProperties = function() {
+        if ($scope.playing) {
+          return Remote.Player.properties($scope.playerId).then(function(data) {
+            var hours, minutes, seconds, timeElapsedInSeconds;
+            $scope.percentage = data.percentage;
+            $scope.timeElapsed = data.time;
+            $scope.subtitles = data.subtitles;
+            $scope.audioStreams = data.audiostreams;
+            timeElapsedInSeconds = data.time.hours * 3600 + data.time.minutes * 60 + data.time.seconds;
+            seconds = $scope.playing.runtime - timeElapsedInSeconds;
+            hours = Math.floor(seconds / 3600);
+            minutes = Math.floor((seconds - (hours * 3600)) / 60);
+            seconds = Math.floor((seconds - (hours * 3600)) % 60);
+            return $scope.timeRemaining = {
+              hours: hours,
+              minutes: minutes,
+              seconds: seconds
+            };
+          });
+        }
+      };
+      $interval(getProperties, 1000);
+      return $scope.jumpTo = function() {
+        return Remote.Player.seek($scope.playerId, $scope.percentage);
       };
     }
   ]);

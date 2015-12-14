@@ -40,7 +40,7 @@ app.service "TvShows", [ "KodiRequest", (KodiRequest) ->
           return KodiRequest.methodRequest "Files.PrepareDownload", [filePath]
 ]
 
-app.service "TvShowsLoader", [ "TvShows", "SERVER", "PORT", (TvShows, SERVER, PORT) ->
+app.service "TvShowsLoader", [ "TvShows", (TvShows) ->
   service =
     DetailsLoader: class TvShowDetailsLoader extends kodiRemote.Loader
       constructor: (@scope) ->
@@ -63,7 +63,7 @@ app.service "TvShowsLoader", [ "TvShows", "SERVER", "PORT", (TvShows, SERVER, PO
         super @scope, TvShows.Seasons.Episodes
       handleData: (data) ->
         path = encodeURI decodeURIComponent(data.details.path)
-        @scope.url = "#{data.protocol}://#{SERVER}:#{PORT}/#{path}"
+        @scope.url = "#{data.protocol}://#{kodiRemote.settings.server}:#{kodiRemote.settings.port}/#{path}"
       prepDownload: (params...) -> 
         @service.prepDownload(params...).then (data) => 
           @handleData data

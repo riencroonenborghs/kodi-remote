@@ -1,32 +1,26 @@
-<md-input-container>
-  <label>Search Movies</label>
-  <input type="text" ng-model="search.query" ng-model-options="{debounce: 500}" ng-change="performSearch()" placeholder="Start typing..." />
-</md-input-container>
-
 <div auto-scroll>
-  <md-list>
+  <md-list class="md-padding">
     <md-list-item ng-repeat="movie in list" 
                   class="md-2-line">
       <avatar-image avatar="movie.art.poster" class="episode-avatar md-avatar"></avatar-image>
       <div class="md-list-item-text">
         <h3>
-        {{movie.label}} ({{movie.year}})
-        <watched-it model="movie"></watched-it>
-        <show-rating rating="movie.rating"></stars>              
+          <show-rating rating="movie.rating"></show-rating>
+          {{movie.label}} ({{movie.year}})
+          <watched-it model="movie"></watched-it>
+          <small class="runtime">{{movie.runtime | secondsToDateTime | date:'HH:mm:ss'}}</small>
         </h3>
         <h4>{{movie.tagline}}</h4>
         <small>
           {{movie.plot}}
-          <br />
-          Runtime: {{movie.runtime | secondsToDateTime | date:'HH:mm:ss'}}
         </small>
         <div>
           <md-button class="md-icon-button play-button" ng-click="play(movie)" aria-label="Play movie">
             <ng-md-icon icon="play_arrow"></ng-md-icon>             
           </md-button>
-          <md-button class="md-icon-button play-button" ng-click="download(movie)" aria-label="Download movie">
+          <!-- <md-button class="md-icon-button play-button" ng-click="download(movie)" aria-label="Download movie">
             <ng-md-icon icon="file_download"></ng-md-icon>             
-          </md-button>          
+          </md-button> -->          
         </div>   
       </div>
     </md-list-item>

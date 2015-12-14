@@ -1,0 +1,31 @@
+<!-- main panel -->
+<md-content id="topbar">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <img flex="10" src="app/assets/images/app.png" style="height: 32px; padding-right: 5px;" />
+      <div flex="10">
+        <ng-md-icon icon="tv" size="12" style="fill: white;" class="pointer" ng-click="visit('/tvshows')"></ng-md-icon>
+        <ng-md-icon icon="movie" size="12" style="fill: white;" class="pointer" ng-click="visit('/movies')"></ng-md-icon>
+      </div>
+      <span id="title" ng-if="!showSearch">
+        <span ng-if="Topbar.item.type == 'title'">{{Topbar.item.title}}</span>
+        <span ng-if="Topbar.item.type == 'link'">
+          <ng-md-icon icon="arrow_back" style="fill: white;" size="20" ng-click="visit(Topbar.item.url)" class="pointer"></ng-md-icon>
+          <a ng-href="Topbar.item.url">{{Topbar.item.label}}</a>
+        </span>
+      </span>
+      <md-input-container id="search" ng-if="showSearch">
+        <input type="text" id="search-query" ng-model="search.query" ng-model-options="{debounce: 500}" ng-change="performSearch()" placeholder="Start typing..." />
+      </md-input-container>
+      <span flex="true"></span>
+      <div flex="15" layout="row">
+        <md-button class="md-icon-button tv-button" aria-label="Search" ng-click="toggleSearch()">
+          <ng-md-icon icon="search" size="24" style="fill: white;"></ng-md-icon>
+        </md-button>
+        <md-button class="md-icon-button movie-button" aria-label="Settings" ng-click="visit('/settings')">
+          <ng-md-icon icon="more_vert" size="24" style="fill: white;"></ng-md-icon>
+        </md-button>
+      </div>
+    </div>  
+  </md-toolbar>
+</md-content>

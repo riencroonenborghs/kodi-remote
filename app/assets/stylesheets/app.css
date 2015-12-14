@@ -1,13 +1,57 @@
-body { min-width: 500px; min-height: 375px; }
+body { min-width: 500px; max-height: 500px; }
 .pointer, a:hover { cursor: pointer; }
 
 .content { padding: 20px; }   
 .error { color: red; }
 
-
+/*----- avatars -----*/
 circle-avatar { background: #2196F3; color: white; }
 circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
 .episode-avatar { min-width: 40px; min-height: 40px; }
+
+/*----- icon buttons -----*/
+.play-button svg,
+.stop-button svg,
+.rew-button svg,
+.pause-button svg,
+.tv-button svg,
+.movie-button svg,
+.ffw-button svg { position: relative; top: 8px; }
+
+/*----- topbar -----*/
+#topbar { position: fixed; width: 100%; z-index: 2; }
+#topbar #search { padding-bottom: 4px; }
+#topbar #search .md-placeholder { top: -18px; }
+#topbar #search input { color: rgb(34, 112, 173); }
+
+/*----- content -----*/
+#content { position: absolute; top: 64px; z-index: 1; }
+#content { max-height: 400px; width: 100%;  overflow: auto; }
+#content.remote-visible { margin-bottom: 128px; }
+.md-padding { padding: 16px; }
+
+/*----- md list -----*/
+.md-list-item-text h4 { line-height: 0.95em !important; }
+
+
+/*----- remote -----*/
+#remote { position: fixed; bottom: 0; height: 128px; background: rgb(33,150,243); width: 100%; }
+#remote #info-details { text-align: center; }
+#remote #info-details h2,
+#remote #info-details h3 { padding: 0; margin: 0; }
+#remote #progress { position: relative; top: -5px; }
+#remote #progress md-slider { height: inherit; }
+#remote #progress md-slider .md-thumb { display: none; }
+#remote #progress md-slider .md-track-container { height: 8px; }
+#remote #progress #time { padding-top: 8px; height: 14px; }
+#remote #progress #time #elapsed { padding-left: 4px; }
+#remote #progress #time #remaining { padding-right: 4px; }
+#remote #remote-control { padding-top: 12px; }
+
+
+ .runtime { font-size: 8pt; color: grey; }
+
+/*
 
 .fixed-content { position: fixed; width: 100%; z-index: 1; }
 .fixed-content #topbar .md-toolbar-tools { height: inherit !important; max-height: inherit !important; }
@@ -16,17 +60,10 @@ circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
 
 .absolute-content { position: absolute; top: 120px; }
 
-.play-button svg,
-.stop-button svg,
-.rew-button svg,
-.pause-button svg,
-.tv-button svg,
-.movie-button svg,
-.ffw-button svg { position: relative; top: 6px; }
 
 
 #playing #info-details h2 { font-size: 13pt; margin: 0; }
 #playing #info-details h3 { font-size: 10pt; margin: 0; }
 #playing #progress #time { font-size: 8pt; position: relative; top: -26px; }
 #playing #progress #time span { padding-left: 8px; padding-right: 8px; }
-#playing #progress md-progress-linear { position: relative; top: -31px; }
+#playing #progress md-progress-linear { position: relative; top: -31px; }*/

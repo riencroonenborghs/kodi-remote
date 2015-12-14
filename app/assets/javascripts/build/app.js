@@ -3,18 +3,33 @@
   var app, kodiRemote,
     slice = [].slice;
 
-  app = angular.module("kodiRemote", ["ngAria", "ngAnimate", "ngMaterial", "ngMdIcons", "ngRoute", "infinite-scroll", "kodiRemote.controllers", "kodiRemote.services", "kodiRemote.directives", "kodiRemote.tvshows.controllers", "kodiRemote.tvshows.services", "kodiRemote.movies.controllers", "kodiRemote.movies.services"]);
+  kodiRemote = window.kodiRemote || (window.kodiRemote = {});
+
+  app = angular.module("kodiRemote", ["ngAria", "ngAnimate", "ngMaterial", "ngMdIcons", "ngRoute", "kodiRemote.controllers", "kodiRemote.services", "kodiRemote.directives", "kodiRemote.tvshows.controllers", "kodiRemote.tvshows.services", "kodiRemote.movies.controllers", "kodiRemote.movies.services"]);
 
   app.config(function($mdThemingProvider) {
-    return $mdThemingProvider.theme("default").primaryPalette("blue").accentPalette("blue");
+    return $mdThemingProvider.theme("default").primaryPalette("blue").accentPalette("green");
   });
 
-  app.constant("SERVER", "192.168.0.111");
+  kodiRemote.settings = {
+    server: "192.168.0.169",
+    port: 80
+  };
 
-  app.constant("PORT", 8080);
+  chrome.storage.local.get("kodiRemote", function(data) {
+    var parsedData;
+    if (data.kodiRemote) {
+      parsedData = JSON.parse(data.kodiRemote);
+      kodiRemote.settings.server = parsedData.server;
+      return kodiRemote.settings.port = parsedData.port;
+    }
+  });
 
   app.config(function($routeProvider, $locationProvider) {
-    $routeProvider.when("/tvshows", {
+    $routeProvider.when("/settings", {
+      templateUrl: "app/views/settings/index.html",
+      controller: "SettingsController"
+    }).when("/tvshows", {
       templateUrl: "app/views/tvshows/index.html",
       controller: "TvShowsController"
     }).when("/tvshows/:id/seasons", {
@@ -51,8 +66,6 @@
       };
     }
   ]);
-
-  kodiRemote = window.kodiRemote || (window.kodiRemote = {});
 
   kodiRemote.Loader = (function() {
     function _Class(scope, service) {

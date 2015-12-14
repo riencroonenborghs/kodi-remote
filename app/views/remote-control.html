@@ -1,0 +1,59 @@
+<div id="remote" ng-controller="RemoteController">
+  <div id="progress">
+    <md-slider min="0" max="100" ng-model="percentage" ng-change="jumpTo()" aria-label="percentage" class="md-accent"></md-slider>
+    <div id="time" layout="row">
+      <span id="elapsed" ng-if="timeElapsed">{{timeElapsed.hours | zeroPrepend : 2}}:{{timeElapsed.minutes | zeroPrepend : 2}}:{{timeElapsed.seconds | zeroPrepend : 2}}</span>
+      <span flex></span>
+      <span id="remaining" ng-if="timeRemaining">{{timeRemaining.hours | zeroPrepend : 2}}:{{timeRemaining.minutes | zeroPrepend : 2}}:{{timeRemaining.seconds | zeroPrepend : 2}}</span>
+    </div>
+  </div>
+
+  <div id="remote-control" layout="row">
+    <div>
+      <md-button class="md-icon-button rew-button" ng-click="rewind()" aria-label="Rewind">
+        <ng-md-icon icon="fast_rewind" size="32"></ng-md-icon>
+      </md-button>
+      
+      <md-button class="md-icon-button pause-button" ng-click="playPause()" ng-if="!playPauseState" aria-label="Pause">
+        <ng-md-icon icon="pause" size="32"></ng-md-icon>
+      </md-button>
+      <md-button class="md-icon-button play-button" ng-click="playPause()" ng-if="playPauseState" aria-label="Play">
+        <ng-md-icon icon="play_arrow" size="32"></ng-md-icon>
+      </md-button>
+
+      <md-button class="md-icon-button stop-button" ng-click="stop()" aria-label="Stop">
+        <ng-md-icon icon="stop" size="32"></ng-md-icon>
+      </md-button>
+      <md-button class="md-icon-button ffw-button" ng-click="fastForward()" aria-label="Fast Forward">
+        <ng-md-icon icon="fast_forward" size="32"></ng-md-icon>
+      </md-button>
+    </div>
+
+    <div flex></div>
+
+    <div>
+      <md-button class="md-icon-button subtitle-button" ng-click="switchSubtitle()" aria-label="Switch subtitle tracks">
+        <ng-md-icon icon="subtitles" size="16"></ng-md-icon>
+      </md-button>
+      <md-button class="md-icon-button audio-button" ng-click="switchAudioStream()" aria-label="Switch audio tracks">
+        <ng-md-icon icon="audiotrack" size="16"></ng-md-icon>
+      </md-button>
+    </div>
+  </div>
+
+  <div id="info-details">
+    <div ng-if="playing.type == 'episode'">
+      <h2>
+        {{playing.showtitle}}
+      </h2>
+      <h3>S{{playing.season | zeroPrepend : 2}}E{{playing.episode | zeroPrepend : 2}}: {{playing.title}}</h3>
+    </div>
+    <div ng-if="playing.type == 'movie'">
+      <h2>
+        {{playing.title}}
+        <span ng-if="playing.year">({{playing.year}})</span>
+      </h2>
+    </div>          
+  </div>
+
+</div>

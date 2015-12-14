@@ -9,7 +9,7 @@ app.service "Topbar", [->
   service
 ]
 
-app.service "KodiRequest", [ "SERVER", "PORT", "$q", "$http", (SERVER, PORT, $q, $http) ->
+app.service "KodiRequest", [ "$q", "$http", ($q, $http) ->  
   request = (payload) ->
     deferred = $q.defer()
 
@@ -24,7 +24,7 @@ app.service "KodiRequest", [ "SERVER", "PORT", "$q", "$http", (SERVER, PORT, $q,
       deferred.reject response
       return
 
-    $http.post("http://#{SERVER}:#{PORT}/jsonrpc", payload).then(success, error)
+    $http.post("http://#{kodiRemote.settings.server}:#{kodiRemote.settings.port}/jsonrpc", payload).then(success, error)
 
     return deferred.promise
 
@@ -60,7 +60,10 @@ app.service "Remote", [ "KodiRequest", (KodiRequest) ->
         return KodiRequest.methodRequest "Player.Open", params
       stop: -> return KodiRequest.methodRequest "Player.Stop", [1]
       playPause: (playerId) -> return KodiRequest.methodRequest "Player.PlayPause", [playerId]
-      properties: (playerId) -> return KodiRequest.methodRequest "Player.GetProperties", params = [playerId, ["percentage", "time"]]
+      properties: (playerId) -> return KodiRequest.methodRequest "Player.GetProperties", params = [playerId, ["percentage", "time", "subtitles", "audiostreams"]]
+      setSubtitle: (playerId, subtitle) -> return KodiRequest.methodRequest "Player.SetSubtitle", params = [playerId, subtitle]
+      setAudioStream: (playerId, audiostream) -> return KodiRequest.methodRequest "Player.SetAudioStream", params = [playerId, audiostream]
+      seek: (playerId, percentage) ->  return KodiRequest.methodRequest "Player.Seek", params = [playerId, percentage]
     Playlist:
       clear: -> return KodiRequest.methodRequest "Playlist.Clear", [1]
       addEpisode: (episodeId) -> return KodiRequest.methodRequest "Playlist.Add", [1, {episodeid: episodeId}]
@@ -75,6 +78,39 @@ app.service "Remote", [ "KodiRequest", (KodiRequest) ->
         @Playlist.clear().then =>
           @Playlist.addMovie(movieId).then =>
             @Player.open(1, 0)
+
+  service
+]
+
+
+app.service "SearchService", [ "TvShows", "Movies", (TvShows, Movies) ->
+  service =
+    tvShows: []
+    movies: []
+    searching: false
+
+    reset: -> 
+      @tvShows = []
+      @movies = []
+      @searching = false
+    search: (query) ->
+      return unless query.length > 2
+
+      searchingTvShows  = true
+      searchingMovies   = true
+      @searching        = searchingTvShows && searchingMovies
+
+      TvShows.search(query).then (data) =>
+        @tvShows          = data.tvshows
+        searchingTvShows  = false
+        @searching        = searchingTvShows && searchingMovies
+
+      Movies.search(query).then (data) =>
+        @movies         = data.movies
+        searchingMovies = true
+        @searching      = searchingTvShows && searchingMovies
+
+      return
 
   service
 ]

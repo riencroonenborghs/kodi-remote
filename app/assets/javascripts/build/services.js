@@ -28,7 +28,7 @@
   ]);
 
   app.service("KodiRequest", [
-    "SERVER", "PORT", "$q", "$http", function(SERVER, PORT, $q, $http) {
+    "$q", "$http", function($q, $http) {
       var methodRequest, perPage, request, service;
       request = function(payload) {
         var deferred, error, success;
@@ -46,7 +46,7 @@
           console.debug(error(response));
           deferred.reject(response);
         };
-        $http.post("http://" + SERVER + ":" + PORT + "/jsonrpc", payload).then(success, error);
+        $http.post("http://" + kodiRemote.settings.server + ":" + kodiRemote.settings.port + "/jsonrpc", payload).then(success, error);
         return deferred.promise;
       };
       methodRequest = function(method, params) {
@@ -108,7 +108,19 @@
           },
           properties: function(playerId) {
             var params;
-            return KodiRequest.methodRequest("Player.GetProperties", params = [playerId, ["percentage", "time"]]);
+            return KodiRequest.methodRequest("Player.GetProperties", params = [playerId, ["percentage", "time", "subtitles", "audiostreams"]]);
+          },
+          setSubtitle: function(playerId, subtitle) {
+            var params;
+            return KodiRequest.methodRequest("Player.SetSubtitle", params = [playerId, subtitle]);
+          },
+          setAudioStream: function(playerId, audiostream) {
+            var params;
+            return KodiRequest.methodRequest("Player.SetAudioStream", params = [playerId, audiostream]);
+          },
+          seek: function(playerId, percentage) {
+            var params;
+            return KodiRequest.methodRequest("Player.Seek", params = [playerId, percentage]);
           }
         },
         Playlist: {
@@ -149,6 +161,46 @@
                   return _this.Player.open(1, 0);
                 });
               });
+            };
+          })(this));
+        }
+      };
+      return service;
+    }
+  ]);
+
+  app.service("SearchService", [
+    "TvShows", "Movies", function(TvShows, Movies) {
+      var service;
+      service = {
+        tvShows: [],
+        movies: [],
+        searching: false,
+        reset: function() {
+          this.tvShows = [];
+          this.movies = [];
+          return this.searching = false;
+        },
+        search: function(query) {
+          var searchingMovies, searchingTvShows;
+          if (!(query.length > 2)) {
+            return;
+          }
+          searchingTvShows = true;
+          searchingMovies = true;
+          this.searching = searchingTvShows && searchingMovies;
+          TvShows.search(query).then((function(_this) {
+            return function(data) {
+              _this.tvShows = data.tvshows;
+              searchingTvShows = false;
+              return _this.searching = searchingTvShows && searchingMovies;
+            };
+          })(this));
+          Movies.search(query).then((function(_this) {
+            return function(data) {
+              _this.movies = data.movies;
+              searchingMovies = true;
+              return _this.searching = searchingTvShows && searchingMovies;
             };
           })(this));
         }

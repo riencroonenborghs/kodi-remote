@@ -76,7 +76,7 @@
   ]);
 
   app.service("TvShowsLoader", [
-    "TvShows", "SERVER", "PORT", function(TvShows, SERVER, PORT) {
+    "TvShows", function(TvShows) {
       var Downloader, SeasonsLoader, TvShowDetailsLoader, service;
       service = {
         DetailsLoader: TvShowDetailsLoader = (function(superClass) {
@@ -135,7 +135,7 @@
           Downloader.prototype.handleData = function(data) {
             var path;
             path = encodeURI(decodeURIComponent(data.details.path));
-            return this.scope.url = data.protocol + "://" + SERVER + ":" + PORT + "/" + path;
+            return this.scope.url = data.protocol + "://" + kodiRemote.settings.server + ":" + kodiRemote.settings.port + "/" + path;
           };
 
           Downloader.prototype.prepDownload = function() {

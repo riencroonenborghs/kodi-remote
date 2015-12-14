@@ -1,10 +1,11 @@
+kodiRemote = window.kodiRemote ||= {}
+
 app = angular.module "kodiRemote", [
   "ngAria", 
   "ngAnimate", 
   "ngMaterial", 
   "ngMdIcons",
   "ngRoute",
-  "infinite-scroll",
   "kodiRemote.controllers",
   "kodiRemote.services",
   "kodiRemote.directives",
@@ -17,13 +18,27 @@ app = angular.module "kodiRemote", [
 app.config ($mdThemingProvider) ->
   $mdThemingProvider.theme("default")
     .primaryPalette("blue")
-    .accentPalette("blue")
+    .accentPalette("green")
 
-app.constant "SERVER", "192.168.0.111"
-app.constant "PORT", 8080
+
+kodiRemote.settings =
+  server: "192.168.0.169"
+  port: 80
+
+chrome.storage.local.get "kodiRemote", (data) ->
+  if data.kodiRemote
+    parsedData = JSON.parse data.kodiRemote
+    kodiRemote.settings.server  = parsedData.server
+    kodiRemote.settings.port    = parsedData.port  
+  # else
+  #   kodiRemote.settings.server  = "192.168.0.169"
+  #   kodiRemote.settings.port    = 8080  
 
 app.config ($routeProvider, $locationProvider) ->
   $routeProvider
+    .when "/settings",
+      templateUrl: "app/views/settings/index.html"
+      controller: "SettingsController"
     .when "/tvshows",
       templateUrl: "app/views/tvshows/index.html"
       controller: "TvShowsController"
@@ -56,7 +71,7 @@ app.filter "zeroPrepend", [->
     "#{zeroes}#{input}"
 ]
 
-kodiRemote = window.kodiRemote ||= {}
+
 kodiRemote.Loader = class
   constructor: (@scope, @service) -> return
   handleData: (data) -> return
