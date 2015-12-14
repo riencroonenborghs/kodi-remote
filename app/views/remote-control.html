@@ -11,21 +11,21 @@
   <div id="remote-control" layout="row">
     <div>
       <md-button class="md-icon-button rew-button" ng-click="rewind()" aria-label="Rewind">
-        <ng-md-icon icon="fast_rewind" size="32"></ng-md-icon>
+        <ng-md-icon icon="fast_rewind" style="fill: white;" size="32"></ng-md-icon>
       </md-button>
       
       <md-button class="md-icon-button pause-button" ng-click="playPause()" ng-if="!playPauseState" aria-label="Pause">
-        <ng-md-icon icon="pause" size="32"></ng-md-icon>
+        <ng-md-icon icon="pause" style="fill: white;" size="32"></ng-md-icon>
       </md-button>
       <md-button class="md-icon-button play-button" ng-click="playPause()" ng-if="playPauseState" aria-label="Play">
-        <ng-md-icon icon="play_arrow" size="32"></ng-md-icon>
+        <ng-md-icon icon="play_arrow" style="fill: white;" size="32"></ng-md-icon>
       </md-button>
 
       <md-button class="md-icon-button stop-button" ng-click="stop()" aria-label="Stop">
-        <ng-md-icon icon="stop" size="32"></ng-md-icon>
+        <ng-md-icon icon="stop" style="fill: white;" size="32"></ng-md-icon>
       </md-button>
       <md-button class="md-icon-button ffw-button" ng-click="fastForward()" aria-label="Fast Forward">
-        <ng-md-icon icon="fast_forward" size="32"></ng-md-icon>
+        <ng-md-icon icon="fast_forward" style="fill: white;" size="32"></ng-md-icon>
       </md-button>
     </div>
 
@@ -33,10 +33,10 @@
 
     <div>
       <md-button class="md-icon-button subtitle-button" ng-click="switchSubtitle()" aria-label="Switch subtitle tracks">
-        <ng-md-icon icon="subtitles" size="16"></ng-md-icon>
+        <ng-md-icon icon="subtitles" style="fill: white;" size="16"></ng-md-icon>
       </md-button>
       <md-button class="md-icon-button audio-button" ng-click="switchAudioStream()" aria-label="Switch audio tracks">
-        <ng-md-icon icon="audiotrack" size="16"></ng-md-icon>
+        <ng-md-icon icon="audiotrack" style="fill: white;" size="16"></ng-md-icon>
       </md-button>
     </div>
   </div>

@@ -18,10 +18,10 @@ app.controller "AppController", [ "$scope", "$interval", "$timeout", "$location"
   $scope.performSearch  = -> $scope.searchService.search $scope.search.query
 
   # visits
-  $scope.visit = (path) -> $location.path path
-  $scope.visitSeasons = (tvShowId) -> 
-    console.debug "visitSeasons #{tvShowId}"
-    $scope.visit("/tvshows/#{tvShowId}/seasons")
+  $scope.visit = (path) ->
+    $scope.showSearch = false
+    $location.path path
+  $scope.visitSeasons = (tvShowId) -> $scope.visit("/tvshows/#{tvShowId}/seasons")
 
   # remote
   $scope.remoteVisible = false
@@ -31,7 +31,7 @@ app.controller "AppController", [ "$scope", "$interval", "$timeout", "$location"
   $scope.playerId = null
 
   whatsPlaying = ->    
-    Remote.Player.activePlayers().then (data) ->      
+    Remote.Player.activePlayers().then (data) ->            
       if data.length > 0
         $scope.playerId = data[0].playerid
         Remote.Player.playing($scope.playerId).then (data) ->

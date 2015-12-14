@@ -28,10 +28,10 @@
         return $scope.searchService.search($scope.search.query);
       };
       $scope.visit = function(path) {
+        $scope.showSearch = false;
         return $location.path(path);
       };
       $scope.visitSeasons = function(tvShowId) {
-        console.debug("visitSeasons " + tvShowId);
         return $scope.visit("/tvshows/" + tvShowId + "/seasons");
       };
       $scope.remoteVisible = false;

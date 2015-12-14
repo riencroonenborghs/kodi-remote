@@ -22,7 +22,8 @@ circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
 #topbar { position: fixed; width: 100%; z-index: 2; }
 #topbar #search { padding-bottom: 4px; }
 #topbar #search .md-placeholder { top: -18px; }
-#topbar #search input { color: rgb(34, 112, 173); }
+#topbar #search input { color: white; border-color: white; }
+#topbar #search .md-placeholder { color: white; }
 
 /*----- content -----*/
 #content { position: absolute; top: 64px; z-index: 1; }
@@ -35,7 +36,7 @@ circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
 
 
 /*----- remote -----*/
-#remote { position: fixed; bottom: 0; height: 128px; background: rgb(33,150,243); width: 100%; }
+#remote { position: fixed; bottom: 0; height: 128px; background: rgb(33,150,243); width: 100%; color: white; }
 #remote #info-details { text-align: center; }
 #remote #info-details h2,
 #remote #info-details h3 { padding: 0; margin: 0; }
