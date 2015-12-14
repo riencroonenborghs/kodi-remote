@@ -33,10 +33,10 @@
 
     <div>
       <md-button class="md-icon-button subtitle-button" ng-click="switchSubtitle()" aria-label="Switch subtitle tracks">
-        <ng-md-icon icon="subtitles" style="fill: white;" size="16"></ng-md-icon>
+        <ng-md-icon icon="subtitles" style="fill: {{subtitles.enabled ? '#96DFA0' : '#DF9696'}};" size="20"></ng-md-icon>
       </md-button>
       <md-button class="md-icon-button audio-button" ng-click="switchAudioStream()" aria-label="Switch audio tracks">
-        <ng-md-icon icon="audiotrack" style="fill: white;" size="16"></ng-md-icon>
+        <ng-md-icon icon="audiotrack" style="fill: white;" size="20"></ng-md-icon>
       </md-button>
     </div>
   </div>

@@ -150,8 +150,8 @@
               return scope.nextPage();
             }
           };
-          $(document).off("scroll", scrollHandler);
-          $(document).on("scroll", scrollHandler);
+          $("#content").off("scroll", scrollHandler);
+          $("#content").on("scroll", scrollHandler);
           return scope.$watch("morePages", function() {
             if (scope.morePages) {
               button.show();

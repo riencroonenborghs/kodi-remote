@@ -58,7 +58,7 @@
 
   app.controller("RemoteController", [
     "$scope", "$interval", "Remote", function($scope, $interval, Remote) {
-      var availableAudioStreams, availableSubtitles, currentAudioStreams, currentSubtitle, getProperties;
+      var getProperties;
       $scope.stop = function() {
         return Remote.Player.stop();
       };
@@ -74,27 +74,33 @@
       $scope.rewind = function() {
         return Remote.Player.seek($scope.playerId, $scope.percentage - 1);
       };
-      availableSubtitles = ["on", "next", "off"];
-      currentSubtitle = 0;
-      $scope.subtitles = [];
+      $scope.subtitles = {
+        enabled: false,
+        available: [],
+        valid: ["on", "next", "off"],
+        current: 0
+      };
       $scope.switchSubtitle = function() {
         var subtitle;
-        subtitle = availableSubtitles[currentSubtitle];
+        subtitle = $scope.subtitles.valid[$scope.subtitles.current];
         Remote.Player.setSubtitle($scope.playerId, subtitle);
-        currentSubtitle += 1;
-        if (currentSubtitle === availableSubtitles.length) {
-          return currentSubtitle = 0;
+        $scope.subtitles.current += 1;
+        if ($scope.subtitles.current === $scope.subtitles.valid.length) {
+          return $scope.subtitles.current = 0;
         }
       };
-      availableAudioStreams = ["next", "previous"];
-      currentAudioStreams = 0;
-      $scope.audioStreams = [];
+      $scope.audioStreams = {
+        valid: ["next", "previous"],
+        current: 0,
+        available: []
+      };
       $scope.switchAudioStream = function() {
-        var audioStream, currentAudioStream;
-        audioStream = availableAudioStreams[currentAudioStream];
+        var audioStream;
+        audioStream = $scope.audioStreams.valid[$scope.audioStreams.current];
         Remote.Player.setAudioStream($scope.playerId, audioStream);
-        if (currentAudioStream === availableAudioStreams.length) {
-          return currentAudioStream = 0;
+        $scope.audioStreams.current += 1;
+        if ($scope.audioStreams.current === $scope.audioStreams.valid.length) {
+          return $scope.audioStreams.current = 0;
         }
       };
       $scope.percentage = 0;
@@ -106,8 +112,9 @@
             var hours, minutes, seconds, timeElapsedInSeconds;
             $scope.percentage = data.percentage;
             $scope.timeElapsed = data.time;
-            $scope.subtitles = data.subtitles;
-            $scope.audioStreams = data.audiostreams;
+            $scope.subtitles.available = data.subtitles;
+            $scope.subtitles.enabled = data.subtitleenabled;
+            $scope.audioStreams.available = data.audiostreams;
             timeElapsedInSeconds = data.time.hours * 3600 + data.time.minutes * 60 + data.time.seconds;
             seconds = $scope.playing.runtime - timeElapsedInSeconds;
             hours = Math.floor(seconds / 3600);

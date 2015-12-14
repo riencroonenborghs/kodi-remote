@@ -49,7 +49,7 @@ app.service "Remote", [ "KodiRequest", (KodiRequest) ->
       playing: (playerId) -> 
         params =
           playerid: playerId
-          properties: ["title", "showtitle", "year", "runtime", "season", "episode"]
+          properties: ["title", "showtitle", "year", "runtime", "season", "episode", "streamdetails"]
           # properties: ["title", "artist", "albumartist", "genre", "year", "rating", "album", "track", "duration", "comment", "lyrics", "musicbrainztrackid", "musicbrainzartistid", "musicbrainzalbumid", "musicbrainzalbumartistid", "playcount", "fanart", "director", "trailer", "tagline", "plot", "plotoutline", "originaltitle", "lastplayed", "writer", "studio", "mpaa", "cast", "country", "imdbnumber", "premiered", "productioncode", "runtime", "set", "showlink", "streamdetails", "top250", "votes", "firstaired", "season", "episode", "showtitle", "thumbnail", "file", "resume", "artistid", "albumid", "tvshowid", "setid", "watchedepisodes", "disc", "tag", "art", "genreid", "displayartist", "albumartistid", "description", "theme", "mood", "style", "albumlabel", "sorttitle", "episodeguide", "uniqueid", "dateadded", "channel", "channeltype", "hidden", "locked", "channelnumber", "starttime", "endtime"]
         return KodiRequest.methodRequest "Player.GetItem", params
       open: (playlistId, position) -> 
@@ -60,7 +60,7 @@ app.service "Remote", [ "KodiRequest", (KodiRequest) ->
         return KodiRequest.methodRequest "Player.Open", params
       stop: -> return KodiRequest.methodRequest "Player.Stop", [1]
       playPause: (playerId) -> return KodiRequest.methodRequest "Player.PlayPause", [playerId]
-      properties: (playerId) -> return KodiRequest.methodRequest "Player.GetProperties", params = [playerId, ["percentage", "time", "subtitles", "audiostreams"]]
+      properties: (playerId) -> return KodiRequest.methodRequest "Player.GetProperties", params = [playerId, ["percentage", "time", "subtitles", "audiostreams", "subtitleenabled"]]
       setSubtitle: (playerId, subtitle) -> return KodiRequest.methodRequest "Player.SetSubtitle", params = [playerId, subtitle]
       setAudioStream: (playerId, audiostream) -> return KodiRequest.methodRequest "Player.SetAudioStream", params = [playerId, audiostream]
       seek: (playerId, percentage) ->  return KodiRequest.methodRequest "Player.Seek", params = [playerId, percentage]

@@ -32,13 +32,11 @@
     <ng-include src="'app/views/topbar.html'"></ng-include>
 
     <md-content id="content" ng-class="{'remote-visible': remoteVisible}">      
-      <div ng-if="!showSearch" ng-view></div>
+      <div id="view" ng-if="!showSearch" ng-view></div>
       <ng-include src="'app/views/search-results.html'" ng-if="showSearch"></ng-include>      
     <md-content>
 
-    <md-content>
-      <ng-include src="'app/views/remote-control.html'" ng-if="remoteVisible"></ng-include>
-    </md-content>
-
+    <ng-include src="'app/views/remote-control.html'" ng-if="remoteVisible"></ng-include>
+    
   </body>
 </html>

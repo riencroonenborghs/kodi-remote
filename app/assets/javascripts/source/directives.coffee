@@ -88,8 +88,8 @@ app.directive "autoScroll", [ "$compile", ($compile) ->
       if elementVisible(button) && !scope.loading && scope.morePages
         scope.nextPage()
 
-    $(document).off "scroll", scrollHandler
-    $(document).on "scroll", scrollHandler
+    $("#content").off "scroll", scrollHandler
+    $("#content").on "scroll", scrollHandler
     scope.$watch "morePages", ->
       button.show() if scope.morePages 
       button.hide() unless scope.morePages 

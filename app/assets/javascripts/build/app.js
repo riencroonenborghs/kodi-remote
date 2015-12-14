@@ -12,8 +12,8 @@
   });
 
   kodiRemote.settings = {
-    server: "192.168.0.169",
-    port: 80
+    server: "192.168.0.111",
+    port: 8080
   };
 
   chrome.storage.local.get("kodiRemote", function(data) {
@@ -41,6 +41,9 @@
     }).when("/movies", {
       templateUrl: "app/views/movies/index.html",
       controller: "MoviesController"
+    }).when("/movies/:id/details", {
+      templateUrl: "app/views/movies/details/index.html",
+      controller: "MovieDetailsController"
     }).otherwise("/tvshows", {
       templateUrl: "app/views/tvshows/index.html",
       controller: "TvShowsController"

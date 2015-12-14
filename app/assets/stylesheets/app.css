@@ -3,6 +3,7 @@ body { min-width: 500px; max-height: 500px; }
 
 .content { padding: 20px; }   
 .error { color: red; }
+.md-padding { padding: 16px; }
 
 /*----- avatars -----*/
 circle-avatar { background: #2196F3; color: white; }
@@ -26,16 +27,29 @@ circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
 #topbar #search .md-placeholder { color: white; }
 
 /*----- content -----*/
-#content { position: absolute; top: 64px; z-index: 1; }
-#content { max-height: 400px; width: 100%;  overflow: auto; }
+#content { top: 64px; z-index: 1; }
+#content { max-height: 400px; }
+#content {  width: 100%;  overflow: auto; }
 #content.remote-visible { margin-bottom: 128px; }
-.md-padding { padding: 16px; }
+#content #view { margin-bottom: 64px; }
 
 /*----- md list -----*/
 .md-list-item-text h4 { line-height: 0.95em !important; }
 
 
 /*----- remote -----*/
+#remote { position: fixed; bottom: 0; background: rgb(33,150,243); width: 100%; color: white; }
+
+#remote #progress md-slider .md-thumb { display: none; }
+#remote #progress md-slider .md-track-container { height: 8px; }
+
+#remote #progress #time { padding-top: 8px; height: 14px; position: relative; bottom: 12px; }
+#remote #progress #time #elapsed { padding-left: 4px; }
+#remote #progress #time #remaining { padding-right: 4px; }
+
+#remote #info-details { text-align: center; }
+
+/*
 #remote { position: fixed; bottom: 0; height: 128px; background: rgb(33,150,243); width: 100%; color: white; }
 #remote #info-details { text-align: center; }
 #remote #info-details h2,
@@ -48,9 +62,20 @@ circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
 #remote #progress #time #elapsed { padding-left: 4px; }
 #remote #progress #time #remaining { padding-right: 4px; }
 #remote #remote-control { padding-top: 12px; }
+*/
 
 
  .runtime { font-size: 8pt; color: grey; }
+ .cast a { text-decoration: none; color: black; }
+
+ /*tv shows*/
+ .tvshow .second-line,
+ .tvshow .plot,
+ .movie .second-line,
+ .movie .plot,
+ .tvshow-season .second-line,
+ .tvshow-season-episode .second-line,
+ .tvshow-season-episode .plot { font-size: 7pt; }
 
 /*
 

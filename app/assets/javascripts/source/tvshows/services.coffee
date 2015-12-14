@@ -26,7 +26,7 @@ app.service "TvShows", [ "KodiRequest", (KodiRequest) ->
     Seasons: 
       index: (tvShowId) -> 
         params =
-          properties: ["playcount"]
+          properties: ["playcount", "episode", "thumbnail"]
           tvshowid: tvShowId
         return KodiRequest.methodRequest "VideoLibrary.GetSeasons", params
       Episodes: 

@@ -29,9 +29,37 @@
       $controller("SearchController", {
         $scope: $scope
       });
-      return $scope.play = function(movie) {
+      $scope.play = function(movie) {
         return Remote.playMovie(movie.movieid);
       };
+      return $scope.visitDetails = function(movieId) {
+        return $scope.visit("/movies/" + movieId + "/details");
+      };
+    }
+  ]);
+
+  app.controller("MovieDetailsController", [
+    "$scope", "$routeParams", "MoviesLoader", "Topbar", function($scope, $routeParams, MoviesLoader, Topbar) {
+      var detailsLoader;
+      $scope.movieId = parseInt($routeParams.id);
+      detailsLoader = new MoviesLoader.DetailsLoader($scope);
+      detailsLoader.afterCallback = function(data) {
+        var castMember, i, len, ref, results;
+        Topbar.setLink("/movies", $scope.movieDetails.label);
+        ref = $scope.movieDetails.cast;
+        results = [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          castMember = ref[i];
+          if (castMember.thumbnail) {
+            castMember.avatar = decodeURIComponent(castMember.thumbnail.replace("image://", ""));
+            results.push(castMember.avatar = castMember.avatar.slice(0, -1));
+          } else {
+            results.push(void 0);
+          }
+        }
+        return results;
+      };
+      return detailsLoader.show($scope.movieId);
     }
   ]);
 

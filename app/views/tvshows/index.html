@@ -2,17 +2,19 @@
   <md-list class="md-padding">
     <md-list-item ng-repeat="tvShow in list" 
                   ng-click="visitSeasons(tvShow.tvshowid)"
-                  class="md-2-line pointer">
+                  class="md-2-line pointer tvshow">
       <avatar-image avatar="tvShow.art.poster" class="md-avatar"></avatar-image>
       <div class="md-list-item-text" layout="column">
-        <h3>
-          <show-rating rating="tvShow.rating"></show-rating>              
+        <h3>          
           {{tvShow.label}} ({{tvShow.year}})
-          <watched-it model="tvShow"></watched-it>          
+          <watched-it model="tvShow"></watched-it>
         </h3>
-        <small>
+        <div class="second-line">
+          <show-rating rating="tvShow.rating"></show-rating>              
+        </div>
+        <div class="plot">
           {{tvShow.plot}}
-        </small>
+        </div>
       </div>
     </md-list-item>
   </md-list>

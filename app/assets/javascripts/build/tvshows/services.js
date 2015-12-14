@@ -51,7 +51,7 @@
           index: function(tvShowId) {
             var params;
             params = {
-              properties: ["playcount"],
+              properties: ["playcount", "episode", "thumbnail"],
               tvshowid: tvShowId
             };
             return KodiRequest.methodRequest("VideoLibrary.GetSeasons", params);

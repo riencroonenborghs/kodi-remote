@@ -84,7 +84,7 @@
             var params;
             params = {
               playerid: playerId,
-              properties: ["title", "showtitle", "year", "runtime", "season", "episode"]
+              properties: ["title", "showtitle", "year", "runtime", "season", "episode", "streamdetails"]
             };
             return KodiRequest.methodRequest("Player.GetItem", params);
           },
@@ -108,7 +108,7 @@
           },
           properties: function(playerId) {
             var params;
-            return KodiRequest.methodRequest("Player.GetProperties", params = [playerId, ["percentage", "time", "subtitles", "audiostreams"]]);
+            return KodiRequest.methodRequest("Player.GetProperties", params = [playerId, ["percentage", "time", "subtitles", "audiostreams", "subtitleenabled"]]);
           },
           setSubtitle: function(playerId, subtitle) {
             var params;

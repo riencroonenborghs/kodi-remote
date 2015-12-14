@@ -35,6 +35,7 @@ app.controller "AppController", [ "$scope", "$interval", "$timeout", "$location"
       if data.length > 0
         $scope.playerId = data[0].playerid
         Remote.Player.playing($scope.playerId).then (data) ->
+          # console.debug data
           $scope.playing = data.item
           $scope.remoteVisible = true
       else
@@ -57,45 +58,49 @@ app.controller "RemoteController", [ "$scope", "$interval", "Remote", ($scope, $
   $scope.rewind = ->
     Remote.Player.seek $scope.playerId, $scope.percentage - 1
 
-  availableSubtitles  = ["on", "next", "off"]
-  currentSubtitle     = 0
-  $scope.subtitles    = []
+  $scope.subtitles =
+    enabled: false
+    available: []
+    valid: ["on", "next", "off"]
+    current: 0  
   $scope.switchSubtitle = -> 
-    subtitle = availableSubtitles[currentSubtitle]
+    subtitle = $scope.subtitles.valid[$scope.subtitles.current]
     Remote.Player.setSubtitle $scope.playerId, subtitle
-    currentSubtitle += 1
-    currentSubtitle = 0 if currentSubtitle == availableSubtitles.length
+    $scope.subtitles.current += 1
+    $scope.subtitles.current = 0 if $scope.subtitles.current == $scope.subtitles.valid.length
 
-  availableAudioStreams = ["next", "previous"]
-  currentAudioStreams   = 0
-  $scope.audioStreams   = []  
+  $scope.audioStreams =
+    valid: ["next", "previous"]
+    current: 0
+    available: []
   $scope.switchAudioStream = ->
-    audioStream = availableAudioStreams[currentAudioStream]
+    audioStream = $scope.audioStreams.valid[$scope.audioStreams.current]
     Remote.Player.setAudioStream $scope.playerId, audioStream
-    currentAudioStream = 0 if currentAudioStream == availableAudioStreams.length
+    $scope.audioStreams.current += 1
+    $scope.audioStreams.current = 0 if $scope.audioStreams.current == $scope.audioStreams.valid.length
 
   $scope.percentage = 0
   $scope.timeElapsed = 0
   $scope.timeRemaining = 0
   getProperties = ->
     if $scope.playing
-      Remote.Player.properties($scope.playerId).then (data) ->
-        # console.debug data
-        $scope.percentage = data.percentage
-        $scope.timeElapsed = data.time
-        $scope.subtitles = data.subtitles
-        $scope.audioStreams = data.audiostreams
+      Remote.Player.properties($scope.playerId).then (data) ->        
+        $scope.percentage             = data.percentage
+        $scope.timeElapsed            = data.time
+        $scope.subtitles.available    = data.subtitles
+        $scope.subtitles.enabled      = data.subtitleenabled
+        $scope.audioStreams.available = data.audiostreams
 
         timeElapsedInSeconds = data.time.hours * 3600 + data.time.minutes * 60 + data.time.seconds
-
         seconds = $scope.playing.runtime - timeElapsedInSeconds
-        hours = Math.floor(seconds / 3600)
+        hours   = Math.floor(seconds / 3600)
         minutes = Math.floor((seconds - (hours * 3600)) / 60)
         seconds = Math.floor((seconds - (hours * 3600)) % 60)
         $scope.timeRemaining =
           hours: hours
           minutes: minutes
           seconds: seconds
+
   $interval getProperties, 1000
 
   $scope.jumpTo = ->

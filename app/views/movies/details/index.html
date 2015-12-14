@@ -1,0 +1,47 @@
+<loading-screen loading="loading"></loading-screen>
+
+<md-list ng-if="!loading" class="md-padding">
+  <md-list-item>
+    <div class="md-list-item-text">
+      <h4>Director</h4>
+      <p>{{movieDetails.director.join(', ')}}</p>
+    </div>
+  </md-list-item>
+
+  <md-list-item>
+    <div class="md-list-item-text">
+      <h4>Writer</h4>
+      <p>{{movieDetails.writer.join(', ')}}</p>
+    </div>
+  </md-list-item>
+
+  <md-list-item>
+    <div class="md-list-item-text">
+      <h4>Studio</h4>
+      <p>{{movieDetails.studio.join(', ')}}</p>
+    </div>
+  </md-list-item>
+
+  <md-list-item>
+    <div class="md-list-item-text">
+      <h4>MPAA Rating</h4>
+      <p>{{movieDetails.mpaa}}</p>
+    </div>
+  </md-list-item>
+
+  <h2>Cast</h2>
+
+  <md-list-item ng-repeat="castMember in movieDetails.cast" class="md-3-line cast">
+    <img src="{{castMember.avatar}}" ng-if="castMember.avatar" class="md-avatar" />
+    <div class="md-list-item-text">
+      <h3>{{castMember.name}}</h3>
+      <h4>{{castMember.role}}</h4>
+      <p>
+        <a ng-href="http://www.imdb.com/find?s=nm&q={{castMember.name}}" target="_blank">
+          <ng-md-icon icon="movie" size="12"></ng-md-icon>
+          IMDB
+        </a>
+      </p>
+    </div>
+  </md-list-item>
+</md-list>

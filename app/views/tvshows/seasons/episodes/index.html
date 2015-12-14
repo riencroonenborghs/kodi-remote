@@ -3,19 +3,21 @@
 <md-content ng-if="!loading">
   <md-subheader class="md-primary md-padding">{{tvShowDetails.label}}</md-subheader>
   <md-list class="md-padding">
-    <md-list-item ng-repeat="episode in episodes" class="md-3-line">
+    <md-list-item ng-repeat="episode in episodes" class="md-3-line tvshow-season-episode">
       <avatar-image avatar="episode.thumbnail" class="episode-avatar md-avatar"></avatar-image>
       <!-- <tvshow-thumbnail thumbnail="episode.thumbnail" class="episode-avatar md-avatar"></tvshow-thumbnail> -->
       <div class="md-list-item-text">
-        <h3>
-          <show-rating rating="episode.rating"></show-rating>              
+        <h3>          
           {{episode.title}}
-          <watched-it model="episode"></watched-it>   
-          <small class="runtime">{{episode.runtime | secondsToDateTime | date:'HH:mm:ss'}}</small>      
+          <watched-it model="episode"></watched-it>             
         </h3>
-        <small>
+        <div class="second-line">
+          <show-rating rating="episode.rating"></show-rating>
+          <span class="runtime">{{episode.runtime | secondsToDateTime | date:'HH:mm:ss'}}</span>      
+        </div>
+        <div class="plot">
           {{episode.plot}}          
-        </small>      
+        </div>
         <div>
           <md-button class="md-icon-button play-button" ng-click="play(episode)" aria-label="Play episode">
             <ng-md-icon icon="play_arrow"></ng-md-icon> 
