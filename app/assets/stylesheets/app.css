@@ -51,21 +51,9 @@ circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
 #remote #info-details h1,
 #remote #info-details h3 { padding: 0; margin: 0; }
 
-/*
-#remote { position: fixed; bottom: 0; height: 128px; background: rgb(33,150,243); width: 100%; color: white; }
-#remote #info-details { text-align: center; }
-#remote #info-details h2,
-#remote #info-details h3 { padding: 0; margin: 0; }
-#remote #progress { position: relative; top: -5px; }
-#remote #progress md-slider { height: inherit; }
-#remote #progress md-slider .md-thumb { display: none; }
-#remote #progress md-slider .md-track-container { height: 8px; }
-#remote #progress #time { padding-top: 8px; height: 14px; }
-#remote #progress #time #elapsed { padding-left: 4px; }
-#remote #progress #time #remaining { padding-right: 4px; }
-#remote #remote-control { padding-top: 12px; }
-*/
-
+.remote-control table { margin: 0 auto; }
+.remote-control table td { text-align: center; }
+    
 
  .runtime { font-size: 8pt; color: grey; }
  .cast a { text-decoration: none; color: black; }
@@ -78,20 +66,3 @@ circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
  .tvshow-season .second-line,
  .tvshow-season-episode .second-line,
  .tvshow-season-episode .plot { font-size: 7pt; }
-
-/*
-
-.fixed-content { position: fixed; width: 100%; z-index: 1; }
-.fixed-content #topbar .md-toolbar-tools { height: inherit !important; max-height: inherit !important; }
-.fixed-content #playing #remote { text-align: center; position: relative; top: -12px; }
-.fixed-content #playing #info-details { text-align: center; position: relative; top: -20px; }
-
-.absolute-content { position: absolute; top: 120px; }
-
-
-
-#playing #info-details h2 { font-size: 13pt; margin: 0; }
-#playing #info-details h3 { font-size: 10pt; margin: 0; }
-#playing #progress #time { font-size: 8pt; position: relative; top: -26px; }
-#playing #progress #time span { padding-left: 8px; padding-right: 8px; }
-#playing #progress md-progress-linear { position: relative; top: -31px; }*/

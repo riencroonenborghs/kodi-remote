@@ -5,7 +5,7 @@
 
   kodiRemote = window.kodiRemote || (window.kodiRemote = {});
 
-  app = angular.module("kodiRemote", ["ngAria", "ngAnimate", "ngMaterial", "ngMdIcons", "ngRoute", "kodiRemote.controllers", "kodiRemote.services", "kodiRemote.directives", "kodiRemote.tvshows.controllers", "kodiRemote.tvshows.services", "kodiRemote.movies.controllers", "kodiRemote.movies.services", "kodiRemote.settings.controllers"]);
+  app = angular.module("kodiRemote", ["ngAria", "ngAnimate", "ngMaterial", "ngMdIcons", "ngRoute", "kodiRemote.controllers", "kodiRemote.services", "kodiRemote.directives", "kodiRemote.tvshows.controllers", "kodiRemote.tvshows.services", "kodiRemote.movies.controllers", "kodiRemote.movies.services", "kodiRemote.settings.controllers", "kodiRemote.remote.controllers", "kodiRemote.remote.services"]);
 
   app.config(function($mdThemingProvider) {
     return $mdThemingProvider.theme("default").primaryPalette("blue").accentPalette("green");
@@ -35,6 +35,9 @@
     }).when("/movies/:id/details", {
       templateUrl: "app/views/movies/details/index.html",
       controller: "MovieDetailsController"
+    }).when("/remote", {
+      templateUrl: "app/views/remote/index.html",
+      controller: "RemoteController"
     }).otherwise("/tvshows", {
       templateUrl: "app/views/tvshows/index.html",
       controller: "TvShowsController"

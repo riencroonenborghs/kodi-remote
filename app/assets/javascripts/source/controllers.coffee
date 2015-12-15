@@ -80,7 +80,7 @@ app.controller "AppController", [ "$scope", "$interval", "$timeout", "$location"
     return      
 ]
 
-app.controller "RemoteController", [ "$scope", "$interval", "Remote", ($scope, $interval, Remote) ->
+app.controller "PlayingRemoteController", [ "$scope", "$interval", "Remote", ($scope, $interval, Remote) ->
   $scope.stop = -> Remote.Player.stop()
 
   $scope.playPauseState = false

@@ -85,7 +85,7 @@
     }
   ]);
 
-  app.controller("RemoteController", [
+  app.controller("PlayingRemoteController", [
     "$scope", "$interval", "Remote", function($scope, $interval, Remote) {
       var getProperties;
       $scope.stop = function() {

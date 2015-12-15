@@ -13,7 +13,9 @@ app = angular.module "kodiRemote", [
   "kodiRemote.tvshows.services",
   "kodiRemote.movies.controllers",
   "kodiRemote.movies.services",
-  "kodiRemote.settings.controllers"
+  "kodiRemote.settings.controllers",
+  "kodiRemote.remote.controllers",
+  "kodiRemote.remote.services"
 ]
 
 app.config ($mdThemingProvider) ->
@@ -49,6 +51,9 @@ app.config ($routeProvider, $locationProvider) ->
     .when "/movies/:id/details",
       templateUrl: "app/views/movies/details/index.html"
       controller: "MovieDetailsController"
+    .when "/remote",
+      templateUrl: "app/views/remote/index.html"
+      controller: "RemoteController"    
     .otherwise "/tvshows",
       templateUrl: "app/views/tvshows/index.html"
       controller: "TvShowsController"

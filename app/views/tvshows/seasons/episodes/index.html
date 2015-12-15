@@ -1,11 +1,13 @@
 <loading-screen loading="loading"></loading-screen>
 
-<md-content ng-if="!loading">
-  <md-subheader class="md-primary md-padding">{{tvShowDetails.label}}</md-subheader>
+<md-subheader ng-if="!loading" class="md-primary md-padding">
+  TV Shows > {{tvShowDetails.label}} > Season {{seasonNumber}}
+</md-subheader>
+
+<md-content ng-if="!loading">  
   <md-list class="md-padding">
     <md-list-item ng-repeat="episode in episodes" class="md-3-line tvshow-season-episode">
       <avatar-image avatar="episode.thumbnail" class="episode-avatar md-avatar"></avatar-image>
-      <!-- <tvshow-thumbnail thumbnail="episode.thumbnail" class="episode-avatar md-avatar"></tvshow-thumbnail> -->
       <div class="md-list-item-text">
         <h3>          
           {{episode.title}}
