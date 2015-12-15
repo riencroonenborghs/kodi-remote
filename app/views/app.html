@@ -28,9 +28,14 @@
     <link rel="stylesheet" type="text/css" href="app/assets/stylesheets/angular-material-0.10.1.min.css">
     <link rel="stylesheet" type="text/css" href="app/assets/stylesheets/app.css">
   </head>
-  <body ng-app="kodiRemote" ng-controller="AppController" ng-keypress="keyPressed($event)">
+  <body ng-app="kodiRemote" ng-controller="AppController">
 
-    <div id="content" layout="column">
+    <div ng-if="!hasServer">
+      <ng-include src="'app/views/settings-topbar.html'"></ng-include>
+      <md-content ng-view></md-content>
+    </div>
+
+    <div id="content" layout="column" ng-if="hasServer">
       <div id="top" layout="column">
         <ng-include src="'app/views/topbar.html'"></ng-include>
         <ng-include src="'app/views/remote-control.html'" ng-if="remoteVisible"></ng-include>

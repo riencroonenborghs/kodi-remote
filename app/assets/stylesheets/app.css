@@ -17,6 +17,7 @@ circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
 .pause-button svg,
 .tv-button svg,
 .movie-button svg,
+.save-button svg,
 .ffw-button svg { position: relative; top: 8px; }
 
 /*----- topbar -----*/
@@ -27,7 +28,7 @@ circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
   
 /*----- content -----*/
 #top { position: fixed; width: 100%; z-index: 2; }
-#middle { position: absolute; top: 64px; }
+#middle { position: absolute; top: 64px; width: 100%; }
 #middle.remote-visible { position: absolute; top: 224px; }
 
 

@@ -6,56 +6,82 @@
 
   app.controller("AppController", [
     "$scope", "$interval", "$timeout", "$location", "SearchService", "Topbar", "Remote", function($scope, $interval, $timeout, $location, SearchService, Topbar, Remote) {
-      var whatsPlaying;
-      $scope.Topbar = Topbar;
-      Topbar.setTitle("Kodi Remote");
-      $scope.toggleSearch = function() {
-        $scope.showSearch = !$scope.showSearch;
-        $scope.search.query = "";
-        $scope.searchService.reset();
-        if ($scope.showSearch) {
-          return $timeout((function() {
-            return $("#search-query").focus();
-          }), 500);
-        }
-      };
-      $scope.showSearch = false;
-      $scope.search = {
-        query: ""
-      };
-      $scope.searchService = SearchService;
-      $scope.performSearch = function() {
-        return $scope.searchService.search($scope.search.query);
-      };
-      $scope.visit = function(path) {
+      var initApp, loadSettings, loadSettingsInterval;
+      initApp = function() {
+        var whatsPlaying;
+        $scope.Topbar = Topbar;
+        $scope.toggleSearch = function() {
+          $scope.showSearch = !$scope.showSearch;
+          $scope.search.query = "";
+          $scope.searchService.reset();
+          if ($scope.showSearch) {
+            return $timeout((function() {
+              return $("#search-query").focus();
+            }), 500);
+          }
+        };
         $scope.showSearch = false;
-        return $location.path(path);
+        $scope.search = {
+          query: ""
+        };
+        $scope.searchService = SearchService;
+        $scope.performSearch = function() {
+          return $scope.searchService.search($scope.search.query);
+        };
+        $scope.visit = function(path) {
+          $scope.showSearch = false;
+          return $location.path(path);
+        };
+        $scope.visitSeasons = function(tvShowId) {
+          return $scope.visit("/tvshows/" + tvShowId + "/seasons");
+        };
+        $scope.remoteVisible = false;
+        $scope.playing = null;
+        $scope.playerId = null;
+        whatsPlaying = function() {
+          return Remote.Player.activePlayers().then(function(data) {
+            if (data.length > 0) {
+              $scope.playerId = data[0].playerid;
+              return Remote.Player.playing($scope.playerId).then(function(data) {
+                $scope.playing = data.item;
+                return $scope.remoteVisible = true;
+              });
+            } else {
+              $scope.playing = null;
+              return $scope.remoteVisible = false;
+            }
+          });
+        };
+        whatsPlaying();
+        $interval(whatsPlaying, 1000);
+        return $scope.keyPressed = function(event) {
+          return console.debug(event);
+        };
       };
-      $scope.visitSeasons = function(tvShowId) {
-        return $scope.visit("/tvshows/" + tvShowId + "/seasons");
-      };
-      $scope.remoteVisible = false;
-      $scope.playing = null;
-      $scope.playerId = null;
-      whatsPlaying = function() {
-        return Remote.Player.activePlayers().then(function(data) {
-          if (data.length > 0) {
-            $scope.playerId = data[0].playerid;
-            return Remote.Player.playing($scope.playerId).then(function(data) {
-              $scope.playing = data.item;
-              return $scope.remoteVisible = true;
-            });
-          } else {
-            $scope.playing = null;
-            return $scope.remoteVisible = false;
+      $scope.hasServer = kodiRemote.settings.server !== null && kodiRemote.settings.port !== null;
+      loadSettings = function() {
+        chrome.storage.local.get("kodiRemote", function(data) {
+          var parsedData;
+          if (data.kodiRemote) {
+            parsedData = JSON.parse(data.kodiRemote);
+            kodiRemote.settings.server = parsedData.server;
+            kodiRemote.settings.port = parsedData.port;
+            $scope.hasServer = kodiRemote.settings.server !== null && kodiRemote.settings.port !== null;
+            initApp();
+            return $location.path("/tvshows");
           }
         });
+        if ($scope.hasServer) {
+          $interval.cancel(loadSettingsInterval);
+        }
       };
-      whatsPlaying();
-      $interval(whatsPlaying, 1000);
-      return $scope.keyPressed = function(event) {
-        return console.debug(event);
-      };
+      loadSettingsInterval = $interval(loadSettings, 1000);
+      loadSettings();
+      if ($scope.hasServer) {
+        return initApp();
+      } else {
+        $location.path("/settings");
+      }
     }
   ]);
 

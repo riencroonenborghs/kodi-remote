@@ -23,14 +23,8 @@ app.config ($mdThemingProvider) ->
 
 
 kodiRemote.settings =
-  server: "192.168.0.169"
-  port: 80
-
-chrome.storage.local.get "kodiRemote", (data) ->
-  if data.kodiRemote
-    parsedData = JSON.parse data.kodiRemote
-    kodiRemote.settings.server  = parsedData.server
-    kodiRemote.settings.port    = parsedData.port  
+  server: null # "192.168.0.169"
+  port: null # 80
   # else
   #   kodiRemote.settings.server  = "192.168.0.169"
   #   kodiRemote.settings.port    = 8080  

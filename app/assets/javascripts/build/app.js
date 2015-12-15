@@ -12,18 +12,9 @@
   });
 
   kodiRemote.settings = {
-    server: "192.168.0.169",
-    port: 80
+    server: null,
+    port: null
   };
-
-  chrome.storage.local.get("kodiRemote", function(data) {
-    var parsedData;
-    if (data.kodiRemote) {
-      parsedData = JSON.parse(data.kodiRemote);
-      kodiRemote.settings.server = parsedData.server;
-      return kodiRemote.settings.port = parsedData.port;
-    }
-  });
 
   app.config(function($routeProvider, $locationProvider) {
     $routeProvider.when("/settings", {
