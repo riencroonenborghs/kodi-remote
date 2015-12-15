@@ -43,6 +43,9 @@ app.controller "AppController", [ "$scope", "$interval", "$timeout", "$location"
         $scope.remoteVisible = false
   whatsPlaying()
   $interval whatsPlaying, 1000
+
+  $scope.keyPressed = (event) ->
+    console.debug event
 ]
 
 app.controller "RemoteController", [ "$scope", "$interval", "Remote", ($scope, $interval, Remote) ->

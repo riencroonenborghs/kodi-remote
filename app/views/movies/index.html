@@ -18,8 +18,9 @@
           {{movie.plot}}
         </div>
         <div>
-          <md-button class="md-icon-button play-button" ng-click="play(movie)" aria-label="Play movie">
-            <ng-md-icon icon="play_arrow"></ng-md-icon>             
+          <md-button class="md-primary md-raised play-button" ng-click="play(movie); $event.stopPropagation();" aria-label="Play movie">
+            <ng-md-icon icon="play_arrow" style="fill: white;"></ng-md-icon>             
+            Play
           </md-button>
           <!-- <md-button class="md-icon-button play-button" ng-click="download(movie)" aria-label="Download movie">
             <ng-md-icon icon="file_download"></ng-md-icon>             

@@ -5,15 +5,15 @@
 
   kodiRemote = window.kodiRemote || (window.kodiRemote = {});
 
-  app = angular.module("kodiRemote", ["ngAria", "ngAnimate", "ngMaterial", "ngMdIcons", "ngRoute", "kodiRemote.controllers", "kodiRemote.services", "kodiRemote.directives", "kodiRemote.tvshows.controllers", "kodiRemote.tvshows.services", "kodiRemote.movies.controllers", "kodiRemote.movies.services"]);
+  app = angular.module("kodiRemote", ["ngAria", "ngAnimate", "ngMaterial", "ngMdIcons", "ngRoute", "kodiRemote.controllers", "kodiRemote.services", "kodiRemote.directives", "kodiRemote.tvshows.controllers", "kodiRemote.tvshows.services", "kodiRemote.movies.controllers", "kodiRemote.movies.services", "kodiRemote.settings.controllers"]);
 
   app.config(function($mdThemingProvider) {
     return $mdThemingProvider.theme("default").primaryPalette("blue").accentPalette("green");
   });
 
   kodiRemote.settings = {
-    server: "192.168.0.111",
-    port: 8080
+    server: "192.168.0.169",
+    port: 80
   };
 
   chrome.storage.local.get("kodiRemote", function(data) {

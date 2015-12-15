@@ -52,7 +52,10 @@
         });
       };
       whatsPlaying();
-      return $interval(whatsPlaying, 1000);
+      $interval(whatsPlaying, 1000);
+      return $scope.keyPressed = function(event) {
+        return console.debug(event);
+      };
     }
   ]);
 

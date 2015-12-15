@@ -1,4 +1,4 @@
-body { min-width: 500px; max-height: 500px; }
+body { width: 500px; }
 .pointer, a:hover { cursor: pointer; }
 
 .content { padding: 20px; }   
@@ -20,26 +20,25 @@ circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
 .ffw-button svg { position: relative; top: 8px; }
 
 /*----- topbar -----*/
-#topbar { position: fixed; width: 100%; z-index: 2; }
 #topbar #search { padding-bottom: 4px; }
 #topbar #search .md-placeholder { top: -18px; }
 #topbar #search input { color: white; border-color: white; }
 #topbar #search .md-placeholder { color: white; }
-
+  
 /*----- content -----*/
-#content { top: 64px; z-index: 1; }
-#content { max-height: 400px; }
-#content {  width: 100%;  overflow: auto; }
-#content.remote-visible { margin-bottom: 128px; }
-#content #view { margin-bottom: 64px; }
+#top { position: fixed; width: 100%; z-index: 2; }
+#middle { position: absolute; top: 64px; }
+#middle.remote-visible { position: absolute; top: 224px; }
+
 
 /*----- md list -----*/
 .md-list-item-text h4 { line-height: 0.95em !important; }
 
 
 /*----- remote -----*/
-#remote { position: fixed; bottom: 0; background: rgb(33,150,243); width: 100%; color: white; }
+#remote { background: rgb(33,150,243); width: 100%; color: white; }
 
+#remote #progress md-slider { cursor: pointer; }
 #remote #progress md-slider .md-thumb { display: none; }
 #remote #progress md-slider .md-track-container { height: 8px; }
 
@@ -48,6 +47,8 @@ circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
 #remote #progress #time #remaining { padding-right: 4px; }
 
 #remote #info-details { text-align: center; }
+#remote #info-details h1,
+#remote #info-details h3 { padding: 0; margin: 0; }
 
 /*
 #remote { position: fixed; bottom: 0; height: 128px; background: rgb(33,150,243); width: 100%; color: white; }

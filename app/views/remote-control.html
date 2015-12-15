@@ -1,12 +1,4 @@
 <div id="remote" ng-controller="RemoteController">
-  <div id="progress">
-    <md-slider min="0" max="100" ng-model="percentage" ng-change="jumpTo()" aria-label="percentage" class="md-accent"></md-slider>
-    <div id="time" layout="row">
-      <span id="elapsed" ng-if="timeElapsed">{{timeElapsed.hours | zeroPrepend : 2}}:{{timeElapsed.minutes | zeroPrepend : 2}}:{{timeElapsed.seconds | zeroPrepend : 2}}</span>
-      <span flex></span>
-      <span id="remaining" ng-if="timeRemaining">{{timeRemaining.hours | zeroPrepend : 2}}:{{timeRemaining.minutes | zeroPrepend : 2}}:{{timeRemaining.seconds | zeroPrepend : 2}}</span>
-    </div>
-  </div>
 
   <div id="remote-control" layout="row">
     <div>
@@ -43,9 +35,9 @@
 
   <div id="info-details">
     <div ng-if="playing.type == 'episode'">
-      <h2>
+      <h1>
         {{playing.showtitle}}
-      </h2>
+      </h1>
       <h3>S{{playing.season | zeroPrepend : 2}}E{{playing.episode | zeroPrepend : 2}}: {{playing.title}}</h3>
     </div>
     <div ng-if="playing.type == 'movie'">
@@ -54,6 +46,15 @@
         <span ng-if="playing.year">({{playing.year}})</span>
       </h2>
     </div>          
+  </div>
+
+  <div id="progress">
+    <md-slider min="0" max="100" ng-model="percentage" ng-change="jumpTo()" aria-label="percentage" class="md-accent"></md-slider>
+    <div id="time" layout="row">
+      <span id="elapsed" ng-if="timeElapsed">{{timeElapsed.hours | zeroPrepend : 2}}:{{timeElapsed.minutes | zeroPrepend : 2}}:{{timeElapsed.seconds | zeroPrepend : 2}}</span>
+      <span flex></span>
+      <span id="remaining" ng-if="timeRemaining">{{timeRemaining.hours | zeroPrepend : 2}}:{{timeRemaining.minutes | zeroPrepend : 2}}:{{timeRemaining.seconds | zeroPrepend : 2}}</span>
+    </div>
   </div>
 
 </div>

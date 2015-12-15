@@ -23,20 +23,23 @@
     <script src="app/assets/javascripts/build/tvshows/services.js"></script>
     <script src="app/assets/javascripts/build/movies/controllers.js"></script>
     <script src="app/assets/javascripts/build/movies/services.js"></script>
+    <script src="app/assets/javascripts/build/settings/controllers.js"></script>
 
     <link rel="stylesheet" type="text/css" href="app/assets/stylesheets/angular-material-0.10.1.min.css">
     <link rel="stylesheet" type="text/css" href="app/assets/stylesheets/app.css">
   </head>
-  <body ng-app="kodiRemote" ng-controller="AppController">
+  <body ng-app="kodiRemote" ng-controller="AppController" ng-keypress="keyPressed($event)">
 
-    <ng-include src="'app/views/topbar.html'"></ng-include>
+    <div id="content" layout="column">
+      <div id="top" layout="column">
+        <ng-include src="'app/views/topbar.html'"></ng-include>
+        <ng-include src="'app/views/remote-control.html'" ng-if="remoteVisible"></ng-include>
+      </div>
+      <div id="middle" ng-class="{'remote-visible' : remoteVisible}">
+        <md-content id="viewContent" ng-if="!showSearch" ng-view></md-content>
+        <ng-include id="searchContent" ng-if="showSearch" src="'app/views/search-results.html'"></ng-include>
+      </div>
+    </div>
 
-    <md-content id="content" ng-class="{'remote-visible': remoteVisible}">      
-      <div id="view" ng-if="!showSearch" ng-view></div>
-      <ng-include src="'app/views/search-results.html'" ng-if="showSearch"></ng-include>      
-    <md-content>
-
-    <ng-include src="'app/views/remote-control.html'" ng-if="remoteVisible"></ng-include>
-    
   </body>
 </html>
