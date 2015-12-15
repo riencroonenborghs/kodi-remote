@@ -10,11 +10,12 @@
       <avatar-image avatar="tvShow.art.poster" class="md-avatar"></avatar-image>
       <div class="md-list-item-text" layout="column">
         <h3>          
-          {{tvShow.label}} ({{tvShow.year}})
+          {{tvShow.label}} ({{tvShow.year}})          
           <watched-it model="tvShow"></watched-it>
         </h3>
         <div class="second-line">
           <show-rating rating="tvShow.rating"></show-rating>              
+          <span class="genre" ng-repeat="genre in tvShow.genre">{{genre}}</span>
         </div>
         <div class="plot">
           {{tvShow.plot}}

@@ -55,14 +55,20 @@ circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
 .remote-control table td { text-align: center; }
     
 
- .runtime { font-size: 8pt; color: grey; }
- .cast a { text-decoration: none; color: black; }
-
- /*tv shows*/
- .tvshow .second-line,
- .tvshow .plot,
- .movie .second-line,
- .movie .plot,
- .tvshow-season .second-line,
- .tvshow-season-episode .second-line,
- .tvshow-season-episode .plot { font-size: 7pt; }
+    
+.runtime { font-size: 8pt; color: grey; }
+.cast a { text-decoration: none; color: black; }
+.second-line,
+.plot { font-size: 7pt; }
+.second-line { padding-top: 8px; padding-bottom: 8px; }
+.genre { 
+  padding-left: 4px; 
+  padding-right: 4px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  background: lightgray;
+  margin-right: 4px;
+  border-radius: 4px;
+  color: white;
+  font-weight: 500;
+}

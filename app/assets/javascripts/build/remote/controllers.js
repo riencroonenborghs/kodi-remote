@@ -30,13 +30,9 @@
       $scope.refresh = function() {
         return RemoteControl.scanLibrary();
       };
-      $scope.info = function() {
+      return $scope.info = function() {
         return RemoteControl.info();
       };
-      return $(".remote-control").keypress(function(e) {
-        console.debug("keyPressed");
-        return console.debug(event);
-      });
     }
   ]);
 

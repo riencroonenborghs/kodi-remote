@@ -16,6 +16,7 @@
         <div class="second-line">
           <show-rating rating="movie.rating"></show-rating>
           <span class="runtime">{{movie.runtime | secondsToDateTime | date:'HH:mm:ss'}}</span>
+          <span class="genre" ng-repeat="genre in movie.genre">{{genre}}</span>
         </div>
         <h4>{{movie.tagline}}</h4>
         <div class="plot">
