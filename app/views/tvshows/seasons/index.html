@@ -1,22 +1,22 @@
 <loading-screen loading="loading"></loading-screen>
 
-<md-subheader ng-if="!loading" class="md-primary md-padding">
+<md-subheader ng-if="!loading" class="md-primary">
   TV Shows > {{tvShowDetails.label}}
 </md-subheader>
 
 <md-list ng-if="!loading" class="md-padding">
-
-  <md-list-item ng-repeat="season in list" ng-click="visitEpisodes(tvShowId, season.seasonid)" class="md-2-line tvshow-season pointer">
-    <avatar-image avatar="season.thumbnail" class="md-avatar"></avatar-image>
-    <div class="md-list-item-text">
+  <md-list-item ng-repeat="season in list" class="md-2-line pointer">
+    <avatar-image ng-if="season.thumbnail" avatar="season.thumbnail"></avatar-image>
+    <circle-avatar ng-if="!season.thumbnail" label="season.label"></circle-avatar>
+    <div class="md-list-item-text" ng-click="visitEpisodes(tvShowId, season.seasonid)">
       <h3>
         {{season.label}}
         <watched-it model="season"></watched-it>
       </h3>
-      <div class="second-line">
+      <h4 class="second-line">
         {{season.episode}} 
         <ng-pluralize count="season.episode" when="{'1': 'Episode', 'other': 'Episodes'}"></ng-pluralize>
-      </div>
+      </h4>
     </div>
   </md-list-item>
 </md-list>

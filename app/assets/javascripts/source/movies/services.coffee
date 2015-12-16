@@ -1,29 +1,41 @@
 app = angular.module "kodiRemote.movies.services", []
 
 app.service "Movies", [ "KodiRequest", (KodiRequest) ->
+  movieProperties = ["plot", "year", "rating", "genre", "art", "tagline", "runtime", "playcount"]
+
   service =
     perPage: 10
-    index: (page = 1) -> 
+    index: (page = 1, sortBy = "label", sortDirection = "ascending") -> 
       params =
-        properties: ["plot", "year", "rating", "genre", "art", "tagline", "runtime", "playcount"]
+        properties: movieProperties
         sort:
-          order: "ascending"
-          method: "label"
+          method: sortBy
+          order: sortDirection
         limits:
           start: (page - 1) * @perPage
           end: page * @perPage
-      return KodiRequest.methodRequest "VideoLibrary.GetMovies", params      
+      return KodiRequest.methodRequest "VideoLibrary.GetMovies", params
     show: (movieId) ->
       properties = ["cast", "fanart", "director", "writer", "studio", "mpaa"]
       return KodiRequest.methodRequest "VideoLibrary.GetMovieDetails", {movieid: movieId, properties: properties}
-    search: (query) ->
-      params =
-        properties: ["plot", "year", "rating", "genre", "art", "tagline", "runtime", "playcount"]
-        filter:
-          field: "title"
-          operator: "contains"
-          value: query
-      return KodiRequest.methodRequest "VideoLibrary.GetMovies", params
+    Search: 
+      query: (query) ->
+        params =
+          properties: movieProperties
+          filter:
+            field: "title"
+            operator: "contains"
+            value: query
+        return KodiRequest.methodRequest "VideoLibrary.GetMovies", params
+      genre: (genre) ->
+        params =
+          properties: movieProperties
+          filter:
+            field: "genre"
+            operator: "is"
+            value: genre
+        return KodiRequest.methodRequest "VideoLibrary.GetMovies", params
+
 ]
 
 app.service "MoviesLoader", [ "Movies", (Movies) ->

@@ -1,0 +1,17 @@
+<md-list-item ng-repeat="tvShow in list" class="md-3-line pointer">
+  <avatar-image ng-if="tvShow.art.poster" avatar="tvShow.art.poster"></avatar-image>
+  <circle-avatar ng-if="!tvShow.art.poster" label="tvShow.label"></circle-avatar>
+  <div class="md-list-item-text" ng-click="visitSeasons(tvShow.tvshowid)">
+    <h3>          
+      {{tvShow.label}} ({{tvShow.year}})          
+      <watched-it model="tvShow"></watched-it>
+      <show-rating rating="tvShow.rating"></show-rating>
+    </h3>
+    <h4 class="second-line">          
+      <span class="genre pointer" ng-repeat="genre in tvShow.genre" ng-click="sortByGenre(genre); $event.stopPropagation();">{{genre}}</span>
+    </h4>
+    <p class="third-line">
+      {{tvShow.plot}}
+    </p>
+  </div>
+</md-list-item>

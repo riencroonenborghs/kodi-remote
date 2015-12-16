@@ -8,19 +8,26 @@
 
   app.service("Movies", [
     "KodiRequest", function(KodiRequest) {
-      var service;
+      var movieProperties, service;
+      movieProperties = ["plot", "year", "rating", "genre", "art", "tagline", "runtime", "playcount"];
       return service = {
         perPage: 10,
-        index: function(page) {
+        index: function(page, sortBy, sortDirection) {
           var params;
           if (page == null) {
             page = 1;
           }
+          if (sortBy == null) {
+            sortBy = "label";
+          }
+          if (sortDirection == null) {
+            sortDirection = "ascending";
+          }
           params = {
-            properties: ["plot", "year", "rating", "genre", "art", "tagline", "runtime", "playcount"],
+            properties: movieProperties,
             sort: {
-              order: "ascending",
-              method: "label"
+              method: sortBy,
+              order: sortDirection
             },
             limits: {
               start: (page - 1) * this.perPage,
@@ -37,17 +44,31 @@
             properties: properties
           });
         },
-        search: function(query) {
-          var params;
-          params = {
-            properties: ["plot", "year", "rating", "genre", "art", "tagline", "runtime", "playcount"],
-            filter: {
-              field: "title",
-              operator: "contains",
-              value: query
-            }
-          };
-          return KodiRequest.methodRequest("VideoLibrary.GetMovies", params);
+        Search: {
+          query: function(query) {
+            var params;
+            params = {
+              properties: movieProperties,
+              filter: {
+                field: "title",
+                operator: "contains",
+                value: query
+              }
+            };
+            return KodiRequest.methodRequest("VideoLibrary.GetMovies", params);
+          },
+          genre: function(genre) {
+            var params;
+            params = {
+              properties: movieProperties,
+              filter: {
+                field: "genre",
+                operator: "is",
+                value: genre
+              }
+            };
+            return KodiRequest.methodRequest("VideoLibrary.GetMovies", params);
+          }
         }
       };
     }

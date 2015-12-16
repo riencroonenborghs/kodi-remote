@@ -1,28 +1,39 @@
 app = angular.module "kodiRemote.tvshows.services", []
 
 app.service "TvShows", [ "KodiRequest", (KodiRequest) ->
+  tvShowProperties = ["plot", "year", "rating", "genre", "art", "playcount"]
+
   service =
     perPage: 10
-    index: (page = 1) -> 
+    index: (page = 1, sortBy = "label", sortDirection = "ascending") -> 
       params =
-        properties: ["plot", "year", "rating", "genre", "art", "playcount"]
+        properties: tvShowProperties
         sort:
-          order: "ascending"
-          method: "label"
+          method: sortBy
+          order: sortDirection
         limits:
           start: (page - 1) * @perPage
           end: page * @perPage
       return KodiRequest.methodRequest "VideoLibrary.GetTVShows", params
     show: (tvShowId) ->
       return KodiRequest.methodRequest "VideoLibrary.GetTVShowDetails", {tvshowid: tvShowId}
-    search: (query) ->
-      params =
-        properties: ["plot", "year", "rating", "genre", "art", "playcount"]
-        filter:
-          field: "title"
-          operator: "contains"
-          value: query
-      return KodiRequest.methodRequest "VideoLibrary.GetTVShows", params
+    Search: 
+      query: (query) ->
+        params =
+          properties: tvShowProperties
+          filter:
+            field: "title"
+            operator: "contains"
+            value: query
+        return KodiRequest.methodRequest "VideoLibrary.GetTVShows", params
+      genre: (genre) ->
+        params =
+          properties: tvShowProperties
+          filter:
+            field: "genre"
+            operator: "is"
+            value: genre
+        return KodiRequest.methodRequest "VideoLibrary.GetTVShows", params
     Seasons: 
       index: (tvShowId) -> 
         params =
@@ -34,7 +45,7 @@ app.service "TvShows", [ "KodiRequest", (KodiRequest) ->
           params =
             tvshowid: tvShowId
             season: season
-            properties: ["title", "plot", "rating", "runtime", "art", "thumbnail", "playcount", "file"]
+            properties: ["title", "plot", "rating", "runtime", "art", "thumbnail", "playcount", "file", "season", "episode"]
           return KodiRequest.methodRequest "VideoLibrary.GetEpisodes", params
         prepDownload: (filePath) ->
           return KodiRequest.methodRequest "Files.PrepareDownload", [filePath]

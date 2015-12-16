@@ -100,12 +100,12 @@ app.service "SearchService", [ "TvShows", "Movies", (TvShows, Movies) ->
       searchingMovies   = true
       @searching        = searchingTvShows && searchingMovies
 
-      TvShows.search(query).then (data) =>
+      TvShows.Search.query(query).then (data) =>
         @tvShows          = data.tvshows
         searchingTvShows  = false
         @searching        = searchingTvShows && searchingMovies
 
-      Movies.search(query).then (data) =>
+      Movies.Search.query(query).then (data) =>
         @movies         = data.movies
         searchingMovies = true
         @searching      = searchingTvShows && searchingMovies

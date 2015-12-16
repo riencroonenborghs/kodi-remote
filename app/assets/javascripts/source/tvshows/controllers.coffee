@@ -8,13 +8,14 @@ app.controller "TvShowsController", [ "$scope", "$controller", "Topbar", "TvShow
     for tvShow in data.tvshows
       $scope.list.push tvShow
     Topbar.setTitle "TV Shows (#{data.limits.total})"
-  $controller "PaginatedController", {$scope: $scope}
+  $controller "SortedPaginatedController", {$scope: $scope}
 
   $scope.setItemsOnList = (data) -> $scope.list = data.tvshows
   $scope.emptyList = -> $scope.list = []
   $controller "SearchController", {$scope: $scope}
 
-  # $scope.visitSeasons = (tvShowId) -> $scope.visit("/tvshows/#{tvShowId}/seasons")
+  $scope.sortByGenre = (genre) ->
+    console.debug genre
 ]
 
 app.controller "TvShowSeasonsController", [ "$scope", "$routeParams", "$controller", "Topbar", "TvShowsLoader", 

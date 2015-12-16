@@ -17,7 +17,7 @@
         }
         return Topbar.setTitle("Movies (" + data.limits.total + ")");
       };
-      $controller("PaginatedController", {
+      $controller("SortedPaginatedController", {
         $scope: $scope
       });
       $scope.setItemsOnList = function(data) {

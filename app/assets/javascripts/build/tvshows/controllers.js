@@ -17,7 +17,7 @@
         }
         return Topbar.setTitle("TV Shows (" + data.limits.total + ")");
       };
-      $controller("PaginatedController", {
+      $controller("SortedPaginatedController", {
         $scope: $scope
       });
       $scope.setItemsOnList = function(data) {
@@ -26,9 +26,12 @@
       $scope.emptyList = function() {
         return $scope.list = [];
       };
-      return $controller("SearchController", {
+      $controller("SearchController", {
         $scope: $scope
       });
+      return $scope.sortByGenre = function(genre) {
+        return console.debug(genre);
+      };
     }
   ]);
 

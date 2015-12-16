@@ -1,10 +1,12 @@
 <loading-screen loading="loading"></loading-screen>
 
-<md-subheader class="md-primary md-padding">
+<md-subheader class="md-primary">
   Movies > {{movieDetails.label}}
 </md-subheader>
 
 <md-list ng-if="!loading" class="md-padding">
+  <md-subheader class="md-primary">Details</md-subheader>
+
   <md-list-item>
     <div class="md-list-item-text">
       <h4>Director</h4>
@@ -33,19 +35,23 @@
     </div>
   </md-list-item>
 
-  <h2>Cast</h2>
+  <div ng-if="movieDetails.cast.length > 0">
+    <md-subheader class="md-primary">Cast</md-subheader>
 
-  <md-list-item ng-repeat="castMember in movieDetails.cast" class="md-3-line cast">
-    <img src="{{castMember.avatar}}" ng-if="castMember.avatar" class="md-avatar" />
-    <div class="md-list-item-text">
-      <h3>{{castMember.name}}</h3>
-      <h4>{{castMember.role}}</h4>
-      <p>
-        <a ng-href="http://www.imdb.com/find?s=nm&q={{castMember.name}}" target="_blank">
-          <ng-md-icon icon="movie" size="12"></ng-md-icon>
-          IMDB
-        </a>
-      </p>
-    </div>
-  </md-list-item>
+    <md-list-item ng-repeat="castMember in movieDetails.cast" class="md-3-line cast">
+      <avatar-image ng-if="castMember.avatar" avatar="castMember.avatar"></avatar-image>
+      <circle-avatar ng-if="!castMember.avatar" label="castMember.name"></circle-avatar>
+      <div class="md-list-item-text">
+        <h3>{{castMember.name}}</h3>
+        <h4>{{castMember.role}}</h4>
+        <p>
+          <a ng-href="http://www.imdb.com/find?s=nm&q={{castMember.name}}" target="_blank">
+            <ng-md-icon icon="movie" size="12"></ng-md-icon>
+            IMDB
+          </a>
+        </p>
+      </div>
+    </md-list-item>
+  </div>
+
 </md-list>

@@ -142,10 +142,61 @@ app.controller "PlayingRemoteController", [ "$scope", "$interval", "Remote", ($s
     Remote.Player.seek $scope.playerId, $scope.percentage
 ]
 
-app.controller "PaginatedController", [ "$scope", ($scope) ->
+# app.controller "PaginatedController", [ "$scope", ($scope) ->
+#   # $scope.listService        = service that loads the paginated list
+#   # $scope.pushItemsOntoList  = method that handles adding the items onto the list
+
+#   $scope.loading          = false
+#   $scope.list             = []
+#   $scope.page             = 1
+#   $scope.morePages        = true  
+
+#   $scope.nextPage = ->
+#     $scope.page += 1
+#     $scope.loadCurrentPage()
+
+#   $scope.loadCurrentPage = ->
+#     $scope.loading = true
+#     $scope.listService.index($scope.page).then (data) ->
+#       $scope.pushItemsOntoList data
+#       $scope.loading    = false
+#       totalItemsInList  = data.limits.total
+#       $scope.morePages  = ($scope.page * $scope.listService.perPage) < totalItemsInList      
+#       return
+
+#   $scope.loadCurrentPage()
+# ]
+
+app.controller "SortedPaginatedController", [ "$scope", ($scope) ->
   # $scope.listService        = service that loads the paginated list
   # $scope.pushItemsOntoList  = method that handles adding the items onto the list
 
+  # sorting
+  $scope.sort = 
+    by: 
+      labels: ["Name", "Recent"]
+      methods: ["label", "dateadded"]
+      current: 0
+    direction:
+      icons: ["sort_ascending", "sort_descending"]
+      methods: ["ascending", "descending"]
+      current: 0
+  
+  $scope.toggleSortDirection = ->
+    $scope.sort.direction.current += 1
+    $scope.sort.direction.current = 0 if $scope.sort.direction.current == $scope.sort.direction.methods.length
+    $scope.list = []
+    $scope.page = 1
+    $scope.loadCurrentPage()
+
+  $scope.toggleSortBy = -> 
+    $scope.sort.by.current += 1
+    $scope.sort.by.current = 0 if $scope.sort.by.current == $scope.sort.by.methods.length
+    $scope.list = []
+    $scope.page = 1
+    $scope.loadCurrentPage()
+
+  # pagination
   $scope.loading          = false
   $scope.list             = []
   $scope.page             = 1
@@ -157,7 +208,7 @@ app.controller "PaginatedController", [ "$scope", ($scope) ->
 
   $scope.loadCurrentPage = ->
     $scope.loading = true
-    $scope.listService.index($scope.page).then (data) ->
+    $scope.listService.index($scope.page, $scope.sort.by.methods[$scope.sort.by.current], $scope.sort.direction.methods[$scope.sort.direction.current]).then (data) ->
       $scope.pushItemsOntoList data
       $scope.loading    = false
       totalItemsInList  = data.limits.total
@@ -177,7 +228,7 @@ app.controller "SearchController", [ "$scope", ($scope) ->
   $scope.performSearch = ->    
     if $scope.search.query.length > 2
       $scope.loading = true
-      $scope.listService.search($scope.search.query).then (data) ->
+      $scope.listService.Search.query($scope.search.query).then (data) ->
         $scope.setItemsOnList data
         $scope.morePages  = false
         $scope.loading    = false

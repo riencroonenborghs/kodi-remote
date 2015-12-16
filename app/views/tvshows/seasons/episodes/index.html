@@ -1,31 +1,30 @@
 <loading-screen loading="loading"></loading-screen>
 
-<md-subheader ng-if="!loading" class="md-primary md-padding">
+<md-subheader ng-if="!loading" class="md-primary">
   TV Shows > {{tvShowDetails.label}} > Season {{seasonNumber}}
 </md-subheader>
 
 <md-content ng-if="!loading">  
   <md-list class="md-padding">
-    <md-list-item ng-repeat="episode in episodes" class="md-3-line tvshow-season-episode">
-      <avatar-image avatar="episode.thumbnail" class="episode-avatar md-avatar"></avatar-image>
+    <md-list-item ng-repeat="episode in episodes" class="md-3-line">
+      <avatar-image ng-if="episode.thumbnail" avatar="episode.thumbnail"></avatar-image>
+      <circle-avatar ng-if="!episode.thumbnail" label="episode.title"></circle-avatar>
       <div class="md-list-item-text">
         <h3>          
-          {{episode.title}}
+          Episoede {{episode.episode}}: {{episode.title}}
           <watched-it model="episode"></watched-it>             
-        </h3>
-        <div class="second-line">
           <show-rating rating="episode.rating"></show-rating>
           <span class="runtime">{{episode.runtime | secondsToDateTime | date:'HH:mm:ss'}}</span>      
-        </div>
-        <div class="plot">
+        </h3>
+        <p class="second-line">
           {{episode.plot}}          
-        </div>
-        <div>
+        </p>
+        <p class="third-line">
           <md-button class="md-primary md-raised play-button" ng-click="play(episode)" aria-label="Play episode">
             <ng-md-icon icon="play_arrow" style="fill: white;"></ng-md-icon>             
             Play
           </md-button>
-        </div>
+        </p>
       </div>
     </md-list-item>
   </md-list>

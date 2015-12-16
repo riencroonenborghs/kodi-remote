@@ -1,0 +1,28 @@
+<md-list-item ng-repeat="movie in list" class="md-2-line pointer">
+  <avatar-image ng-if="movie.art.poster" avatar="movie.art.poster"></avatar-image>
+  <circle-avatar ng-if="!movie.art.poster" label="movie.label"></circle-avatar>
+  <div class="md-list-item-text" ng-click="visitDetails(movie.movieid)">
+    <h3>          
+      {{movie.label}} ({{movie.year}})
+      <watched-it model="movie"></watched-it>       
+      <show-rating rating="movie.rating"></show-rating>   
+      <span class="runtime">{{movie.runtime | secondsToDateTime | date:'HH:mm:ss'}}</span>
+      <h4>{{movie.tagline}}</h4>
+    </h3>        
+    <div class="second-line">                    
+      <span class="genre" ng-repeat="genre in movie.genre">{{genre}}</span>
+    </div>
+    <p class="third-line">
+      {{movie.plot}}
+    </p>
+    <div>
+      <md-button class="md-primary md-raised play-button" ng-click="play(movie); $event.stopPropagation();" aria-label="Play movie">
+        <ng-md-icon icon="play_arrow" style="fill: white;"></ng-md-icon>             
+        Play
+      </md-button>
+      <!-- <md-button class="md-icon-button play-button" ng-click="download(movie)" aria-label="Download movie">
+        <ng-md-icon icon="file_download"></ng-md-icon>             
+      </md-button> -->          
+    </div>   
+  </div>
+</md-list-item>

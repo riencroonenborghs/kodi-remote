@@ -189,14 +189,14 @@
           searchingTvShows = true;
           searchingMovies = true;
           this.searching = searchingTvShows && searchingMovies;
-          TvShows.search(query).then((function(_this) {
+          TvShows.Search.query(query).then((function(_this) {
             return function(data) {
               _this.tvShows = data.tvshows;
               searchingTvShows = false;
               return _this.searching = searchingTvShows && searchingMovies;
             };
           })(this));
-          Movies.search(query).then((function(_this) {
+          Movies.Search.query(query).then((function(_this) {
             return function(data) {
               _this.movies = data.movies;
               searchingMovies = true;

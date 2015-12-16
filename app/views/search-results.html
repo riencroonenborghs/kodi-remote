@@ -1,55 +1,20 @@
-<md-content class="md-padding">
-  <md-subheader>
-    Search results 
-    <span ng-if="search.query && search.query.length > 2">for '{{search.query}}'</span>
-  </md-subheader>
+<md-subheader class="md-primary">
+  Search results 
+  <span ng-if="search.query && search.query.length > 2">for '{{search.query}}'</span>
+</md-subheader>
 
-  <loading-screen loading="searchService.searching"></loading-screen>
+<loading-screen loading="searchService.searching"></loading-screen>
 
-  <br />
+<md-content ng-if="!searchService.searching && searchService.tvShows.length > 0">
+  <md-subheader class="md-primary">TV Shows ({{searchService.tvShows.length}})</md-subheader>
+  <md-list class="md-padding">
+    <ng-include src="'app/views/tvshows/_tvshows.html'" onload="list = searchService.tvShows"></ng-include>    
+  </md-list>
+</md-content>
 
-  <md-content ng-if="!searchService.searching && searchService.tvShows.length > 0">
-    <md-subheader>TV Shows ({{searchService.tvShows.length}})</md-subheader>
-    <md-list>
-      <md-list-item ng-repeat="tvShow in searchService.tvShows"
-                    ng-click="toggleSearch(); visitSeasons(tvShow.tvshowid)"
-                    class="md-2-line pointer">
-        <avatar-image avatar="tvShow.art.poster" class="tvshow-avatar md-avatar"></avatar-image>
-        <div class="md-list-item-text">
-          <h3>
-            <show-rating rating="tvShow.rating"></show-rating>
-            {{tvShow.label}} ({{tvShow.year}})
-            <watched-it model="tvShow"></watched-it>            
-          </h3>
-          <small>
-            {{tvShow.plot}}
-          </small>
-        </div>
-      </md-list-item>
-    </md-list>
-  </md-content>
-
-  <md-content ng-if="!searchService.searching && searchService.movies.length > 0">
-    <md-subheader>Movies ({{searchService.movies.length}})</md-subheader>
-    <md-list>
-      <md-list-item ng-repeat="movie in searchService.movies" 
-                    class="md-2-line">
-        <avatar-image avatar="movie.art.poster" class="episode-avatar md-avatar"></avatar-image>
-        <div class="md-list-item-text">
-          <h3>
-            <show-rating rating="movie.rating"></show-rating>              
-            {{movie.label}} ({{movie.year}})
-            <watched-it model="movie"></watched-it>          
-            <small class="runtime">{{movie.runtime | secondsToDateTime | date:'HH:mm:ss'}}</small>
-          </h3>
-          <h4>{{movie.tagline}}</h4>
-          <small>
-            {{movie.plot}}            
-          </small>          
-        </div>
-      </md-list-item>
-    </md-list>
-  </md-content>
-  
-
-</md-list>
+<md-content ng-if="!searchService.searching && searchService.movies.length > 0">
+  <md-subheader class="md-primary">Movies ({{searchService.movies.length}})</md-subheader>
+  <md-list class="md-padding">
+    <ng-include src="'app/views/movies/_movies.html'" onload="list = searchService.movies"></ng-include>        
+  </md-list>
+</md-content>

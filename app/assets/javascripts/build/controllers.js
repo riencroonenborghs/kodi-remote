@@ -164,8 +164,38 @@
     }
   ]);
 
-  app.controller("PaginatedController", [
+  app.controller("SortedPaginatedController", [
     "$scope", function($scope) {
+      $scope.sort = {
+        by: {
+          labels: ["Name", "Recent"],
+          methods: ["label", "dateadded"],
+          current: 0
+        },
+        direction: {
+          icons: ["sort_ascending", "sort_descending"],
+          methods: ["ascending", "descending"],
+          current: 0
+        }
+      };
+      $scope.toggleSortDirection = function() {
+        $scope.sort.direction.current += 1;
+        if ($scope.sort.direction.current === $scope.sort.direction.methods.length) {
+          $scope.sort.direction.current = 0;
+        }
+        $scope.list = [];
+        $scope.page = 1;
+        return $scope.loadCurrentPage();
+      };
+      $scope.toggleSortBy = function() {
+        $scope.sort.by.current += 1;
+        if ($scope.sort.by.current === $scope.sort.by.methods.length) {
+          $scope.sort.by.current = 0;
+        }
+        $scope.list = [];
+        $scope.page = 1;
+        return $scope.loadCurrentPage();
+      };
       $scope.loading = false;
       $scope.list = [];
       $scope.page = 1;
@@ -176,7 +206,7 @@
       };
       $scope.loadCurrentPage = function() {
         $scope.loading = true;
-        return $scope.listService.index($scope.page).then(function(data) {
+        return $scope.listService.index($scope.page, $scope.sort.by.methods[$scope.sort.by.current], $scope.sort.direction.methods[$scope.sort.direction.current]).then(function(data) {
           var totalItemsInList;
           $scope.pushItemsOntoList(data);
           $scope.loading = false;
@@ -196,7 +226,7 @@
       return $scope.performSearch = function() {
         if ($scope.search.query.length > 2) {
           $scope.loading = true;
-          return $scope.listService.search($scope.search.query).then(function(data) {
+          return $scope.listService.Search.query($scope.search.query).then(function(data) {
             $scope.setItemsOnList(data);
             $scope.morePages = false;
             $scope.loading = false;

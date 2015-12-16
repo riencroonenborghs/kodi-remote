@@ -1,6 +1,8 @@
 app = angular.module "kodiRemote.remote.controllers", []
 
-app.controller "RemoteController", [ "$scope", "RemoteControl", ($scope, RemoteControl) ->
+app.controller "RemoteController", [ "$scope", "Topbar", "RemoteControl", ($scope, Topbar, RemoteControl) ->
+  Topbar.setTitle "Remote Controller"
+  
   $scope.up = -> RemoteControl.up()
   $scope.down = -> RemoteControl.down()
   $scope.left = -> RemoteControl.left()

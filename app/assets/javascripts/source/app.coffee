@@ -1,3 +1,5 @@
+# http://kodi.wiki/view/JSON-RPC_API/v6
+
 kodiRemote = window.kodiRemote ||= {}
 
 app = angular.module "kodiRemote", [

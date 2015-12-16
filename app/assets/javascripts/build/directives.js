@@ -16,19 +16,91 @@
     }
   ]);
 
-  app.directive("tvshowThumbnail", [
+  app.directive("autoScroll", [
+    "$compile", function($compile) {
+      return {
+        restrict: "A",
+        link: function(scope, element, attrs) {
+          var button, elementVisible, scrollHandler;
+          button = $("<md-button>").attr("ng-click", "nextPage()").html("Next Page");
+          $compile(button)(scope);
+          element.append(button);
+          elementVisible = function(elem) {
+            var $elem, $window, docViewBottom, docViewTop, elemBottom, elemTop;
+            $elem = $(elem);
+            $window = $(window);
+            docViewTop = $window.scrollTop();
+            docViewBottom = docViewTop + $window.height();
+            elemTop = $elem.offset().top;
+            elemBottom = elemTop + $elem.height();
+            return (elemBottom <= docViewBottom) && (elemTop >= docViewTop);
+          };
+          scrollHandler = function() {
+            if (!scope.morePages) {
+              button.hide();
+            }
+            if (elementVisible(button) && !scope.loading && scope.morePages) {
+              return scope.nextPage();
+            }
+          };
+          $(document).off("scroll", scrollHandler);
+          $(document).on("scroll", scrollHandler);
+          return scope.$watch("morePages", function() {
+            if (scope.morePages) {
+              button.show();
+            }
+            if (!scope.morePages) {
+              return button.hide();
+            }
+          });
+        },
+        controller: ["$scope", function($scope) {}]
+      };
+    }
+  ]);
+
+  app.directive("avatarImage", [
     function() {
       return {
         restrict: "E",
         replace: true,
         scope: {
-          thumbnail: "="
+          avatar: "="
         },
-        template: "<img src='{{thumb}}' class='art-thumb' />",
+        template: "<img src='{{avatar}}' class='md-avatar' />",
         controller: [
           "$scope", function($scope) {
-            $scope.thumb = decodeURIComponent($scope.thumbnail.replace("image://", ""));
-            return $scope.thumb = $scope.thumb.slice(0, -1);
+            if ($scope.avatar) {
+              $scope.avatar = decodeURIComponent($scope.avatar.replace("image://", ""));
+              if ($scope.avatar.endsWith("/")) {
+                return $scope.avatar = $scope.avatar.slice(0, -1);
+              }
+            }
+          }
+        ]
+      };
+    }
+  ]);
+
+  app.directive("circleAvatar", [
+    function() {
+      return {
+        restrict: "E",
+        replace: true,
+        scope: {
+          label: "="
+        },
+        template: "<div class='circle-avatar md-avatar'><span>{{initials}}</span></div>",
+        controller: [
+          "$scope", function($scope) {
+            var parts;
+            parts = $scope.label.split(" ");
+            $scope.initials = parts[0][0];
+            if (parts.length === 1) {
+              return $scope.initials = parts[0][0] + parts[0][1];
+            } else {
+              return $scope.initials = parts[0][0] + parts[1][0];
+            }
           }
         ]
       };
@@ -99,73 +171,6 @@
     }
   ]);
 
-  app.directive("circleAvatar", [
-    function() {
-      return {
-        restrict: "E",
-        scope: {
-          label: "="
-        },
-        template: "<div class='circle-avatar'>{{initials}}</div>",
-        controller: [
-          "$scope", function($scope) {
-            var parts;
-            parts = $scope.label.split(" ");
-            $scope.initials = parts[0][0];
-            if (parts.length === 1) {
-              return $scope.initials = parts[0][0] + parts[0][1];
-            } else {
-              return $scope.initials = parts[0][0] + parts[1][0];
-            }
-          }
-        ]
-      };
-    }
-  ]);
-
-  app.directive("autoScroll", [
-    "$compile", function($compile) {
-      return {
-        restrict: "A",
-        link: function(scope, element, attrs) {
-          var button, elementVisible, scrollHandler;
-          button = $("<md-button>").attr("ng-click", "nextPage()").html("Next Page");
-          $compile(button)(scope);
-          element.append(button);
-          elementVisible = function(elem) {
-            var $elem, $window, docViewBottom, docViewTop, elemBottom, elemTop;
-            $elem = $(elem);
-            $window = $(window);
-            docViewTop = $window.scrollTop();
-            docViewBottom = docViewTop + $window.height();
-            elemTop = $elem.offset().top;
-            elemBottom = elemTop + $elem.height();
-            return (elemBottom <= docViewBottom) && (elemTop >= docViewTop);
-          };
-          scrollHandler = function() {
-            if (!scope.morePages) {
-              button.hide();
-            }
-            if (elementVisible(button) && !scope.loading && scope.morePages) {
-              return scope.nextPage();
-            }
-          };
-          $(document).off("scroll", scrollHandler);
-          $(document).on("scroll", scrollHandler);
-          return scope.$watch("morePages", function() {
-            if (scope.morePages) {
-              button.show();
-            }
-            if (!scope.morePages) {
-              return button.hide();
-            }
-          });
-        },
-        controller: ["$scope", function($scope) {}]
-      };
-    }
-  ]);
-
   app.directive("watchedIt", [
     function() {
       return {
@@ -174,28 +179,6 @@
           model: "="
         },
         template: "<ng-md-icon icon='check_circle' size='12' style='fill: #6FA67B;' ng-if='model.playcount == 1' title='Watched it'></ng-md-icon>"
-      };
-    }
-  ]);
-
-  app.directive("avatarImage", [
-    function() {
-      return {
-        restrict: "E",
-        replace: true,
-        scope: {
-          avatar: "="
-        },
-        template: "<img src='{{avatar}}' class='art-thumb' />",
-        controller: [
-          "$scope", function($scope) {
-            $scope.viewMode = "avatar";
-            if ($scope.avatar) {
-              $scope.avatar = decodeURIComponent($scope.avatar.replace("image://", ""));
-              return $scope.avatar = $scope.avatar.slice(0, -1);
-            }
-          }
-        ]
       };
     }
   ]);

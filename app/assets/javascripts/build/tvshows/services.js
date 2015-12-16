@@ -9,19 +9,26 @@
 
   app.service("TvShows", [
     "KodiRequest", function(KodiRequest) {
-      var service;
+      var service, tvShowProperties;
+      tvShowProperties = ["plot", "year", "rating", "genre", "art", "playcount"];
       return service = {
         perPage: 10,
-        index: function(page) {
+        index: function(page, sortBy, sortDirection) {
           var params;
           if (page == null) {
             page = 1;
           }
+          if (sortBy == null) {
+            sortBy = "label";
+          }
+          if (sortDirection == null) {
+            sortDirection = "ascending";
+          }
           params = {
-            properties: ["plot", "year", "rating", "genre", "art", "playcount"],
+            properties: tvShowProperties,
             sort: {
-              order: "ascending",
-              method: "label"
+              method: sortBy,
+              order: sortDirection
             },
             limits: {
               start: (page - 1) * this.perPage,
@@ -35,17 +42,31 @@
             tvshowid: tvShowId
           });
         },
-        search: function(query) {
-          var params;
-          params = {
-            properties: ["plot", "year", "rating", "genre", "art", "playcount"],
-            filter: {
-              field: "title",
-              operator: "contains",
-              value: query
-            }
-          };
-          return KodiRequest.methodRequest("VideoLibrary.GetTVShows", params);
+        Search: {
+          query: function(query) {
+            var params;
+            params = {
+              properties: tvShowProperties,
+              filter: {
+                field: "title",
+                operator: "contains",
+                value: query
+              }
+            };
+            return KodiRequest.methodRequest("VideoLibrary.GetTVShows", params);
+          },
+          genre: function(genre) {
+            var params;
+            params = {
+              properties: tvShowProperties,
+              filter: {
+                field: "genre",
+                operator: "is",
+                value: genre
+              }
+            };
+            return KodiRequest.methodRequest("VideoLibrary.GetTVShows", params);
+          }
         },
         Seasons: {
           index: function(tvShowId) {
@@ -62,7 +83,7 @@
               params = {
                 tvshowid: tvShowId,
                 season: season,
-                properties: ["title", "plot", "rating", "runtime", "art", "thumbnail", "playcount", "file"]
+                properties: ["title", "plot", "rating", "runtime", "art", "thumbnail", "playcount", "file", "season", "episode"]
               };
               return KodiRequest.methodRequest("VideoLibrary.GetEpisodes", params);
             },

@@ -1,26 +1,16 @@
 <div auto-scroll>
-  <md-subheader class="md-primary md-padding">
-    TV Shows
-  </md-subheader>
-  
+  <div layout="row">
+    <md-subheader class="md-primary">TV Shows</md-subheader>
+    <div flex></div>    
+    <md-button flex="15" aria-label="Sorting" class="md-icon-button sort-button" ng-click="toggleSortBy()">            
+      {{sort.by.labels[sort.by.current]}}
+    </md-button>    
+    <md-button flex="5" aria-label="Sorting" class="md-icon-button sort-button" ng-click="toggleSortDirection()">
+      <ng-md-icon icon="{{sort.direction.icons[sort.direction.current]}}" size="16" style="fill: rgb(33,150,243);"></ng-md-icon>                  
+    </md-button>
+  </div>
+
   <md-list class="md-padding">
-    <md-list-item ng-repeat="tvShow in list" 
-                  ng-click="visitSeasons(tvShow.tvshowid)"
-                  class="md-2-line pointer tvshow">
-      <avatar-image avatar="tvShow.art.poster" class="md-avatar"></avatar-image>
-      <div class="md-list-item-text" layout="column">
-        <h3>          
-          {{tvShow.label}} ({{tvShow.year}})          
-          <watched-it model="tvShow"></watched-it>
-        </h3>
-        <div class="second-line">
-          <show-rating rating="tvShow.rating"></show-rating>              
-          <span class="genre" ng-repeat="genre in tvShow.genre">{{genre}}</span>
-        </div>
-        <div class="plot">
-          {{tvShow.plot}}
-        </div>
-      </div>
-    </md-list-item>
+    <ng-include src="'app/views/tvshows/_tvshows.html'" onload="list = list"></ng-include>    
   </md-list>
 </div>  

@@ -5,7 +5,8 @@
   app = angular.module("kodiRemote.remote.controllers", []);
 
   app.controller("RemoteController", [
-    "$scope", "RemoteControl", function($scope, RemoteControl) {
+    "$scope", "Topbar", "RemoteControl", function($scope, Topbar, RemoteControl) {
+      Topbar.setTitle("Remote Controller");
       $scope.up = function() {
         return RemoteControl.up();
       };

@@ -1,4 +1,4 @@
-body { width: 500px; }
+html, body { width: 500px; }
 .pointer, a:hover { cursor: pointer; }
 
 .content { padding: 20px; }   
@@ -6,9 +6,9 @@ body { width: 500px; }
 .md-padding { padding: 16px; }
 
 /*----- avatars -----*/
-circle-avatar { background: #2196F3; color: white; }
-circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
-.episode-avatar { min-width: 40px; min-height: 40px; }
+.circle-avatar { background: #2196F3; color: white; }
+.circle-avatar span { position: relative; top: 12px; left: 12px;}
+/*.episode-avatar { min-width: 40px; min-height: 40px; }*/
 
 /*----- icon buttons -----*/
 .play-button svg,
@@ -33,7 +33,9 @@ circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
 
 
 /*----- md list -----*/
-.md-list-item-text h4 { line-height: 0.95em !important; }
+.md-list-item-text h4 { line-height: 0.95em !important; white-space: inherit !important; text-align: justify; }
+md-list-item:not(:last-child) { padding-bottom: 8px !important; border-bottom: 1px solid rgba(33, 150, 243, 0.12); margin-bottom: 8px !important; }
+
 
 
 /*----- remote -----*/
@@ -56,11 +58,12 @@ circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
     
 
     
-.runtime { font-size: 8pt; color: grey; }
+.runtime { font-size: 8pt !important; color: grey; }
 .cast a { text-decoration: none; color: black; }
 .second-line,
-.plot { font-size: 7pt; }
+.third-line { font-size: 7pt !important; text-align: justify; }
 .second-line { padding-top: 8px; padding-bottom: 8px; }
+
 .genre { 
   padding-left: 4px; 
   padding-right: 4px;
@@ -72,3 +75,9 @@ circle-avatar .circle-avatar { position: relative; top: 12px; left: 12px;}
   color: white;
   font-weight: 500;
 }
+.genre:hover { background: darkgray; }
+
+
+
+.sort-button { text-transform: none !important; color: rgb(33,150,243); }
+.sort-button svg { position: relative; top: 2px; }

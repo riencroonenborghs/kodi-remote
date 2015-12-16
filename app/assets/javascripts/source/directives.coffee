@@ -7,65 +7,6 @@ app.directive "loadingScreen", [ ->
   templateUrl: "app/views/loading.html"
 ]
 
-app.directive "tvshowThumbnail", [ ->
-  restrict: "E"
-  replace: true
-  scope:
-    thumbnail: "="
-  template: "<img src='{{thumb}}' class='art-thumb' />"
-  controller: [ "$scope", ($scope) ->
-    $scope.thumb = decodeURIComponent $scope.thumbnail.replace("image://", "")
-    $scope.thumb = $scope.thumb.slice(0, -1)
-  ]
-]
-
-app.directive "showRating", [->
-  restrict: "E"
-  replace: true
-  scope:
-    rating: "="
-  template: "<span ng-repeat='star in stars track by $index'><ng-md-icon icon='{{star}}' size='8' style='fill: grey;'></ng-md-icon></span>"
-  controller: [ "$scope", ($scope) ->
-    $scope.stars = ["star_outline","star_outline","star_outline","star_outline","star_outline"]
-    $scope.stars[0] = "star_half" if $scope.rating >= 1
-    $scope.stars[0] = "star" if $scope.rating >= 2
-    $scope.stars[1] = "star_half" if $scope.rating >= 3
-    $scope.stars[1] = "star" if $scope.rating >= 4
-    $scope.stars[2] = "star_half" if $scope.rating >= 5
-    $scope.stars[2] = "star" if $scope.rating >= 6
-    $scope.stars[3] = "star_half" if $scope.rating >= 7
-    $scope.stars[3] = "star" if $scope.rating >= 8
-    $scope.stars[4] = "star_half" if $scope.rating >= 9
-  ]
-]
-
-app.directive "runtime", [->
-  restrict: "E"
-  scope:
-    seconds: "="
-  template: "{{hours | number}}:{{minutes | number}}"
-  controller: [ "$scope", ($scope) ->
-    $scope.hours = $scope.seconds / 3600
-    $scope.runtime = $scope.runtime % 3600
-    $scope.minutes = $scope.seconds / 60    
-  ]
-]
-
-app.directive "circleAvatar", [->
-  restrict: "E"
-  scope:
-    label: "="
-  template: "<div class='circle-avatar'>{{initials}}</div>"
-  controller: [ "$scope", ($scope) ->
-    parts = $scope.label.split(" ")
-    $scope.initials = parts[0][0]
-    if parts.length == 1
-      $scope.initials = parts[0][0] + parts[0][1]
-    else
-      $scope.initials = parts[0][0] + parts[1][0]
-  ]
-]
-
 app.directive "autoScroll", [ "$compile", ($compile) ->
   restrict: "A"
   link: (scope, element, attrs) ->
@@ -99,24 +40,75 @@ app.directive "autoScroll", [ "$compile", ($compile) ->
   ]
 ]
 
-app.directive "watchedIt", [->
-  restrict: "E"
-  scope:
-    model: "="
-  template: "<ng-md-icon icon='check_circle' size='12' style='fill: #6FA67B;' ng-if='model.playcount == 1' title='Watched it'></ng-md-icon>"
-]
-
+# ---------- avatars ----------
 
 app.directive "avatarImage", [ ->
   restrict: "E"
   replace: true
   scope:
     avatar: "="
-  template: "<img src='{{avatar}}' class='art-thumb' />"
+  template: "<img src='{{avatar}}' class='md-avatar' />"
   controller: [ "$scope", ($scope) ->
-    $scope.viewMode = "avatar"
     if $scope.avatar
       $scope.avatar = decodeURIComponent $scope.avatar.replace("image://", "")
-      $scope.avatar = $scope.avatar.slice(0, -1)
+      if $scope.avatar.endsWith("/")
+        $scope.avatar = $scope.avatar.slice(0, -1)
   ]
+]
+
+app.directive "circleAvatar", [->
+  restrict: "E"
+  replace: true
+  scope:
+    label: "="
+  template: "<div class='circle-avatar md-avatar'><span>{{initials}}</span></div>"
+  controller: [ "$scope", ($scope) ->
+    parts = $scope.label.split(" ")
+    $scope.initials = parts[0][0]
+    if parts.length == 1
+      $scope.initials = parts[0][0] + parts[0][1]
+    else
+      $scope.initials = parts[0][0] + parts[1][0]
+  ]
+]
+
+# ---------- video details ----------
+
+app.directive "showRating", [->
+  restrict: "E"
+  replace: true
+  scope:
+    rating: "="
+  template: "<span ng-repeat='star in stars track by $index'><ng-md-icon icon='{{star}}' size='8' style='fill: grey;'></ng-md-icon></span>"
+  controller: [ "$scope", ($scope) ->
+    $scope.stars = ["star_outline","star_outline","star_outline","star_outline","star_outline"]
+    $scope.stars[0] = "star_half" if $scope.rating >= 1
+    $scope.stars[0] = "star" if $scope.rating >= 2
+    $scope.stars[1] = "star_half" if $scope.rating >= 3
+    $scope.stars[1] = "star" if $scope.rating >= 4
+    $scope.stars[2] = "star_half" if $scope.rating >= 5
+    $scope.stars[2] = "star" if $scope.rating >= 6
+    $scope.stars[3] = "star_half" if $scope.rating >= 7
+    $scope.stars[3] = "star" if $scope.rating >= 8
+    $scope.stars[4] = "star_half" if $scope.rating >= 9
+  ]
+]
+
+app.directive "runtime", [->
+  restrict: "E"
+  scope:
+    seconds: "="
+  template: "{{hours | number}}:{{minutes | number}}"
+  controller: [ "$scope", ($scope) ->
+    $scope.hours = $scope.seconds / 3600
+    $scope.runtime = $scope.runtime % 3600
+    $scope.minutes = $scope.seconds / 60    
+  ]
+]
+
+app.directive "watchedIt", [->
+  restrict: "E"
+  scope:
+    model: "="
+  template: "<ng-md-icon icon='check_circle' size='12' style='fill: #6FA67B;' ng-if='model.playcount == 1' title='Watched it'></ng-md-icon>"
 ]

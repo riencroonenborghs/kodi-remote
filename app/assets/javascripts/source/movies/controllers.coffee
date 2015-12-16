@@ -9,7 +9,7 @@ app.controller "MoviesController", [ "$scope", "$controller", "Topbar", "Movies"
     for movie in data.movies
       $scope.list.push movie
     Topbar.setTitle "Movies (#{data.limits.total})"
-  $controller "PaginatedController", {$scope: $scope}
+  $controller "SortedPaginatedController", {$scope: $scope}
 
   $scope.setItemsOnList = (data) -> $scope.list = data.movies
   $scope.emptyList = -> $scope.list = []
