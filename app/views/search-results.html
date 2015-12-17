@@ -8,13 +8,13 @@
 <md-content ng-if="!searchService.searching && searchService.tvShows.length > 0">
   <md-subheader class="md-primary">TV Shows ({{searchService.tvShows.length}})</md-subheader>
   <md-list class="md-padding">
-    <ng-include src="'app/views/tvshows/_tvshows.html'" onload="list = searchService.tvShows"></ng-include>    
+    <ng-include src="'app/views/tvshows/_tvshows.html'" onload="tvShows = searchService.tvShows"></ng-include>    
   </md-list>
 </md-content>
 
 <md-content ng-if="!searchService.searching && searchService.movies.length > 0">
   <md-subheader class="md-primary">Movies ({{searchService.movies.length}})</md-subheader>
   <md-list class="md-padding">
-    <ng-include src="'app/views/movies/_movies.html'" onload="list = searchService.movies"></ng-include>        
+    <ng-include src="'app/views/movies/_movies.html'" onload="movies = searchService.movies"></ng-include>        
   </md-list>
 </md-content>

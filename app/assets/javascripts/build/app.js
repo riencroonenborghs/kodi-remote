@@ -25,16 +25,16 @@
       controller: "TvShowsController"
     }).when("/tvshows/:id/seasons", {
       templateUrl: "app/views/tvshows/seasons/index.html",
-      controller: "TvShowSeasonsController"
+      controller: "SeasonsController"
     }).when("/tvshows/:tvshowid/seasons/:id/episodes", {
       templateUrl: "app/views/tvshows/seasons/episodes/index.html",
-      controller: "TvShowSeasonEpisodesController"
+      controller: "EpisodesController"
     }).when("/movies", {
       templateUrl: "app/views/movies/index.html",
       controller: "MoviesController"
-    }).when("/movies/:id/details", {
-      templateUrl: "app/views/movies/details/index.html",
-      controller: "MovieDetailsController"
+    }).when("/movies/:id", {
+      templateUrl: "app/views/movies/show.html",
+      controller: "MovieController"
     }).when("/remote", {
       templateUrl: "app/views/remote/index.html",
       controller: "RemoteController"

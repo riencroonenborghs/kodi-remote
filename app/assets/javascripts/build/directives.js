@@ -16,13 +16,13 @@
     }
   ]);
 
-  app.directive("autoScroll", [
+  app.directive("autoScrollPaginate", [
     "$compile", function($compile) {
       return {
         restrict: "A",
         link: function(scope, element, attrs) {
           var button, elementVisible, scrollHandler;
-          button = $("<md-button>").attr("ng-click", "nextPage()").html("Next Page");
+          button = $("<md-button>").attr("ng-click", "loadNextPage()").html("Next Page");
           $compile(button)(scope);
           element.append(button);
           elementVisible = function(elem) {
@@ -36,25 +36,89 @@
             return (elemBottom <= docViewBottom) && (elemTop >= docViewTop);
           };
           scrollHandler = function() {
-            if (!scope.morePages) {
+            if (!scope.pagination.more) {
               button.hide();
             }
-            if (elementVisible(button) && !scope.loading && scope.morePages) {
-              return scope.nextPage();
+            if (elementVisible(button) && !scope.loading && scope.pagination.more) {
+              return scope.loadNextPage();
             }
           };
           $(document).off("scroll", scrollHandler);
           $(document).on("scroll", scrollHandler);
-          return scope.$watch("morePages", function() {
-            if (scope.morePages) {
+          scope.$watch("morePages", function() {
+            if (scope.pagination.more) {
               button.show();
             }
-            if (!scope.morePages) {
+            if (!scope.pagination.more) {
               return button.hide();
             }
           });
         },
-        controller: ["$scope", function($scope) {}]
+        controller: [
+          "$scope", function($scope) {
+            $scope.pagination = {
+              page: 1,
+              more: true
+            };
+            $scope.loadNextPage = function() {
+              $scope.pagination.page += 1;
+              return $scope.load();
+            };
+            $scope.paginationAfterLoad = function(perPage, total) {
+              return $scope.pagination.more = ($scope.pagination.page * perPage) < total;
+            };
+            return $scope.load();
+          }
+        ]
+      };
+    }
+  ]);
+
+  app.directive("sortable", [
+    function() {
+      return {
+        restrict: "A",
+        controller: [
+          "$scope", function($scope) {
+            var setSortParams;
+            $scope.sort = {
+              by: {
+                labels: ["Name", "Recent"],
+                methods: ["label", "dateadded"],
+                current: 0
+              },
+              direction: {
+                icons: ["sort_ascending", "sort_descending"],
+                methods: ["ascending", "descending"],
+                current: 0
+              }
+            };
+            setSortParams = function() {
+              return $scope.sortParams = {
+                by: $scope.sort.by.methods[$scope.sort.by.current],
+                direction: $scope.sort.direction.methods[$scope.sort.direction.current]
+              };
+            };
+            $scope.toggleSortDirection = function() {
+              $scope.sort.direction.current += 1;
+              if ($scope.sort.direction.current === $scope.sort.direction.methods.length) {
+                $scope.sort.direction.current = 0;
+              }
+              setSortParams();
+              $scope.beforeSortLoad();
+              return $scope.load();
+            };
+            return $scope.toggleSortBy = function() {
+              $scope.sort.by.current += 1;
+              if ($scope.sort.by.current === $scope.sort.by.methods.length) {
+                $scope.sort.by.current = 0;
+              }
+              setSortParams();
+              $scope.beforeSortLoad();
+              return $scope.load();
+            };
+          }
+        ]
       };
     }
   ]);
@@ -67,7 +131,7 @@
         scope: {
           avatar: "="
         },
-        template: "<img src='{{avatar}}' class='md-avatar' />",
+        templateUrl: "app/views/ui/avatar-image.html",
         controller: [
           "$scope", function($scope) {
             if ($scope.avatar) {
@@ -90,7 +154,7 @@
         scope: {
           label: "="
         },
-        template: "<div class='circle-avatar md-avatar'><span>{{initials}}</span></div>",
+        templateUrl: "app/views/ui/circle-avatar.html",
         controller: [
           "$scope", function($scope) {
             var parts;
@@ -115,7 +179,7 @@
         scope: {
           rating: "="
         },
-        template: "<span ng-repeat='star in stars track by $index'><ng-md-icon icon='{{star}}' size='8' style='fill: grey;'></ng-md-icon></span>",
+        templateUrl: "app/views/ui/show-rating.html",
         controller: [
           "$scope", function($scope) {
             $scope.stars = ["star_outline", "star_outline", "star_outline", "star_outline", "star_outline"];
@@ -159,7 +223,7 @@
         scope: {
           seconds: "="
         },
-        template: "{{hours | number}}:{{minutes | number}}",
+        templateUrl: "app/views/ui/runtime.html",
         controller: [
           "$scope", function($scope) {
             $scope.hours = $scope.seconds / 3600;
@@ -178,7 +242,13 @@
         scope: {
           model: "="
         },
-        template: "<ng-md-icon icon='check_circle' size='12' style='fill: #6FA67B;' ng-if='model.playcount == 1' title='Watched it'></ng-md-icon>"
+        templateUrl: "app/views/ui/watched-it.html",
+        controller: [
+          "$scope", function($scope) {
+            $scope.title = $scope.model.playcount === 1 ? "Watched it" : "Haven't watched it";
+            return $scope.iconColor = $scope.model.playcount === 1 ? "#6FA67B" : "grey";
+          }
+        ]
       };
     }
   ]);

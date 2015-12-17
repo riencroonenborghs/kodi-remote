@@ -1,7 +1,7 @@
 <loading-screen loading="loading"></loading-screen>
 
 <md-subheader ng-if="!loading" class="md-primary">
-  TV Shows > {{tvShowDetails.label}} > Season {{seasonNumber}}
+  TV Shows > {{tvShow.title}} > Season {{season.season}}
 </md-subheader>
 
 <md-content ng-if="!loading">  
@@ -11,8 +11,8 @@
       <circle-avatar ng-if="!episode.thumbnail" label="episode.title"></circle-avatar>
       <div class="md-list-item-text">
         <h3>          
-          Episoede {{episode.episode}}: {{episode.title}}
           <watched-it model="episode"></watched-it>             
+          Episode {{episode.episode}}: {{episode.title}}
           <show-rating rating="episode.rating"></show-rating>
           <span class="runtime">{{episode.runtime | secondsToDateTime | date:'HH:mm:ss'}}</span>      
         </h3>

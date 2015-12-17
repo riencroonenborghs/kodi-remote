@@ -1,83 +1,91 @@
 app = angular.module "kodiRemote.tvshows.services", []
 
-app.service "TvShows", [ "KodiRequest", (KodiRequest) ->
-  tvShowProperties = ["plot", "year", "rating", "genre", "art", "playcount"]
+app.service "TvShows", [ "Request", "Seasons", (Request, Seasons) ->
+  properties    = ["title", "genre", "year", "rating", "plot", "studio", "mpaa", "cast", "playcount", "episode", "imdbnumber", "premiered", "thumbnail", "season", "watchedepisodes"]
+  
+  allResultHandler = (result) ->
+    for show in (result.tvshows || [])
+      show.type = "tvShow"
+      show.seasons = -> Seasons.all @.tvshowid
+    return result.tvshows || []
 
-  service =
-    perPage: 10
-    index: (page = 1, sortBy = "label", sortDirection = "ascending") -> 
-      params =
-        properties: tvShowProperties
-        sort:
-          method: sortBy
-          order: sortDirection
-        limits:
-          start: (page - 1) * @perPage
-          end: page * @perPage
-      return KodiRequest.methodRequest "VideoLibrary.GetTVShows", params
-    show: (tvShowId) ->
-      return KodiRequest.methodRequest "VideoLibrary.GetTVShowDetails", {tvshowid: tvShowId}
-    Search: 
-      query: (query) ->
+  getResultHandler = (result) ->
+    result.tvshowdetails.type = "tvShow"
+    result.tvshowdetails.seasons = -> Seasons.all @.tvshowid
+    return result.tvshowdetails
+
+  service = 
+    perPage: 5
+
+    where:
+      title: (query) ->
         params =
-          properties: tvShowProperties
+          properties: properties
           filter:
             field: "title"
             operator: "contains"
             value: query
-        return KodiRequest.methodRequest "VideoLibrary.GetTVShows", params
-      genre: (genre) ->
-        params =
-          properties: tvShowProperties
-          filter:
-            field: "genre"
-            operator: "is"
-            value: genre
-        return KodiRequest.methodRequest "VideoLibrary.GetTVShows", params
-    Seasons: 
-      index: (tvShowId) -> 
-        params =
-          properties: ["playcount", "episode", "thumbnail"]
-          tvshowid: tvShowId
-        return KodiRequest.methodRequest "VideoLibrary.GetSeasons", params
-      Episodes: 
-        index: (tvShowId, season) ->
-          params =
-            tvshowid: tvShowId
-            season: season
-            properties: ["title", "plot", "rating", "runtime", "art", "thumbnail", "playcount", "file", "season", "episode"]
-          return KodiRequest.methodRequest "VideoLibrary.GetEpisodes", params
-        prepDownload: (filePath) ->
-          return KodiRequest.methodRequest "Files.PrepareDownload", [filePath]
+         
+        return Request.fetch "VideoLibrary.GetTVShows", allResultHandler, params
+
+    all: (pageParams = 1, sortParams = {by: "label", direction: "ascending"}) -> 
+      params =
+        properties: properties
+        sort:
+          method: sortParams.by
+          order: sortParams.direction
+        limits:
+          start: (pageParams - 1) * @perPage
+          end: pageParams * @perPage
+       
+      return Request.fetch "VideoLibrary.GetTVShows", allResultHandler, params
+
+    get: (tvShowId) ->
+      params =
+        tvshowid: tvShowId
+        properties: properties
+               
+      return Request.fetch "VideoLibrary.GetTVShowDetails", getResultHandler, params
+
+    
+  service
 ]
 
-app.service "TvShowsLoader", [ "TvShows", (TvShows) ->
-  service =
-    DetailsLoader: class TvShowDetailsLoader extends kodiRemote.Loader
-      constructor: (@scope) ->
-        super @scope, TvShows
-      handleData: (data) -> 
-        @scope.tvShowDetails = data.tvshowdetails
+app.service "Seasons", [ "Request", "Episodes", (Request, Episodes) ->
+  properties    = ["season", "playcount", "episode", "thumbnail", "tvshowid", "watchedepisodes"]
 
-    SeasonsLoader: class SeasonsLoader extends kodiRemote.Loader
-      constructor: (@scope) ->
-        super @scope, TvShows.Seasons
-      handleData: (data) -> @scope.list = data.seasons
+  resultHandler = (result) ->
+    for season in (result.seasons || [])
+      season.type = "season"
+      season.episodes = -> Episodes.all @.tvshowid, @.season
+    return result.seasons || []
 
-    EpisodesLoader: class SeasonsLoader extends kodiRemote.Loader
-      constructor: (@scope) ->
-        super @scope, TvShows.Seasons.Episodes
-      handleData: (data) -> @scope.episodes = data.episodes
+  service = 
+    all: (tvShowId) -> 
+      params =
+        tvshowid: tvShowId
+        properties: properties
+            
+      return Request.fetch "VideoLibrary.GetSeasons", resultHandler, params
+    
+  service
+]
 
-    EpisodeDownloader: class Downloader extends kodiRemote.Loader
-      constructor: (@scope) ->
-        super @scope, TvShows.Seasons.Episodes
-      handleData: (data) ->
-        path = encodeURI decodeURIComponent(data.details.path)
-        @scope.url = "#{data.protocol}://#{kodiRemote.settings.server}:#{kodiRemote.settings.port}/#{path}"
-      prepDownload: (params...) -> 
-        @service.prepDownload(params...).then (data) => 
-          @handleData data
+app.service "Episodes", [ "Request", (Request) ->
+  properties    = ["title", "plot", "rating", "writer", "firstaired", "playcount", "runtime", "director", "season", "episode", "cast", "thumbnail", "resume"]
+  
+  resultHandler = (result) -> 
+    for episode in (result.episodes || [])
+      episode.type = "episode"
+    return result.episodes || []
 
+  service = 
+    all: (tvShowId, season) -> 
+      params =
+        tvshowid: tvShowId
+        season: season
+        properties: properties
+      return Request.fetch "VideoLibrary.GetEpisodes", resultHandler, params
+    
   service
 ]

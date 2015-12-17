@@ -27,11 +27,8 @@ app.config ($mdThemingProvider) ->
 
 
 kodiRemote.settings =
-  server: null # "192.168.0.169"
-  port: null # 80
-  # else
-  #   kodiRemote.settings.server  = "192.168.0.169"
-  #   kodiRemote.settings.port    = 8080  
+  server: null
+  port: null
 
 app.config ($routeProvider, $locationProvider) ->
   $routeProvider
@@ -43,16 +40,16 @@ app.config ($routeProvider, $locationProvider) ->
       controller: "TvShowsController"
     .when "/tvshows/:id/seasons",
       templateUrl: "app/views/tvshows/seasons/index.html"
-      controller: "TvShowSeasonsController"
+      controller: "SeasonsController"
     .when "/tvshows/:tvshowid/seasons/:id/episodes",
       templateUrl: "app/views/tvshows/seasons/episodes/index.html"
-      controller: "TvShowSeasonEpisodesController"
+      controller: "EpisodesController"
     .when "/movies",
       templateUrl: "app/views/movies/index.html"
       controller: "MoviesController"
-    .when "/movies/:id/details",
-      templateUrl: "app/views/movies/details/index.html"
-      controller: "MovieDetailsController"
+    .when "/movies/:id",
+      templateUrl: "app/views/movies/show.html"
+      controller: "MovieController"
     .when "/remote",
       templateUrl: "app/views/remote/index.html"
       controller: "RemoteController"    

@@ -7,10 +7,10 @@ app.directive "loadingScreen", [ ->
   templateUrl: "app/views/loading.html"
 ]
 
-app.directive "autoScroll", [ "$compile", ($compile) ->
+app.directive "autoScrollPaginate", [ "$compile", ($compile) ->
   restrict: "A"
   link: (scope, element, attrs) ->
-    button = $("<md-button>").attr("ng-click", "nextPage()").html("Next Page")
+    button = $("<md-button>").attr("ng-click", "loadNextPage()").html("Next Page")
     $compile(button)(scope)
     element.append(button)
 
@@ -24,21 +24,67 @@ app.directive "autoScroll", [ "$compile", ($compile) ->
       return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop))
 
     scrollHandler = ->
-      unless scope.morePages
+      unless scope.pagination.more
         button.hide()
-      if elementVisible(button) && !scope.loading && scope.morePages
-        scope.nextPage()
+      if elementVisible(button) && !scope.loading && scope.pagination.more
+        scope.loadNextPage()
 
     $(document).off "scroll", scrollHandler
     $(document).on "scroll", scrollHandler
     scope.$watch "morePages", ->
-      button.show() if scope.morePages 
-      button.hide() unless scope.morePages 
+      button.show() if scope.pagination.more
+      button.hide() unless scope.pagination.more
+    return
 
   controller: ["$scope", ($scope) ->
-    
+    $scope.pagination =
+      page: 1
+      more: true
+    $scope.loadNextPage = ->
+      $scope.pagination.page += 1
+      $scope.load()
+    $scope.paginationAfterLoad = (perPage, total) ->
+      $scope.pagination.more  = ($scope.pagination.page * perPage) < total
+      
+    $scope.load()
   ]
 ]
+
+app.directive "sortable", [->
+  restrict: "A"
+  controller: [ "$scope", ($scope) ->
+    $scope.sort = 
+      by: 
+        labels: ["Name", "Recent"]
+        methods: ["label", "dateadded"]
+        current: 0
+      direction:
+        icons: ["sort_ascending", "sort_descending"]
+        methods: ["ascending", "descending"]
+        current: 0
+
+    setSortParams = ->
+      $scope.sortParams =
+        by: $scope.sort.by.methods[$scope.sort.by.current]
+        direction: $scope.sort.direction.methods[$scope.sort.direction.current]
+
+    $scope.toggleSortDirection = ->
+      $scope.sort.direction.current += 1
+      $scope.sort.direction.current = 0 if $scope.sort.direction.current == $scope.sort.direction.methods.length
+      setSortParams()
+      $scope.beforeSortLoad()
+      $scope.load()
+
+    $scope.toggleSortBy = -> 
+      $scope.sort.by.current += 1
+      $scope.sort.by.current = 0 if $scope.sort.by.current == $scope.sort.by.methods.length
+      setSortParams()
+      $scope.beforeSortLoad()
+      $scope.load()
+  ]
+]
+
+
 
 # ---------- avatars ----------
 
@@ -47,7 +93,7 @@ app.directive "avatarImage", [ ->
   replace: true
   scope:
     avatar: "="
-  template: "<img src='{{avatar}}' class='md-avatar' />"
+  templateUrl: "app/views/ui/avatar-image.html"
   controller: [ "$scope", ($scope) ->
     if $scope.avatar
       $scope.avatar = decodeURIComponent $scope.avatar.replace("image://", "")
@@ -61,7 +107,7 @@ app.directive "circleAvatar", [->
   replace: true
   scope:
     label: "="
-  template: "<div class='circle-avatar md-avatar'><span>{{initials}}</span></div>"
+  templateUrl: "app/views/ui/circle-avatar.html" 
   controller: [ "$scope", ($scope) ->
     parts = $scope.label.split(" ")
     $scope.initials = parts[0][0]
@@ -79,7 +125,7 @@ app.directive "showRating", [->
   replace: true
   scope:
     rating: "="
-  template: "<span ng-repeat='star in stars track by $index'><ng-md-icon icon='{{star}}' size='8' style='fill: grey;'></ng-md-icon></span>"
+  templateUrl: "app/views/ui/show-rating.html"
   controller: [ "$scope", ($scope) ->
     $scope.stars = ["star_outline","star_outline","star_outline","star_outline","star_outline"]
     $scope.stars[0] = "star_half" if $scope.rating >= 1
@@ -98,7 +144,7 @@ app.directive "runtime", [->
   restrict: "E"
   scope:
     seconds: "="
-  template: "{{hours | number}}:{{minutes | number}}"
+  templateUrl: "app/views/ui/runtime.html"
   controller: [ "$scope", ($scope) ->
     $scope.hours = $scope.seconds / 3600
     $scope.runtime = $scope.runtime % 3600
@@ -110,5 +156,9 @@ app.directive "watchedIt", [->
   restrict: "E"
   scope:
     model: "="
-  template: "<ng-md-icon icon='check_circle' size='12' style='fill: #6FA67B;' ng-if='model.playcount == 1' title='Watched it'></ng-md-icon>"
+  templateUrl: "app/views/ui/watched-it.html"
+  controller: [ "$scope", ($scope) ->
+    $scope.title      = if $scope.model.playcount == 1 then "Watched it" else "Haven't watched it"
+    $scope.iconColor  = if $scope.model.playcount == 1 then "#6FA67B" else "grey"
+  ]
 ]

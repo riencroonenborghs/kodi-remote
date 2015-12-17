@@ -72,100 +72,47 @@
     }
   ]);
 
-  app.service("Remote", [
-    "KodiRequest", function(KodiRequest) {
-      var service;
-      service = {
-        Player: {
-          activePlayers: function() {
-            return KodiRequest.methodRequest("Player.GetActivePlayers", {});
-          },
-          playing: function(playerId) {
-            var params;
-            params = {
-              playerid: playerId,
-              properties: ["title", "showtitle", "year", "runtime", "season", "episode", "streamdetails"]
-            };
-            return KodiRequest.methodRequest("Player.GetItem", params);
-          },
-          open: function(playlistId, position) {
-            var params;
-            params = [
-              {
-                playlistid: playlistId,
-                position: position
-              }, {
-                resume: true
-              }
-            ];
-            return KodiRequest.methodRequest("Player.Open", params);
-          },
-          stop: function() {
-            return KodiRequest.methodRequest("Player.Stop", [1]);
-          },
-          playPause: function(playerId) {
-            return KodiRequest.methodRequest("Player.PlayPause", [playerId]);
-          },
-          properties: function(playerId) {
-            var params;
-            return KodiRequest.methodRequest("Player.GetProperties", params = [playerId, ["percentage", "time", "subtitles", "audiostreams", "subtitleenabled"]]);
-          },
-          setSubtitle: function(playerId, subtitle) {
-            var params;
-            return KodiRequest.methodRequest("Player.SetSubtitle", params = [playerId, subtitle]);
-          },
-          setAudioStream: function(playerId, audiostream) {
-            var params;
-            return KodiRequest.methodRequest("Player.SetAudioStream", params = [playerId, audiostream]);
-          },
-          seek: function(playerId, percentage) {
-            var params;
-            return KodiRequest.methodRequest("Player.Seek", params = [playerId, percentage]);
+  app.service("Request", [
+    "$q", "$http", function($q, $http) {
+      var fetch;
+      fetch = function(method, resultHandler, params) {
+        var deferred, error, payload, success;
+        payload = {
+          jsonrpc: "2.0",
+          method: method,
+          id: 1,
+          params: params
+        };
+        deferred = $q.defer();
+        success = function(response) {
+          var returnData, total;
+          if (!response.data) {
+            error(response);
+            return;
           }
-        },
-        Playlist: {
-          clear: function() {
-            return KodiRequest.methodRequest("Playlist.Clear", [1]);
-          },
-          addEpisode: function(episodeId) {
-            return KodiRequest.methodRequest("Playlist.Add", [
-              1, {
-                episodeid: episodeId
-              }
-            ]);
-          },
-          addMovie: function(movieId) {
-            return KodiRequest.methodRequest("Playlist.Add", [
-              1, {
-                movieid: movieId
-              }
-            ]);
+          if (response.data.error) {
+            error(response.data.error);
+            return;
           }
-        },
-        playEpisode: function(episodeId) {
-          return this.Player.stop().then((function(_this) {
-            return function() {
-              return _this.Playlist.clear().then(function() {
-                return _this.Playlist.addEpisode(episodeId).then(function() {
-                  return _this.Player.open(1, 0);
-                });
-              });
-            };
-          })(this));
-        },
-        playMovie: function(movieId) {
-          return this.Player.stop().then((function(_this) {
-            return function() {
-              return _this.Playlist.clear().then(function() {
-                return _this.Playlist.addMovie(movieId).then(function() {
-                  return _this.Player.open(1, 0);
-                });
-              });
-            };
-          })(this));
-        }
+          returnData = resultHandler(response.data.result);
+          total = response.data.result.limits ? response.data.result.limits.total : null;
+          deferred.resolve({
+            data: returnData,
+            total: total
+          });
+        };
+        error = function(response) {
+          console.error("ERROR - " + (new Date()));
+          console.error(response);
+          console.error("ERROR ---------------");
+          deferred.reject(response);
+        };
+        $http.post("http://" + kodiRemote.settings.server + ":" + kodiRemote.settings.port + "/jsonrpc", payload).then(success, error);
+        return deferred.promise;
       };
-      return service;
+      return {
+        fetch: fetch
+      };
     }
   ]);
 
@@ -189,16 +136,16 @@
           searchingTvShows = true;
           searchingMovies = true;
           this.searching = searchingTvShows && searchingMovies;
-          TvShows.Search.query(query).then((function(_this) {
-            return function(data) {
-              _this.tvShows = data.tvshows;
+          TvShows.where.title(query).then((function(_this) {
+            return function(tvShowsData) {
+              _this.tvShows = tvShowsData.data;
               searchingTvShows = false;
               return _this.searching = searchingTvShows && searchingMovies;
             };
           })(this));
-          Movies.Search.query(query).then((function(_this) {
-            return function(data) {
-              _this.movies = data.movies;
+          Movies.where.title(query).then((function(_this) {
+            return function(moviesData) {
+              _this.movies = moviesData.data;
               searchingMovies = true;
               return _this.searching = searchingTvShows && searchingMovies;
             };

@@ -42,57 +42,51 @@ app.service "KodiRequest", [ "$q", "$http", ($q, $http) ->
   service
 ]
 
-app.service "Remote", [ "KodiRequest", (KodiRequest) ->
-  service =
-    Player:
-      activePlayers: -> return KodiRequest.methodRequest "Player.GetActivePlayers", {}
-      playing: (playerId) -> 
-        params =
-          playerid: playerId
-          properties: ["title", "showtitle", "year", "runtime", "season", "episode", "streamdetails"]
-          # properties: ["title", "artist", "albumartist", "genre", "year", "rating", "album", "track", "duration", "comment", "lyrics", "musicbrainztrackid", "musicbrainzartistid", "musicbrainzalbumid", "musicbrainzalbumartistid", "playcount", "fanart", "director", "trailer", "tagline", "plot", "plotoutline", "originaltitle", "lastplayed", "writer", "studio", "mpaa", "cast", "country", "imdbnumber", "premiered", "productioncode", "runtime", "set", "showlink", "streamdetails", "top250", "votes", "firstaired", "season", "episode", "showtitle", "thumbnail", "file", "resume", "artistid", "albumid", "tvshowid", "setid", "watchedepisodes", "disc", "tag", "art", "genreid", "displayartist", "albumartistid", "description", "theme", "mood", "style", "albumlabel", "sorttitle", "episodeguide", "uniqueid", "dateadded", "channel", "channeltype", "hidden", "locked", "channelnumber", "starttime", "endtime"]
-        return KodiRequest.methodRequest "Player.GetItem", params
-      open: (playlistId, position) -> 
-        params = [
-          {playlistid: playlistId, position: position}
-          {resume: true}
-        ]        
-        return KodiRequest.methodRequest "Player.Open", params
-      stop: -> return KodiRequest.methodRequest "Player.Stop", [1]
-      playPause: (playerId) -> return KodiRequest.methodRequest "Player.PlayPause", [playerId]
-      properties: (playerId) -> return KodiRequest.methodRequest "Player.GetProperties", params = [playerId, ["percentage", "time", "subtitles", "audiostreams", "subtitleenabled"]]
-      setSubtitle: (playerId, subtitle) -> return KodiRequest.methodRequest "Player.SetSubtitle", params = [playerId, subtitle]
-      setAudioStream: (playerId, audiostream) -> return KodiRequest.methodRequest "Player.SetAudioStream", params = [playerId, audiostream]
-      seek: (playerId, percentage) ->  return KodiRequest.methodRequest "Player.Seek", params = [playerId, percentage]
-    Playlist:
-      clear: -> return KodiRequest.methodRequest "Playlist.Clear", [1]
-      addEpisode: (episodeId) -> return KodiRequest.methodRequest "Playlist.Add", [1, {episodeid: episodeId}]
-      addMovie: (movieId) -> return KodiRequest.methodRequest "Playlist.Add", [1, {movieid: movieId}]
-    playEpisode: (episodeId) ->
-      @Player.stop().then =>
-        @Playlist.clear().then =>
-          @Playlist.addEpisode(episodeId).then =>
-            @Player.open(1, 0)
-    playMovie: (movieId) ->
-      @Player.stop().then =>
-        @Playlist.clear().then =>
-          @Playlist.addMovie(movieId).then =>
-            @Player.open(1, 0)
 
-  service
+app.service "Request", [ "$q", "$http", ($q, $http) ->  
+  fetch = (method, resultHandler, params) ->
+    payload = {jsonrpc: "2.0", method: method, id: 1, params: params}
+
+    deferred = $q.defer()
+
+    success = (response) ->
+      unless response.data
+        error response
+        return
+
+      if response.data.error
+        error response.data.error
+        return
+
+      returnData  = resultHandler response.data.result
+      total       = if response.data.result.limits then response.data.result.limits.total else null
+      deferred.resolve {data: returnData, total: total}
+      return
+
+    error = (response) -> 
+      console.error "ERROR - #{new Date()}"
+      console.error response
+      console.error "ERROR ---------------"
+      deferred.reject response
+      return
+        
+    $http.post("http://#{kodiRemote.settings.server}:#{kodiRemote.settings.port}/jsonrpc", payload).then(success, error)
+    return deferred.promise
+
+  fetch: fetch
 ]
-
 
 app.service "SearchService", [ "TvShows", "Movies", (TvShows, Movies) ->
   service =
-    tvShows: []
-    movies: []
-    searching: false
+    tvShows:    []
+    movies:     []
+    searching:  false
 
     reset: -> 
-      @tvShows = []
-      @movies = []
-      @searching = false
+      @tvShows    = []
+      @movies     = []
+      @searching  = false
+
     search: (query) ->
       return unless query.length > 2
 
@@ -100,13 +94,13 @@ app.service "SearchService", [ "TvShows", "Movies", (TvShows, Movies) ->
       searchingMovies   = true
       @searching        = searchingTvShows && searchingMovies
 
-      TvShows.Search.query(query).then (data) =>
-        @tvShows          = data.tvshows
+      TvShows.where.title(query).then (tvShowsData) =>
+        @tvShows          = tvShowsData.data
         searchingTvShows  = false
         @searching        = searchingTvShows && searchingMovies
 
-      Movies.Search.query(query).then (data) =>
-        @movies         = data.movies
+      Movies.where.title(query).then (moviesData) =>
+        @movies         = moviesData.data
         searchingMovies = true
         @searching      = searchingTvShows && searchingMovies
 

@@ -1,50 +1,49 @@
 app = angular.module "kodiRemote.movies.services", []
 
-app.service "Movies", [ "KodiRequest", (KodiRequest) ->
-  movieProperties = ["plot", "year", "rating", "genre", "art", "tagline", "runtime", "playcount"]
+app.service "Movies", [ "Request", (Request) ->
+  properties = ["title", "genre", "year", "rating", "director", "tagline", "plot", "plotoutline", "playcount", "writer", "studio", "mpaa", "cast", "imdbnumber", "runtime", "thumbnail", "resume"]
 
-  service =
-    perPage: 10
-    index: (page = 1, sortBy = "label", sortDirection = "ascending") -> 
-      params =
-        properties: movieProperties
-        sort:
-          method: sortBy
-          order: sortDirection
-        limits:
-          start: (page - 1) * @perPage
-          end: page * @perPage
-      return KodiRequest.methodRequest "VideoLibrary.GetMovies", params
-    show: (movieId) ->
-      properties = ["cast", "fanart", "director", "writer", "studio", "mpaa"]
-      return KodiRequest.methodRequest "VideoLibrary.GetMovieDetails", {movieid: movieId, properties: properties}
-    Search: 
-      query: (query) ->
+  allResultHandler = (result) -> 
+    for movie in (result.movies || [])
+      movie.type = "movie"
+    return result.movies || []
+
+  getResultHandler = (result) -> 
+    result.moviedetails.type = "movie"
+    result.moviedetails
+
+  service = 
+    perPage: 5
+
+    where:
+      title: (query) ->
         params =
-          properties: movieProperties
+          properties: properties
           filter:
             field: "title"
             operator: "contains"
             value: query
-        return KodiRequest.methodRequest "VideoLibrary.GetMovies", params
-      genre: (genre) ->
-        params =
-          properties: movieProperties
-          filter:
-            field: "genre"
-            operator: "is"
-            value: genre
-        return KodiRequest.methodRequest "VideoLibrary.GetMovies", params
+         
+        return Request.fetch "VideoLibrary.GetMovies", allResultHandler, params    
 
-]
+    all: (pageParams = 1, sortParams = {by: "label", direction: "ascending"}) -> 
+      params =
+        properties: properties
+        sort:
+          method: sortParams.by
+          order: sortParams.direction
+        limits:
+          start: (pageParams - 1) * @perPage
+          end: pageParams * @perPage
+       
+      return Request.fetch "VideoLibrary.GetMovies", allResultHandler, params
 
-app.service "MoviesLoader", [ "Movies", (Movies) ->
-  service =
-    DetailsLoader: class MovieDetailsLoader extends kodiRemote.Loader
-      constructor: (@scope) ->
-        super @scope, Movies
-      handleData: (data) -> 
-        @scope.movieDetails = data.moviedetails
-
+    get: (movieId) ->
+      params =
+        movieid: movieId
+        properties: properties
+               
+      return Request.fetch "VideoLibrary.GetMovieDetails", getResultHandler, params
+    
   service
 ]

@@ -1,88 +1,67 @@
 app = angular.module "kodiRemote.tvshows.controllers", []
 
-app.controller "TvShowsController", [ "$scope", "$controller", "Topbar", "TvShows", ($scope, $controller, Topbar, TvShows) ->  
+app.controller "TvShowsController", [ "$scope", "Topbar", "TvShows", ($scope, Topbar, TvShows) ->  
   Topbar.setTitle "TV Shows"
 
-  $scope.listService = TvShows
-  $scope.pushItemsOntoList = (data) ->
-    for tvShow in data.tvshows
-      $scope.list.push tvShow
-    Topbar.setTitle "TV Shows (#{data.limits.total})"
-  $controller "SortedPaginatedController", {$scope: $scope}
+  $scope.tvShows = []
 
-  $scope.setItemsOnList = (data) -> $scope.list = data.tvshows
-  $scope.emptyList = -> $scope.list = []
-  $controller "SearchController", {$scope: $scope}
+  # sortable directive
+  # - set $scope.sortParams before load
+  # - call $scope.beforeSortLoad  before load
 
-  $scope.sortByGenre = (genre) ->
-    console.debug genre
+  $scope.beforeSortLoad = ->
+    $scope.tvShows = []
+    $scope.pagination.page = 1
+
+  # autoScrollPaginate directive
+  # - sets $scope.pagination hash
+  # - uses $scope.paginationAfterLoad to calculate $scope.pagination.more
+  # - uses $scope.loading
+
+  $scope.load = ->
+    $scope.loading = true
+    TvShows.all($scope.pagination.page, $scope.sortParams).then (data) ->
+      $scope.loading = false
+      for tvShow in data.data
+        $scope.tvShows.push tvShow
+      Topbar.setTitle "TV Shows (#{data.total})"
+      $scope.paginationAfterLoad TvShows.perPage, data.total
+      return
 ]
 
-app.controller "TvShowSeasonsController", [ "$scope", "$routeParams", "$controller", "Topbar", "TvShowsLoader", 
-($scope, $routeParams, $controller, Topbar, TvShowsLoader) ->  
-  $scope.tvShowId = parseInt $routeParams.id
+app.controller "SeasonsController", [ "$scope", "$routeParams", "Topbar", "TvShows", 
+($scope, $routeParams, Topbar, TvShows) ->  
+  tvShowId = parseInt $routeParams.id
 
-  $scope.visitEpisodes = (tvShowId, seasonId) ->
-    $scope.visit("/tvshows/#{tvShowId}/seasons/#{seasonId}/episodes")
+  $scope.tvShow = null
+  $scope.seasons = []
 
-  detailsLoader = new TvShowsLoader.DetailsLoader $scope
-  detailsLoader.afterCallback = (data) -> Topbar.setLink "/tvshows", $scope.tvShowDetails.label
-  detailsLoader.show $scope.tvShowId
-
-  seasonsLoader = new TvShowsLoader.SeasonsLoader $scope
-  seasonsLoader.index $scope.tvShowId
+  TvShows.get(tvShowId).then (tvShowData) ->
+    $scope.tvShow = tvShowData.data
+    Topbar.setLink "/tvshows", $scope.tvShow.title
+    $scope.tvShow.seasons().then (seasonsData) ->
+      $scope.seasons = seasonsData.data
 ]
 
-app.controller "TvShowSeasonEpisodesController", [ "$scope", "$routeParams", "Topbar", "TvShowsLoader", "Remote",
-($scope, $routeParams, Topbar, TvShowsLoader, Remote) ->  
-  $scope.tvShowId = parseInt $routeParams.tvshowid  
-  $scope.seasonId = parseInt $routeParams.id
 
-  detailsLoader = new TvShowsLoader.DetailsLoader $scope
-  detailsLoader.show $scope.tvShowId
+app.controller "EpisodesController", [ "$scope", "$routeParams", "Topbar", "TvShows", "Remote",
+($scope, $routeParams, Topbar, TvShows, Remote) ->  
+  tvShowId = parseInt $routeParams.tvshowid  
+  seasonId = parseInt $routeParams.id
 
-  seasonsLoader = new TvShowsLoader.SeasonsLoader $scope
-  seasonsLoader.afterCallback = (data) ->
-    for season in data.seasons
-      if season.seasonid == $scope.seasonId
-        if season.label == "Specials"
-          $scope.seasonNumber = 0
-        else  
-          $scope.seasonNumber = parseInt season.label.match(/(\d)/)[0]
-        Topbar.setLink "/tvshows/#{$scope.tvShowId}/seasons", season.label
-  seasonsLoader.index $scope.tvShowId
+  $scope.tvShow = null
+  $scope.season = null
+  $scope.episodes = []
 
-  $scope.$watch "seasonNumber", ->    
-    if $scope.seasonNumber != null
-      episodesLoader = new TvShowsLoader.EpisodesLoader $scope
-      episodesLoader.index $scope.tvShowId, $scope.seasonNumber
+  TvShows.get(tvShowId).then (tvShowData) ->
+    $scope.tvShow = tvShowData.data
+    $scope.tvShow.seasons().then (seasonsData) ->
+      for season in seasonsData.data
+        if season.seasonid == seasonId
+          $scope.season = season
+          Topbar.setLink "/tvshows/#{$scope.tvShow.tvshowid}/seasons", "Season #{season.season}"
+          season.episodes().then (episodeData) ->
+            $scope.episodes = episodeData.data
 
   $scope.play = (episode) -> Remote.playEpisode(episode.episodeid)
-  
-  # $scope.download = (episode) -> 
-  #   $scope.url = null
-  #   fileName = "#{$scope.tvShowDetails.label} - #{episode.title}.mp4"
-  #   episodeDownloader = new TvShowsLoader.EpisodeDownloader $scope
-  #   episodeDownloader.prepDownload episode.file
-
-  #   downloadFile = (url, success) ->
-  #     xhr = new XMLHttpRequest()
-  #     xhr.open "GET", url, true
-  #     xhr.responseType = "blob"
-  #     xhr.onreadystatechange = ->
-  #       if xhr.readyState == 4
-  #         success xhr.response
-  #     xhr.send null
-
-    
-  #   $scope.$watch "url", ->
-  #     if $scope.url
-  #       downloadFile $scope.url, (data) ->
-  #         saveAs data, fileName
-
-  #   # TvShows.Seasons.Episodes.prepDownload(episode.file).then (data) ->
-  #   #   path = encodeURI decodeURIComponent(data.details.path)
-  #   #   url = "#{data.protocol}://#{SERVER}:#{PORT}/#{path}"
-  #   #   console.debug url
-
 ]

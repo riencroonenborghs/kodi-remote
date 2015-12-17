@@ -5,61 +5,39 @@
   app = angular.module("kodiRemote.movies.controllers", []);
 
   app.controller("MoviesController", [
-    "$scope", "$controller", "Topbar", "Movies", "Remote", function($scope, $controller, Topbar, Movies, Remote) {
+    "$scope", "Topbar", "Movies", function($scope, Topbar, Movies) {
       Topbar.setTitle("Movies");
-      $scope.listService = Movies;
-      $scope.pushItemsOntoList = function(data) {
-        var i, len, movie, ref;
-        ref = data.movies;
-        for (i = 0, len = ref.length; i < len; i++) {
-          movie = ref[i];
-          $scope.list.push(movie);
-        }
-        return Topbar.setTitle("Movies (" + data.limits.total + ")");
+      $scope.movies = [];
+      $scope.beforeSortLoad = function() {
+        $scope.movies = [];
+        return $scope.pagination.page = 1;
       };
-      $controller("SortedPaginatedController", {
-        $scope: $scope
-      });
-      $scope.setItemsOnList = function(data) {
-        return $scope.list = data.movies;
-      };
-      $scope.emptyList = function() {
-        return $scope.list = [];
-      };
-      $controller("SearchController", {
-        $scope: $scope
-      });
-      $scope.play = function(movie) {
-        return Remote.playMovie(movie.movieid);
-      };
-      return $scope.visitDetails = function(movieId) {
-        return $scope.visit("/movies/" + movieId + "/details");
+      return $scope.load = function() {
+        $scope.loading = true;
+        return Movies.all($scope.pagination.page, $scope.sortParams).then(function(data) {
+          var i, len, movie, ref;
+          $scope.loading = false;
+          ref = data.data;
+          for (i = 0, len = ref.length; i < len; i++) {
+            movie = ref[i];
+            $scope.movies.push(movie);
+          }
+          Topbar.setTitle("Movies (" + data.total + ")");
+          $scope.paginationAfterLoad(Movies.perPage, data.total);
+        });
       };
     }
   ]);
 
-  app.controller("MovieDetailsController", [
-    "$scope", "$routeParams", "MoviesLoader", "Topbar", function($scope, $routeParams, MoviesLoader, Topbar) {
-      var detailsLoader;
-      $scope.movieId = parseInt($routeParams.id);
-      detailsLoader = new MoviesLoader.DetailsLoader($scope);
-      detailsLoader.afterCallback = function(data) {
-        var castMember, i, len, ref, results;
-        Topbar.setLink("/movies", $scope.movieDetails.label);
-        ref = $scope.movieDetails.cast;
-        results = [];
-        for (i = 0, len = ref.length; i < len; i++) {
-          castMember = ref[i];
-          if (castMember.thumbnail) {
-            castMember.avatar = decodeURIComponent(castMember.thumbnail.replace("image://", ""));
-            results.push(castMember.avatar = castMember.avatar.slice(0, -1));
-          } else {
-            results.push(void 0);
-          }
-        }
-        return results;
-      };
-      return detailsLoader.show($scope.movieId);
+  app.controller("MovieController", [
+    "$scope", "$routeParams", "Movies", "Topbar", function($scope, $routeParams, Movies, Topbar) {
+      var movieId;
+      movieId = parseInt($routeParams.id);
+      $scope.movie = null;
+      return Movies.get(movieId).then(function(movieData) {
+        $scope.movie = movieData.data;
+        return Topbar.setLink("/movies", $scope.movie.title);
+      });
     }
   ]);
 

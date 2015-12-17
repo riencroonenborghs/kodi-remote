@@ -1,4 +1,4 @@
-<div auto-scroll>
+<div auto-scroll-paginate sortable>
   <div layout="row">
     <md-subheader class="md-primary">Movies</md-subheader>
     <div flex></div>    
@@ -6,11 +6,11 @@
       {{sort.by.labels[sort.by.current]}}
     </md-button>    
     <md-button flex="5" aria-label="Sorting" class="md-icon-button sort-button" ng-click="toggleSortDirection()">
-      <ng-md-icon icon="{{sort.direction.icons[sort.direction.current]}}" size="16" style="fill: rgb(33,150,243);"></ng-md-icon>                  
+      <ng-md-icon icon="{{sort.direction.icons[sort.direction.current]}}" size="16" style="fill: rgb(33,150,243);"></ng-md-icon>
     </md-button>
   </div>
 
   <md-list class="md-padding">
-    <ng-include src="'app/views/movies/_movies.html'" onload="list = list"></ng-include>    
+    <ng-include src="'app/views/movies/_movies.html'"></ng-include>    
   </md-list>
 </div>  

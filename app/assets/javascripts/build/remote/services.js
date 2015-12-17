@@ -4,6 +4,103 @@
 
   app = angular.module("kodiRemote.remote.services", []);
 
+  app.service("Remote", [
+    "KodiRequest", function(KodiRequest) {
+      var service;
+      service = {
+        Player: {
+          activePlayers: function() {
+            return KodiRequest.methodRequest("Player.GetActivePlayers", {});
+          },
+          playing: function(playerId) {
+            var params;
+            params = {
+              playerid: playerId,
+              properties: ["title", "showtitle", "year", "runtime", "season", "episode", "streamdetails"]
+            };
+            return KodiRequest.methodRequest("Player.GetItem", params);
+          },
+          open: function(playlistId, position) {
+            var params;
+            params = [
+              {
+                playlistid: playlistId,
+                position: position
+              }, {
+                resume: true
+              }
+            ];
+            return KodiRequest.methodRequest("Player.Open", params);
+          },
+          stop: function() {
+            return KodiRequest.methodRequest("Player.Stop", [1]);
+          },
+          playPause: function(playerId) {
+            return KodiRequest.methodRequest("Player.PlayPause", [playerId]);
+          },
+          properties: function(playerId) {
+            var params;
+            return KodiRequest.methodRequest("Player.GetProperties", params = [playerId, ["percentage", "time", "subtitles", "audiostreams", "subtitleenabled"]]);
+          },
+          setSubtitle: function(playerId, subtitle) {
+            var params;
+            return KodiRequest.methodRequest("Player.SetSubtitle", params = [playerId, subtitle]);
+          },
+          setAudioStream: function(playerId, audiostream) {
+            var params;
+            return KodiRequest.methodRequest("Player.SetAudioStream", params = [playerId, audiostream]);
+          },
+          seek: function(playerId, percentage) {
+            var params;
+            return KodiRequest.methodRequest("Player.Seek", params = [playerId, percentage]);
+          }
+        },
+        Playlist: {
+          clear: function() {
+            return KodiRequest.methodRequest("Playlist.Clear", [1]);
+          },
+          addEpisode: function(episodeId) {
+            return KodiRequest.methodRequest("Playlist.Add", [
+              1, {
+                episodeid: episodeId
+              }
+            ]);
+          },
+          addMovie: function(movieId) {
+            return KodiRequest.methodRequest("Playlist.Add", [
+              1, {
+                movieid: movieId
+              }
+            ]);
+          }
+        },
+        playEpisode: function(episodeId) {
+          return this.Player.stop().then((function(_this) {
+            return function() {
+              return _this.Playlist.clear().then(function() {
+                return _this.Playlist.addEpisode(episodeId).then(function() {
+                  return _this.Player.open(1, 0);
+                });
+              });
+            };
+          })(this));
+        },
+        playMovie: function(movieId) {
+          return this.Player.stop().then((function(_this) {
+            return function() {
+              return _this.Playlist.clear().then(function() {
+                return _this.Playlist.addMovie(movieId).then(function() {
+                  return _this.Player.open(1, 0);
+                });
+              });
+            };
+          })(this));
+        }
+      };
+      return service;
+    }
+  ]);
+
   app.service("RemoteControl", [
     "KodiRequest", function(KodiRequest) {
       var service;
