@@ -11,7 +11,7 @@ app.controller "AppController", [ "$scope", "$interval", "$timeout", "$location"
     $location.path path
   $scope.visitSeasons   = (tvShowId) -> $scope.visit "/tvshows/#{tvShowId}/seasons"
   $scope.visitEpisodes  = (tvShowId, seasonId) -> $scope.visit "/tvshows/#{tvShowId}/seasons/#{seasonId}/episodes"
-  $scope.visitEpisode   = (episodeId) -> console.debug(episodeId); $scope.visit "/episodes/#{episodeId}"
+  $scope.visitEpisode   = (episodeId) -> $scope.visit "/episodes/#{episodeId}"
   $scope.visitMovie     = (movieId) -> $scope.visit "/movies/#{movieId}"
 
   # init the app
@@ -30,10 +30,8 @@ app.controller "AppController", [ "$scope", "$interval", "$timeout", "$location"
     $scope.searchService  = SearchService
     $scope.performSearch  = -> $scope.searchService.search $scope.search.query
 
-    # remote
+    # what is playing now?
     $scope.playingNowVisible = false
-
-    # what is playing
     $scope.playing = null
     $scope.playerId = null
 
@@ -51,27 +49,34 @@ app.controller "AppController", [ "$scope", "$interval", "$timeout", "$location"
     whatsPlaying()
     $interval whatsPlaying, 1000
 
-    # $scope.keyPressed = (event) ->
-    #   console.debug event
-
 
   # check for settings (server + port) in interval
   # if not found go to settings page and keep checking
   # if found init the app and cancel check
-  $scope.hasServer = kodiRemote.settings.server != null && kodiRemote.settings.port != null
+  checkServer = ->
+    $scope.hasServer = false
+    unless kodiRemote.settings.server != null && kodiRemote.settings.port != null
+      return
+    Remote.Player.activePlayers().then (data) ->
+      $scope.hasServer = true
+  checkServer()
+
   loadSettings = ->
     chrome.storage.local.get "kodiRemote", (data) ->
       if data.kodiRemote
         parsedData = JSON.parse data.kodiRemote
         kodiRemote.settings.server  = parsedData.server
         kodiRemote.settings.port    = parsedData.port
-        $scope.hasServer = kodiRemote.settings.server != null && kodiRemote.settings.port != null
-        initApp()
-        $location.path "/tvshows"
+        # it's set, no check if we can access the server
+        # if so, init the app and go to tv shows
+        checkServer()        
+        $timeout (->
+          if $scope.hasServer
+            $interval.cancel loadSettingsInterval
+            initApp()
+            $location.path "/tvshows"
+        ), 500
 
-    if $scope.hasServer
-      $interval.cancel loadSettingsInterval
-      return
   loadSettingsInterval = $interval loadSettings, 1000
   loadSettings()
   

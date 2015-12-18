@@ -44,6 +44,9 @@
     }).when("/music/albums", {
       templateUrl: "app/views/music/albums.html",
       controller: "AlbumsController"
+    }).when("/music/albums/:id/songs", {
+      templateUrl: "app/views/music/songs.html",
+      controller: "SongsController"
     }).otherwise("/tvshows", {
       templateUrl: "app/views/tvshows/index.html",
       controller: "TvShowsController"

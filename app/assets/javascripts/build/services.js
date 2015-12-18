@@ -20,7 +20,7 @@
           deferred.resolve(response.data.result);
         };
         error = function(response) {
-          console.debug(error(response));
+          console.debug(response);
           deferred.reject(response);
         };
         $http.post("http://" + kodiRemote.settings.server + ":" + kodiRemote.settings.port + "/jsonrpc", payload).then(success, error);

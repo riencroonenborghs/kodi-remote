@@ -11,7 +11,7 @@ app.service "KodiRequest", [ "$q", "$http", ($q, $http) ->
       return
 
     error = (response) -> 
-      console.debug error response
+      console.debug response
       deferred.reject response
       return
 

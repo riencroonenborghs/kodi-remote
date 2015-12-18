@@ -5,7 +5,7 @@
   app = angular.module("kodiRemote.music.controllers", []);
 
   app.controller("AlbumsController", [
-    "$scope", "NavbarFactory", "Music", function($scope, NavbarFactory, Music) {
+    "$scope", "NavbarFactory", "Albums", function($scope, NavbarFactory, Albums) {
       $scope.albums = [];
       $scope.beforeSortLoad = function() {
         $scope.albums = [];
@@ -13,10 +13,9 @@
       };
       return $scope.load = function() {
         $scope.loading = true;
-        return Music.albums($scope.pagination.page, $scope.sortParams).then(function(data) {
+        return Albums.all($scope.pagination.page, $scope.sortParams).then(function(data) {
           var album, i, len, ref;
           $scope.loading = false;
-          console.debug(data.data);
           ref = data.data;
           for (i = 0, len = ref.length; i < len; i++) {
             album = ref[i];
@@ -24,7 +23,7 @@
           }
           $scope.Navbar = new NavbarFactory;
           $scope.Navbar.addTitle("Albums (" + data.total + ")");
-          $scope.paginationAfterLoad(Music.perPage, data.total);
+          $scope.paginationAfterLoad(Albums.perPage, data.total);
         });
       };
     }

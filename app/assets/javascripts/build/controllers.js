@@ -6,7 +6,7 @@
 
   app.controller("AppController", [
     "$scope", "$interval", "$timeout", "$location", "SearchService", "Remote", function($scope, $interval, $timeout, $location, SearchService, Remote) {
-      var initApp, loadSettings, loadSettingsInterval;
+      var checkServer, initApp, loadSettings, loadSettingsInterval;
       $scope.visit = function(path) {
         $scope.showSearch = false;
         return $location.path(path);
@@ -18,7 +18,6 @@
         return $scope.visit("/tvshows/" + tvShowId + "/seasons/" + seasonId + "/episodes");
       };
       $scope.visitEpisode = function(episodeId) {
-        console.debug(episodeId);
         return $scope.visit("/episodes/" + episodeId);
       };
       $scope.visitMovie = function(movieId) {
@@ -64,22 +63,34 @@
         whatsPlaying();
         return $interval(whatsPlaying, 1000);
       };
-      $scope.hasServer = kodiRemote.settings.server !== null && kodiRemote.settings.port !== null;
+      checkServer = function() {
+        $scope.hasServer = false;
+        if (!(kodiRemote.settings.server !== null && kodiRemote.settings.port !== null)) {
+          return;
+        }
+        return Remote.Player.activePlayers().then(function(data) {
+          return $scope.hasServer = true;
+        });
+      };
+      checkServer();
       loadSettings = function() {
-        chrome.storage.local.get("kodiRemote", function(data) {
+        console.debug("loadSettings");
+        return chrome.storage.local.get("kodiRemote", function(data) {
           var parsedData;
           if (data.kodiRemote) {
             parsedData = JSON.parse(data.kodiRemote);
             kodiRemote.settings.server = parsedData.server;
             kodiRemote.settings.port = parsedData.port;
-            $scope.hasServer = kodiRemote.settings.server !== null && kodiRemote.settings.port !== null;
-            initApp();
-            return $location.path("/tvshows");
+            checkServer();
+            return $timeout((function() {
+              if ($scope.hasServer) {
+                $interval.cancel(loadSettingsInterval);
+                initApp();
+                return $location.path("/tvshows");
+              }
+            }), 500);
           }
         });
-        if ($scope.hasServer) {
-          $interval.cancel(loadSettingsInterval);
-        }
       };
       loadSettingsInterval = $interval(loadSettings, 1000);
       loadSettings();

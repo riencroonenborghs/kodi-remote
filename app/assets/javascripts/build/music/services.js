@@ -4,22 +4,32 @@
 
   app = angular.module("kodiRemote.music.services", []);
 
-  app.service("Music", [
-    "Request", function(Request) {
-      var albumsProperties, albumsResultHandler, service;
-      albumsProperties = ["title", "description", "artist", "genre", "mood", "style", "albumlabel", "rating", "year", "thumbnail", "playcount", "genreid", "artistid", "fanart"];
-      albumsResultHandler = function(result) {
+  app.service("Albums", [
+    "Request", "Songs", function(Request, Songs) {
+      var allResultHandler, getResultHandler, properties, service;
+      properties = ["title", "description", "artist", "genre", "mood", "style", "albumlabel", "rating", "year", "thumbnail", "playcount", "genreid", "artistid", "fanart"];
+      allResultHandler = function(result) {
         var i, len, ref, show;
         ref = result.albums || [];
         for (i = 0, len = ref.length; i < len; i++) {
           show = ref[i];
           show.type = "album";
+          show.songs = function() {
+            return Songs.all(this.albumid);
+          };
         }
         return result.albums || [];
       };
+      getResultHandler = function(result) {
+        result.albumdetails.type = "album";
+        result.albumdetails.songs = function() {
+          return Songs.all(this.albumid);
+        };
+        return result.albumdetails;
+      };
       service = {
         perPage: 5,
-        albums: function(pageParams, sortParams) {
+        all: function(pageParams, sortParams) {
           var params;
           if (pageParams == null) {
             pageParams = 1;
@@ -31,7 +41,7 @@
             };
           }
           params = {
-            properties: albumsProperties,
+            properties: properties,
             sort: {
               method: sortParams.by,
               order: sortParams.direction
@@ -41,7 +51,42 @@
               end: pageParams * this.perPage
             }
           };
-          return Request.fetch("AudioLibrary.GetAlbums", albumsResultHandler, params);
+          return Request.fetch("AudioLibrary.GetAlbums", allResultHandler, params);
+        },
+        get: function(albumId) {
+          var params;
+          params = {
+            albumid: albumId,
+            properties: properties
+          };
+          return Request.fetch("AudioLibrary.GetAlbumDetails", getResultHandler, params);
+        }
+      };
+      return service;
+    }
+  ]);
+
+  app.service("Songs", [
+    "Request", function(Request) {
+      var properties, resultHandler, service;
+      properties = ["title", "description", "artist", "genre", "mood", "style", "albumlabel", "rating", "year", "thumbnail", "playcount", "genreid", "artistid", "fanart"];
+      resultHandler = function(result) {
+        var i, len, ref, season;
+        ref = result.songs || [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          season = ref[i];
+          season.type = "song";
+        }
+        return result.songs || [];
+      };
+      service = {
+        all: function(albumId) {
+          var params;
+          params = {
+            albumid: albumId,
+            properties: properties
+          };
+          return Request.fetch("AudioLibrary.GetSongs", resultHandler, params);
         }
       };
       return service;
