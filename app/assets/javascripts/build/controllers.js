@@ -74,7 +74,6 @@
       };
       checkServer();
       loadSettings = function() {
-        console.debug("loadSettings");
         return chrome.storage.local.get("kodiRemote", function(data) {
           var parsedData;
           if (data.kodiRemote) {

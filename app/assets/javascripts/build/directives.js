@@ -150,17 +150,7 @@
         scope: {
           avatar: "="
         },
-        templateUrl: "app/views/ui/avatar-image.html",
-        controller: [
-          "$scope", function($scope) {
-            if ($scope.avatar) {
-              $scope.avatar = decodeURIComponent($scope.avatar.replace("image://", ""));
-              if ($scope.avatar.endsWith("/")) {
-                return $scope.avatar = $scope.avatar.slice(0, -1);
-              }
-            }
-          }
-        ]
+        templateUrl: "app/views/ui/avatar-image.html"
       };
     }
   ]);

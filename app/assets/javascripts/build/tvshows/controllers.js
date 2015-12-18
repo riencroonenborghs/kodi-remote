@@ -21,6 +21,7 @@
             tvShow = ref[i];
             $scope.tvShows.push(tvShow);
           }
+          console.debug($scope.tvShows.length);
           $scope.Navbar = new NavbarFactory;
           $scope.Navbar.addTitle("TV Shows (" + data.total + ")");
           $scope.paginationAfterLoad(TvShows.perPage, data.total);

@@ -14,11 +14,19 @@
         for (i = 0, len = ref.length; i < len; i++) {
           movie = ref[i];
           movie.type = "movie";
+          movie.thumbnail = kodiRemote.parseImage(movie.thumbnail);
         }
         return result.movies || [];
       };
       getResultHandler = function(result) {
+        var castMember, i, len, ref;
         result.moviedetails.type = "movie";
+        result.moviedetails.thumbnail = kodiRemote.parseImage(result.moviedetails.thumbnail);
+        ref = result.moviedetails.cast;
+        for (i = 0, len = ref.length; i < len; i++) {
+          castMember = ref[i];
+          castMember.thumbnail = kodiRemote.parseImage(castMember.thumbnail);
+        }
         return result.moviedetails;
       };
       service = {

@@ -4,16 +4,34 @@
 
   app = angular.module("kodiRemote.tvshows.services", []);
 
+  kodiRemote.parseImage = function(image) {
+    if (!image) {
+      return "";
+    }
+    image = decodeURIComponent(image.replace("image://", ""));
+    if (image.endsWith("/")) {
+      return image.slice(0, -1);
+    } else {
+      return image;
+    }
+  };
+
   app.service("TvShows", [
     "Request", "Seasons", function(Request, Seasons) {
       var allResultHandler, getResultHandler, properties, service;
       properties = ["title", "genre", "year", "rating", "plot", "studio", "mpaa", "cast", "playcount", "episode", "imdbnumber", "premiered", "thumbnail", "season", "watchedepisodes"];
       allResultHandler = function(result) {
-        var i, len, ref, show;
+        var castMember, i, j, len, len1, ref, ref1, show;
         ref = result.tvshows || [];
         for (i = 0, len = ref.length; i < len; i++) {
           show = ref[i];
           show.type = "tvShow";
+          show.thumbnail = kodiRemote.parseImage(show.thumbnail);
+          ref1 = show.cast;
+          for (j = 0, len1 = ref1.length; j < len1; j++) {
+            castMember = ref1[j];
+            castMember.thumbnail = kodiRemote.parseImage(castMember.thumbnail);
+          }
           show.seasons = function() {
             return Seasons.all(this.tvshowid);
           };
@@ -21,14 +39,22 @@
         return result.tvshows || [];
       };
       getResultHandler = function(result) {
+        var castMember, i, len, ref;
         result.tvshowdetails.type = "tvShow";
+        result.tvshowdetails.thumbnail = kodiRemote.parseImage(result.tvshowdetails.thumbnail);
+        ref = result.tvshowdetails.cast;
+        for (i = 0, len = ref.length; i < len; i++) {
+          castMember = ref[i];
+          castMember.thumbnail = kodiRemote.parseImage(castMember.thumbnail);
+          console.debug(castMember.thumbnail);
+        }
         result.tvshowdetails.seasons = function() {
           return Seasons.all(this.tvshowid);
         };
         return result.tvshowdetails;
       };
       service = {
-        perPage: 5,
+        perPage: 10,
         where: {
           title: function(query) {
             var params;
@@ -90,6 +116,7 @@
         for (i = 0, len = ref.length; i < len; i++) {
           season = ref[i];
           season.type = "season";
+          season.thumbnail = kodiRemote.parseImage(season.thumbnail);
           season.episodes = function() {
             return Episodes.all(this.tvshowid, this.season);
           };
@@ -120,11 +147,19 @@
         for (i = 0, len = ref.length; i < len; i++) {
           episode = ref[i];
           episode.type = "episode";
+          episode.thumbnail = kodiRemote.parseImage(episode.thumbnail);
         }
         return result.episodes || [];
       };
       getResultHandler = function(result) {
+        var castMember, i, len, ref;
         result.episodedetails.type = "episode";
+        result.episodedetails.thumbnail = kodiRemote.parseImage(result.episodedetails.thumbnail);
+        ref = result.episodedetails.cast;
+        for (i = 0, len = ref.length; i < len; i++) {
+          castMember = ref[i];
+          castMember.thumbnail = kodiRemote.parseImage(castMember.thumbnail);
+        }
         return result.episodedetails;
       };
       service = {

@@ -103,13 +103,7 @@ app.directive "avatarImage", [ ->
   replace: true
   scope:
     avatar: "="
-  templateUrl: "app/views/ui/avatar-image.html"
-  controller: [ "$scope", ($scope) ->
-    if $scope.avatar
-      $scope.avatar = decodeURIComponent $scope.avatar.replace("image://", "")
-      if $scope.avatar.endsWith("/")
-        $scope.avatar = $scope.avatar.slice(0, -1)
-  ]
+  templateUrl: "app/views/ui/avatar-image.html"  
 ]
 
 app.directive "circleAvatar", [->

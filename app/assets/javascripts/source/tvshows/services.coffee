@@ -1,21 +1,33 @@
 app = angular.module "kodiRemote.tvshows.services", []
 
+kodiRemote.parseImage = (image) ->
+  return "" unless image
+  image = decodeURIComponent image.replace("image://", "")
+  return if image.endsWith("/") then image.slice(0, -1) else image
+
 app.service "TvShows", [ "Request", "Seasons", (Request, Seasons) ->
   properties    = ["title", "genre", "year", "rating", "plot", "studio", "mpaa", "cast", "playcount", "episode", "imdbnumber", "premiered", "thumbnail", "season", "watchedepisodes"]
   
   allResultHandler = (result) ->
     for show in (result.tvshows || [])
       show.type = "tvShow"
+      show.thumbnail = kodiRemote.parseImage show.thumbnail
+      for castMember in show.cast
+        castMember.thumbnail = kodiRemote.parseImage castMember.thumbnail
       show.seasons = -> Seasons.all @.tvshowid
     return result.tvshows || []
 
   getResultHandler = (result) ->
     result.tvshowdetails.type = "tvShow"
+    result.tvshowdetails.thumbnail = kodiRemote.parseImage result.tvshowdetails.thumbnail
+    for castMember in result.tvshowdetails.cast
+      castMember.thumbnail = kodiRemote.parseImage castMember.thumbnail
+      console.debug castMember.thumbnail
     result.tvshowdetails.seasons = -> Seasons.all @.tvshowid
     return result.tvshowdetails
 
   service = 
-    perPage: 5
+    perPage: 10
 
     where:
       title: (query) ->
@@ -57,6 +69,7 @@ app.service "Seasons", [ "Request", "Episodes", (Request, Episodes) ->
   resultHandler = (result) ->
     for season in (result.seasons || [])
       season.type = "season"
+      season.thumbnail = kodiRemote.parseImage season.thumbnail
       season.episodes = -> Episodes.all @.tvshowid, @.season
     return result.seasons || []
 
@@ -77,10 +90,14 @@ app.service "Episodes", [ "Request", (Request) ->
   resultHandler = (result) -> 
     for episode in (result.episodes || [])
       episode.type = "episode"
+      episode.thumbnail = kodiRemote.parseImage episode.thumbnail
     return result.episodes || []
 
   getResultHandler = (result) -> 
     result.episodedetails.type = "episode"
+    result.episodedetails.thumbnail = kodiRemote.parseImage result.episodedetails.thumbnail
+    for castMember in result.episodedetails.cast
+      castMember.thumbnail = kodiRemote.parseImage castMember.thumbnail
     result.episodedetails
 
   service = 
