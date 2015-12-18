@@ -1,25 +1,14 @@
-<md-list-item ng-repeat="movie in movies" class="md-2-line pointer">
-  <avatar-image ng-if="movie.thumbnail" avatar="movie.thumbnail"></avatar-image>
-  <circle-avatar ng-if="!movie.thumbnail" label="movie.label"></circle-avatar>
-  <div class="md-list-item-text" ng-click="visitMovie(movie.movieid)">
-    <h3>                
-      <watched-it model="movie"></watched-it>       
-      {{movie.label}} ({{movie.year}})
-      <show-rating rating="movie.rating"></show-rating>   
-      <span class="runtime">{{movie.runtime | secondsToDateTime | date:'HH:mm:ss'}}</span>
-      <h4>{{movie.tagline}}</h4>
-    </h3>        
-    <div class="second-line">                    
-      <span class="genre" ng-repeat="genre in movie.genre">{{genre}}</span>
+<div class="md-padding" layout="column">
+  <div ng-repeat="movieGroup in movieGroups" layout="row">
+    <div flex="50" ng-repeat="movie in movieGroup" layout="column" class="tvshow pointer" ng-click="visitMovie(movie.movieid)">
+      <img src="{{movie.thumbnail}}" class="video-avatar" />
+      <h2 class="center">
+        <watched-it model="movie"></watched-it>
+        {{movie.title}}
+      </h2>
+      <h5 class="center">
+        {{movie.year}}
+      </h5>
     </div>
-    <p class="third-line">
-      {{movie.plot}}
-    </p>
-    <div>
-      <md-button class="md-primary md-raised play-button" ng-click="play(movie); $event.stopPropagation();" aria-label="Play movie">
-        <ng-md-icon icon="play_arrow" style="fill: white;"></ng-md-icon>             
-        Play
-      </md-button>     
-    </div>   
   </div>
-</md-list-item>
+</div>

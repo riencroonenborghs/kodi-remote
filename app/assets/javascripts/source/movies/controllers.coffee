@@ -2,6 +2,7 @@ app = angular.module "kodiRemote.movies.controllers", []
 
 app.controller "MoviesController", [ "$scope", "NavbarFactory", "Movies", ($scope, NavbarFactory, Movies) ->  
   $scope.movies = []
+  $scope.movieGroups = []
 
   # sortable directive
   # - set $scope.sortParams before load
@@ -22,6 +23,8 @@ app.controller "MoviesController", [ "$scope", "NavbarFactory", "Movies", ($scop
       $scope.loading = false
       for movie in data.data
         $scope.movies.push movie
+
+      $scope.movieGroups = kodiRemote.array.inGroupsOf $scope.movies, 2
       $scope.Navbar = new NavbarFactory
       $scope.Navbar.addTitle "Movies (#{data.total})"
       $scope.paginationAfterLoad Movies.perPage, data.total

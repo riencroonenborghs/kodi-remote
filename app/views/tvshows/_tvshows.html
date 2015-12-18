@@ -1,17 +1,14 @@
-<md-list-item ng-repeat="tvShow in tvShows" class="md-3-line pointer">
-  <avatar-image ng-if="tvShow.thumbnail" avatar="tvShow.thumbnail"></avatar-image>
-  <circle-avatar ng-if="!tvShow.thumbnail" label="tvShow.label"></circle-avatar>
-  <div class="md-list-item-text" ng-click="visitSeasons(tvShow.tvshowid)">
-    <h3>          
-      <watched-it model="tvShow"></watched-it>
-      {{tvShow.title}} ({{tvShow.year}})          
-      <show-rating rating="tvShow.rating"></show-rating>
-    </h3>
-    <h4 class="second-line">          
-      <span class="genre pointer" ng-repeat="genre in tvShow.genre" ng-click="sortByGenre(genre); $event.stopPropagation();">{{genre}}</span>
-    </h4>
-    <p class="third-line">
-      {{tvShow.plot}}
-    </p>
+<div class="md-padding" layout="column">
+  <div ng-repeat="tvShowGroup in tvShowGroups" layout="row">
+    <div flex="50" ng-repeat="tvShow in tvShowGroup" layout="column" class="tvshow pointer" ng-click="visitSeasons(tvShow.tvshowid)">
+      <img src="{{tvShow.thumbnail}}" class="video-avatar" />
+      <h2 class="center">
+        <watched-it model="tvShow"></watched-it>
+        {{tvShow.title}}
+      </h2>
+      <h5 class="center">
+        {{tvShow.year}}
+      </h5>
+    </div>
   </div>
-</md-list-item>
+</div>

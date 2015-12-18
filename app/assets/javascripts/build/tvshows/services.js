@@ -46,7 +46,6 @@
         for (i = 0, len = ref.length; i < len; i++) {
           castMember = ref[i];
           castMember.thumbnail = kodiRemote.parseImage(castMember.thumbnail);
-          console.debug(castMember.thumbnail);
         }
         result.tvshowdetails.seasons = function() {
           return Seasons.all(this.tvshowid);

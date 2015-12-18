@@ -1,7 +1,16 @@
 app = angular.module "kodiRemote.tvshows.controllers", []
 
+kodiRemote.array =
+  inGroupsOf: (_list, number) ->
+    list = _list.slice(0)
+    newList = []
+    while list.length > 0
+      newList.push list.splice(0, number)
+    return newList
+
 app.controller "TvShowsController", [ "$scope", "NavbarFactory", "TvShows", ($scope, NavbarFactory, TvShows) ->  
   $scope.tvShows = []  
+  $scope.tvShowGroups = []
 
   # sortable directive
   # - set $scope.sortParams before load
@@ -22,6 +31,9 @@ app.controller "TvShowsController", [ "$scope", "NavbarFactory", "TvShows", ($sc
       $scope.loading = false
       for tvShow in data.data
         $scope.tvShows.push tvShow
+
+      $scope.tvShowGroups = kodiRemote.array.inGroupsOf $scope.tvShows, 2      
+
       $scope.Navbar = new NavbarFactory
       $scope.Navbar.addTitle "TV Shows (#{data.total})"
       $scope.paginationAfterLoad TvShows.perPage, data.total
@@ -34,6 +46,7 @@ app.controller "SeasonsController", [ "$scope", "$routeParams", "NavbarFactory",
 
   $scope.tvShow = null
   $scope.seasons = []
+  $scope.seasonGroups = []
 
   TvShows.get(tvShowId).then (tvShowData) ->
     $scope.tvShow = tvShowData.data    
@@ -42,6 +55,7 @@ app.controller "SeasonsController", [ "$scope", "$routeParams", "NavbarFactory",
     $scope.Navbar.addTitle $scope.tvShow.title
     $scope.tvShow.seasons().then (seasonsData) ->
       $scope.seasons = seasonsData.data
+      $scope.seasonGroups = kodiRemote.array.inGroupsOf $scope.seasons, 2
 ]
 
 
@@ -53,6 +67,7 @@ app.controller "EpisodesController", [ "$scope", "$routeParams", "NavbarFactory"
   $scope.tvShow = null
   $scope.season = null
   $scope.episodes = []
+  $scope.episodeGroups = []
 
   TvShows.get(tvShowId).then (tvShowData) ->
     $scope.tvShow = tvShowData.data
@@ -66,6 +81,7 @@ app.controller "EpisodesController", [ "$scope", "$routeParams", "NavbarFactory"
           $scope.Navbar.addTitle "Season #{season.season}"
           season.episodes().then (episodeData) ->
             $scope.episodes = episodeData.data
+            $scope.episodeGroups = kodiRemote.array.inGroupsOf $scope.episodes, 2
 
   $scope.play = (episode) -> Remote.playEpisode(episode.episodeid)
 ]

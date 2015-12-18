@@ -98,7 +98,9 @@
       var service;
       service = {
         tvShows: [],
+        tvShowGroups: [],
         movies: [],
+        movieGroups: [],
         searching: false,
         reset: function() {
           this.tvShows = [];
@@ -116,6 +118,7 @@
           TvShows.where.title(query).then((function(_this) {
             return function(tvShowsData) {
               _this.tvShows = tvShowsData.data;
+              _this.tvShowGroups = kodiRemote.array.inGroupsOf(_this.tvShows, 2);
               searchingTvShows = false;
               return _this.searching = searchingTvShows && searchingMovies;
             };
@@ -123,6 +126,7 @@
           Movies.where.title(query).then((function(_this) {
             return function(moviesData) {
               _this.movies = moviesData.data;
+              _this.movieGroups = kodiRemote.array.inGroupsOf(_this.movies, 2);
               searchingMovies = true;
               return _this.searching = searchingTvShows && searchingMovies;
             };

@@ -7,6 +7,7 @@
   app.controller("MoviesController", [
     "$scope", "NavbarFactory", "Movies", function($scope, NavbarFactory, Movies) {
       $scope.movies = [];
+      $scope.movieGroups = [];
       $scope.beforeSortLoad = function() {
         $scope.movies = [];
         return $scope.pagination.page = 1;
@@ -21,6 +22,7 @@
             movie = ref[i];
             $scope.movies.push(movie);
           }
+          $scope.movieGroups = kodiRemote.array.inGroupsOf($scope.movies, 2);
           $scope.Navbar = new NavbarFactory;
           $scope.Navbar.addTitle("Movies (" + data.total + ")");
           $scope.paginationAfterLoad(Movies.perPage, data.total);

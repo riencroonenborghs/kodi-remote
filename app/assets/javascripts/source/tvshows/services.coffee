@@ -22,7 +22,6 @@ app.service "TvShows", [ "Request", "Seasons", (Request, Seasons) ->
     result.tvshowdetails.thumbnail = kodiRemote.parseImage result.tvshowdetails.thumbnail
     for castMember in result.tvshowdetails.cast
       castMember.thumbnail = kodiRemote.parseImage castMember.thumbnail
-      console.debug castMember.thumbnail
     result.tvshowdetails.seasons = -> Seasons.all @.tvshowid
     return result.tvshowdetails
 

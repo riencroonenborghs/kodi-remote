@@ -124,23 +124,15 @@ app.directive "circleAvatar", [->
 
 # ---------- video details ----------
 
-app.directive "showRating", [->
+app.directive "rating", [->
   restrict: "E"
-  replace: true
   scope:
     rating: "="
-  templateUrl: "app/views/ui/show-rating.html"
+    size: "@"
+  template: "<div class='rating {{classSize}}'><ng-md-icon icon='star' size='{{iconSize}}' style='fill: rgba(33,150,243,1);'></ng-md-icon> {{rating | number: 1}}</div>"
   controller: [ "$scope", ($scope) ->
-    $scope.stars = ["star_outline","star_outline","star_outline","star_outline","star_outline"]
-    $scope.stars[0] = "star_half" if $scope.rating >= 1
-    $scope.stars[0] = "star" if $scope.rating >= 2
-    $scope.stars[1] = "star_half" if $scope.rating >= 3
-    $scope.stars[1] = "star" if $scope.rating >= 4
-    $scope.stars[2] = "star_half" if $scope.rating >= 5
-    $scope.stars[2] = "star" if $scope.rating >= 6
-    $scope.stars[3] = "star_half" if $scope.rating >= 7
-    $scope.stars[3] = "star" if $scope.rating >= 8
-    $scope.stars[4] = "star_half" if $scope.rating >= 9
+    $scope.iconSize = if $scope.size == "big" then 32 else 16
+    $scope.classSize = if $scope.size == "big" then "big" else "regular"
   ]
 ]
 
@@ -163,6 +155,6 @@ app.directive "watchedIt", [->
   templateUrl: "app/views/ui/watched-it.html"
   controller: [ "$scope", ($scope) ->
     $scope.title      = if $scope.model.playcount == 1 then "Watched it" else "Haven't watched it"
-    $scope.iconColor  = if $scope.model.playcount == 1 then "#6FA67B" else "grey"
+    $scope.iconColor  = if $scope.model.playcount == 1 then "rgba(33,150,243,1)" else "rgba(33,150,243,0.2)"
   ]
 ]

@@ -4,9 +4,22 @@
 
   app = angular.module("kodiRemote.tvshows.controllers", []);
 
+  kodiRemote.array = {
+    inGroupsOf: function(_list, number) {
+      var list, newList;
+      list = _list.slice(0);
+      newList = [];
+      while (list.length > 0) {
+        newList.push(list.splice(0, number));
+      }
+      return newList;
+    }
+  };
+
   app.controller("TvShowsController", [
     "$scope", "NavbarFactory", "TvShows", function($scope, NavbarFactory, TvShows) {
       $scope.tvShows = [];
+      $scope.tvShowGroups = [];
       $scope.beforeSortLoad = function() {
         $scope.tvShows = [];
         return $scope.pagination.page = 1;
@@ -21,7 +34,7 @@
             tvShow = ref[i];
             $scope.tvShows.push(tvShow);
           }
-          console.debug($scope.tvShows.length);
+          $scope.tvShowGroups = kodiRemote.array.inGroupsOf($scope.tvShows, 2);
           $scope.Navbar = new NavbarFactory;
           $scope.Navbar.addTitle("TV Shows (" + data.total + ")");
           $scope.paginationAfterLoad(TvShows.perPage, data.total);
@@ -36,13 +49,15 @@
       tvShowId = parseInt($routeParams.id);
       $scope.tvShow = null;
       $scope.seasons = [];
+      $scope.seasonGroups = [];
       return TvShows.get(tvShowId).then(function(tvShowData) {
         $scope.tvShow = tvShowData.data;
         $scope.Navbar = new NavbarFactory;
         $scope.Navbar.addLink("/tvshows", "TV Shows");
         $scope.Navbar.addTitle($scope.tvShow.title);
         return $scope.tvShow.seasons().then(function(seasonsData) {
-          return $scope.seasons = seasonsData.data;
+          $scope.seasons = seasonsData.data;
+          return $scope.seasonGroups = kodiRemote.array.inGroupsOf($scope.seasons, 2);
         });
       });
     }
@@ -56,6 +71,7 @@
       $scope.tvShow = null;
       $scope.season = null;
       $scope.episodes = [];
+      $scope.episodeGroups = [];
       TvShows.get(tvShowId).then(function(tvShowData) {
         $scope.tvShow = tvShowData.data;
         return $scope.tvShow.seasons().then(function(seasonsData) {
@@ -71,7 +87,8 @@
               $scope.Navbar.addLink("/tvshows/" + tvShowId + "/seasons", $scope.tvShow.title);
               $scope.Navbar.addTitle("Season " + season.season);
               results.push(season.episodes().then(function(episodeData) {
-                return $scope.episodes = episodeData.data;
+                $scope.episodes = episodeData.data;
+                return $scope.episodeGroups = kodiRemote.array.inGroupsOf($scope.episodes, 2);
               }));
             } else {
               results.push(void 0);

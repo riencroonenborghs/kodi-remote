@@ -2,28 +2,25 @@
 
 <navbar ng-if="!loading" model="Navbar"></navbar>
 
-<md-content ng-if="!loading">  
-  <md-list class="md-padding">
-    <md-list-item ng-repeat="episode in episodes" class="md-3-line">
-      <avatar-image ng-if="episode.thumbnail" avatar="episode.thumbnail"></avatar-image>
-      <circle-avatar ng-if="!episode.thumbnail" label="episode.title"></circle-avatar>
-      <div class="md-list-item-text" ng-click="visitEpisode(episode.episodeid)">
-        <h3>          
-          <watched-it model="episode"></watched-it>             
-          Episode {{episode.episode}}: {{episode.title}}
-          <show-rating rating="episode.rating"></show-rating>
-          <span class="runtime">{{episode.runtime | secondsToDateTime | date:'HH:mm:ss'}}</span>      
-        </h3>
-        <p class="second-line">
-          {{episode.plot}}          
-        </p>
-        <p class="third-line">
-          <md-button class="md-primary md-raised play-button" ng-click="play(episode); $event.stopPropagation();" aria-label="Play episode">
-            <ng-md-icon icon="play_arrow" style="fill: white;"></ng-md-icon>             
-            Play
-          </md-button>
-        </p>
+<div class="md-padding" layout="column">
+  <div ng-repeat="episodeGroup in episodeGroups" layout="row">
+    <div flex="50" ng-repeat="episode in episodeGroup" layout="column" class="tvshow pointer" ng-click="visitEpisode(episode.episodeid)">
+      <img src="{{episode.thumbnail}}" class="video-avatar" />
+      <h5 class="center">
+        Episode {{episode.episode}} -
+        {{episode.runtime | secondsToDateTime | date:'HH:mm:ss'}}
+        
+      </h5>
+      <h2 class="center">
+        <watched-it model="episode"></watched-it>        
+        {{episode.title}}        
+      </h2>
+      <div class="center">
+        <md-button class="md-primary md-raised play-button" ng-click="play(episode); $event.stopPropagation();" aria-label="Play episode">
+          <ng-md-icon icon="play_arrow" style="fill: white;"></ng-md-icon>             
+          Play
+        </md-button>
       </div>
-    </md-list-item>
-  </md-list>
-</show-rating>
+    </div>
+  </div>
+</div>

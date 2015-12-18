@@ -180,45 +180,19 @@
     }
   ]);
 
-  app.directive("showRating", [
+  app.directive("rating", [
     function() {
       return {
         restrict: "E",
-        replace: true,
         scope: {
-          rating: "="
+          rating: "=",
+          size: "@"
         },
-        templateUrl: "app/views/ui/show-rating.html",
+        template: "<div class='rating {{classSize}}'><ng-md-icon icon='star' size='{{iconSize}}' style='fill: rgba(33,150,243,1);'></ng-md-icon> {{rating | number: 1}}</div>",
         controller: [
           "$scope", function($scope) {
-            $scope.stars = ["star_outline", "star_outline", "star_outline", "star_outline", "star_outline"];
-            if ($scope.rating >= 1) {
-              $scope.stars[0] = "star_half";
-            }
-            if ($scope.rating >= 2) {
-              $scope.stars[0] = "star";
-            }
-            if ($scope.rating >= 3) {
-              $scope.stars[1] = "star_half";
-            }
-            if ($scope.rating >= 4) {
-              $scope.stars[1] = "star";
-            }
-            if ($scope.rating >= 5) {
-              $scope.stars[2] = "star_half";
-            }
-            if ($scope.rating >= 6) {
-              $scope.stars[2] = "star";
-            }
-            if ($scope.rating >= 7) {
-              $scope.stars[3] = "star_half";
-            }
-            if ($scope.rating >= 8) {
-              $scope.stars[3] = "star";
-            }
-            if ($scope.rating >= 9) {
-              return $scope.stars[4] = "star_half";
-            }
+            $scope.iconSize = $scope.size === "big" ? 32 : 16;
+            return $scope.classSize = $scope.size === "big" ? "big" : "regular";
           }
         ]
       };
@@ -255,7 +229,7 @@
         controller: [
           "$scope", function($scope) {
             $scope.title = $scope.model.playcount === 1 ? "Watched it" : "Haven't watched it";
-            return $scope.iconColor = $scope.model.playcount === 1 ? "#6FA67B" : "grey";
+            return $scope.iconColor = $scope.model.playcount === 1 ? "rgba(33,150,243,1)" : "rgba(33,150,243,0.2)";
           }
         ]
       };

@@ -2,68 +2,76 @@
 
 <navbar model="Navbar"></navbar>
 
-<md-list ng-if="!loading" class="md-padding">
-  <md-subheader class="md-primary">Details</md-subheader>
-
-  <md-list-item>
-    <div class="md-list-item-text">
-      <h4>Genre</h4>
-      <p><span class="genre" ng-repeat="genre in episode.genre">{{genre}}</span></p>
-    </div>
-  </md-list-item>
-
-  <md-list-item>
-    <div class="md-list-item-text">
-      <h4>Plot</h4>
-      <p>{{episode.plot}}</p>
-    </div>
-  </md-list-item>
-
-  <md-list-item ng-if="episode.director">
-    <div class="md-list-item-text">
-      <h4>Director</h4>
-      <p>{{episode.director.join(', ')}}</p>
-    </div>
-  </md-list-item>
-
-  <md-list-item ng-if="episode.writer">
-    <div class="md-list-item-text">
-      <h4>Writer</h4>
-      <p>{{episode.writer.join(', ')}}</p>
-    </div>
-  </md-list-item>
-
-  <md-list-item ng-if="episode.studio">
-    <div class="md-list-item-text">
-      <h4>Studio</h4>
-      <p>{{episode.studio.join(', ')}}</p>
-    </div>
-  </md-list-item>
-
-  <md-list-item ng-if="episode.mpaa">
-    <div class="md-list-item-text">
-      <h4>MPAA Rating</h4>
-      <p>{{episode.mpaa}}</p>
-    </div>
-  </md-list-item>
-
-  <div ng-if="episode.cast.length > 0">
-    <md-subheader class="md-primary">Cast ({{episode.cast.length}})</md-subheader>
-
-    <md-list-item ng-repeat="castMember in episode.cast" class="md-3-line cast">
-      <avatar-image ng-if="castMember.thumbnail" avatar="castMember.thumbnail"></avatar-image>
-      <circle-avatar ng-if="!castMember.thumbnail" label="castMember.name"></circle-avatar>
-      <div class="md-list-item-text">
-        <h3>{{castMember.name}}</h3>
-        <h4>{{castMember.role}}</h4>
-        <p>
-          <a ng-href="http://www.imdb.com/find?s=nm&q={{castMember.name}}" target="_blank">
-            <ng-md-icon icon="episode" size="12"></ng-md-icon>
-            IMDB
-          </a>
-        </p>
-      </div>
-    </md-list-item>
+<div class="md-padding">
+  <div>
+    <span ng-if="episode.runtime">Runtime: {{episode.runtime | secondsToDateTime | date:'HH:mm:ss'}}</span>
   </div>
+  <div layout="row">
+    <p class="plot" flex>{{episode.plot}}</p>
+    <rating flex="25" size="big" rating="episode.rating"></rating>
+  </div>  
+</div>
 
-</md-list>
+<md-tabs md-dynamic-height md-border-bottom>
+  <md-tab label="Details">
+    <md-content class="md-padding">
+      <md-list>
+
+        <md-list-item ng-if="episode.director">
+          <div class="md-list-item-text">
+            <h4>Director</h4>
+            <p>{{episode.director.join(', ')}}</p>
+          </div>
+        </md-list-item>
+
+        <md-list-item ng-if="episode.writer">
+          <div class="md-list-item-text">
+            <h4>Writer</h4>
+            <p>{{episode.writer.join(', ')}}</p>
+          </div>
+        </md-list-item>
+
+        <md-list-item ng-if="episode.studio">
+          <div class="md-list-item-text">
+            <h4>Studio</h4>
+            <p>{{episode.studio.join(', ')}}</p>
+          </div>
+        </md-list-item>
+
+        <md-list-item ng-if="episode.mpaa">
+          <div class="md-list-item-text">
+            <h4>MPAA Rating</h4>
+            <p>{{episode.mpaa}}</p>
+          </div>
+        </md-list-item>
+      </md-list>
+    </md-content>
+  </md-tab>
+
+  <md-tab label="Cast">
+    <md-content class="md-padding">
+      <md-list>
+        <md-list-item ng-repeat="castMember in episode.cast" class="md-3-line cast">
+          <avatar-image ng-if="castMember.thumbnail" avatar="castMember.thumbnail"></avatar-image>
+          <circle-avatar ng-if="!castMember.thumbnail" label="castMember.name"></circle-avatar>
+          <div class="md-list-item-text">
+            <h3>{{castMember.name}}</h3>
+            <h4>{{castMember.role}}</h4>
+            <p>
+              <a ng-href="http://www.imdb.com/find?s=nm&q={{castMember.name}}" target="_blank">
+                <ng-md-icon icon="episode" size="12"></ng-md-icon>
+                IMDB
+              </a>
+            </p>
+          </div>
+        </md-list-item>
+      </md-list>
+    </md-content>
+  </md-tab>
+
+  <md-tab label="Images">
+    <mg-content class="md-padding">
+      <div class="center"><img src="{{episode.thumbnail}}" /></div>
+    </mg-content>
+  </md-tab>
+</md-tabs>

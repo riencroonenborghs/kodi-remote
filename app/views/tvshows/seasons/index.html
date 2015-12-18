@@ -2,16 +2,25 @@
 
 <navbar ng-if="!loading" model="Navbar"></navbar>
 
-<md-list ng-if="!loading" class="md-padding">
-  <md-list-item ng-repeat="season in seasons" class="md-2-line pointer">
-    <avatar-image ng-if="season.thumbnail" avatar="season.thumbnail"></avatar-image>
-    <circle-avatar ng-if="!season.thumbnail" label="season.label"></circle-avatar>
-    <div class="md-list-item-text" ng-click="visitEpisodes(tvShow.tvshowid, season.seasonid)">
-      <h3>
+<div class="md-padding">
+  <h4 layout="row">          
+    <span class="genre pointer" ng-repeat="genre in tvShow.genre" ng-click="sortByGenre(genre); $event.stopPropagation();">{{genre}}</span>
+    <rating rating="tvShow.rating"></rating>
+  </h4>
+  <p>
+    {{tvShow.plot}}
+  </p>
+</div>
+
+<div class="md-padding" layout="column">
+  <div ng-repeat="seasonGroup in seasonGroups" layout="row">
+    <div flex="50" ng-repeat="season in seasonGroup" layout="column" class="tvshow pointer" ng-click="visitEpisodes(tvShow.tvshowid, season.seasonid)">
+      <img src="{{season.thumbnail}}" class="video-avatar" />
+      <h2 class="center">
         <watched-it model="season"></watched-it>
         Season {{season.season}}
-      </h3>
-      <h4 class="second-line">
+      </h2>
+      <h5 class="center">
         {{season.episode}}
         <ng-pluralize count="season.episode" when="{'1': 'Episode', 'other': 'Episodes'}"></ng-pluralize>
         -
@@ -19,5 +28,5 @@
         <ng-pluralize count="season.watchedepisodes" when="{'1': 'Episode', 'other': 'Episodes'}"></ng-pluralize> Watched
       </h4>
     </div>
-  </md-list-item>
-</md-list>
+  </div>
+</div>

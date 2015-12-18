@@ -70,7 +70,9 @@ app.service "Request", [ "$q", "$http", ($q, $http) ->
 app.service "SearchService", [ "TvShows", "Movies", (TvShows, Movies) ->
   service =
     tvShows:    []
+    tvShowGroups: []
     movies:     []
+    movieGroups: []
     searching:  false
 
     reset: -> 
@@ -87,11 +89,13 @@ app.service "SearchService", [ "TvShows", "Movies", (TvShows, Movies) ->
 
       TvShows.where.title(query).then (tvShowsData) =>
         @tvShows          = tvShowsData.data
+        @tvShowGroups     = kodiRemote.array.inGroupsOf @tvShows, 2
         searchingTvShows  = false
         @searching        = searchingTvShows && searchingMovies
 
       Movies.where.title(query).then (moviesData) =>
         @movies         = moviesData.data
+        @movieGroups    = kodiRemote.array.inGroupsOf @movies, 2
         searchingMovies = true
         @searching      = searchingTvShows && searchingMovies
 
