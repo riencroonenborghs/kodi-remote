@@ -15,10 +15,16 @@ html, body { width: 500px; }
 .stop-button svg,
 .rew-button svg,
 .pause-button svg,
-.tv-button svg,
+.tvshow-button svg,
 .movie-button svg,
+.settings-button svg,
+.remote-button svg,
+.music-button svg,
+.search-button svg,
 .save-button svg,
 .ffw-button svg { position: relative; top: 8px; }
+.sort-button { text-transform: none !important; color: rgb(33,150,243); }
+.sort-button svg { position: relative; top: 2px; }
 
 /*----- topbar -----*/
 #topbar #search { padding-bottom: 4px; }
@@ -29,35 +35,34 @@ html, body { width: 500px; }
 /*----- content -----*/
 #top { position: fixed; width: 100%; z-index: 2; }
 #middle { position: absolute; top: 64px; width: 100%; }
-#middle.remote-visible { position: absolute; top: 224px; }
+#middle.playing-now-visible { position: absolute; top: 224px; }
 
 
 /*----- md list -----*/
 .md-list-item-text h4 { line-height: 0.95em !important; white-space: inherit !important; text-align: justify; }
 md-list-item:not(:last-child) { padding-bottom: 8px !important; border-bottom: 1px solid rgba(33, 150, 243, 0.12); margin-bottom: 8px !important; }
 
+/*----- playing now -----*/
+#playing-now { background: rgb(33,150,243); width: 100%; color: white; }
 
+#playing-now #progress md-slider { cursor: pointer; }
+#playing-now #progress md-slider .md-thumb { display: none; }
+#playing-now #progress md-slider .md-track-container { height: 8px; }
 
-/*----- remote -----*/
-#remote { background: rgb(33,150,243); width: 100%; color: white; }
+#playing-now #progress #time { padding-top: 8px; height: 14px; position: relative; bottom: 12px; }
+#playing-now #progress #time #elapsed { padding-left: 4px; }
+#playing-now #progress #time #remaining { padding-right: 4px; }
 
-#remote #progress md-slider { cursor: pointer; }
-#remote #progress md-slider .md-thumb { display: none; }
-#remote #progress md-slider .md-track-container { height: 8px; }
+#playing-now #info-details { text-align: center; }
+#playing-now #info-details h1,
+#playing-now #info-details h3 { padding: 0; margin: 0; }
 
-#remote #progress #time { padding-top: 8px; height: 14px; position: relative; bottom: 12px; }
-#remote #progress #time #elapsed { padding-left: 4px; }
-#remote #progress #time #remaining { padding-right: 4px; }
+/*----- remote control -----*/
 
-#remote #info-details { text-align: center; }
-#remote #info-details h1,
-#remote #info-details h3 { padding: 0; margin: 0; }
-
-.remote-control table { margin: 0 auto; }
-.remote-control table td { text-align: center; }
+.remote-control .cell { margin: auto 0; text-align: center; }
     
 
-    
+/*----- tv shows / movies -----*/    
 .runtime { font-size: 8pt !important; color: grey; }
 .cast a { text-decoration: none; color: black; }
 .second-line,
@@ -79,5 +84,3 @@ md-list-item:not(:last-child) { padding-bottom: 8px !important; border-bottom: 1
 
 
 
-.sort-button { text-transform: none !important; color: rgb(33,150,243); }
-.sort-button svg { position: relative; top: 2px; }

@@ -5,11 +5,27 @@
   app = angular.module("kodiRemote.controllers", []);
 
   app.controller("AppController", [
-    "$scope", "$interval", "$timeout", "$location", "SearchService", "Topbar", "Remote", function($scope, $interval, $timeout, $location, SearchService, Topbar, Remote) {
+    "$scope", "$interval", "$timeout", "$location", "SearchService", "Remote", function($scope, $interval, $timeout, $location, SearchService, Remote) {
       var initApp, loadSettings, loadSettingsInterval;
+      $scope.visit = function(path) {
+        $scope.showSearch = false;
+        return $location.path(path);
+      };
+      $scope.visitSeasons = function(tvShowId) {
+        return $scope.visit("/tvshows/" + tvShowId + "/seasons");
+      };
+      $scope.visitEpisodes = function(tvShowId, seasonId) {
+        return $scope.visit("/tvshows/" + tvShowId + "/seasons/" + seasonId + "/episodes");
+      };
+      $scope.visitEpisode = function(episodeId) {
+        console.debug(episodeId);
+        return $scope.visit("/episodes/" + episodeId);
+      };
+      $scope.visitMovie = function(movieId) {
+        return $scope.visit("/movies/" + movieId);
+      };
       initApp = function() {
         var whatsPlaying;
-        $scope.Topbar = Topbar;
         $scope.toggleSearch = function() {
           $scope.showSearch = !$scope.showSearch;
           $scope.search.query = "";
@@ -28,20 +44,7 @@
         $scope.performSearch = function() {
           return $scope.searchService.search($scope.search.query);
         };
-        $scope.visit = function(path) {
-          $scope.showSearch = false;
-          return $location.path(path);
-        };
-        $scope.visitSeasons = function(tvShowId) {
-          return $location.path("/tvshows/" + tvShowId + "/seasons");
-        };
-        $scope.visitEpisodes = function(tvShowId, seasonId) {
-          return $location.path("/tvshows/" + tvShowId + "/seasons/" + seasonId + "/episodes");
-        };
-        $scope.visitMovie = function(movieId) {
-          return $location.path("/movies/" + movieId);
-        };
-        $scope.remoteVisible = false;
+        $scope.playingNowVisible = false;
         $scope.playing = null;
         $scope.playerId = null;
         whatsPlaying = function() {
@@ -50,15 +53,16 @@
               $scope.playerId = data[0].playerid;
               return Remote.Player.playing($scope.playerId).then(function(data) {
                 $scope.playing = data.item;
-                return $scope.remoteVisible = true;
+                return $scope.playingNowVisible = true;
               });
             } else {
               $scope.playing = null;
-              return $scope.remoteVisible = false;
+              return $scope.playingNowVisible = false;
             }
           });
         };
-        return whatsPlaying();
+        whatsPlaying();
+        return $interval(whatsPlaying, 1000);
       };
       $scope.hasServer = kodiRemote.settings.server !== null && kodiRemote.settings.port !== null;
       loadSettings = function() {

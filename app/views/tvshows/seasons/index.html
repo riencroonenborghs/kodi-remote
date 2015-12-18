@@ -1,8 +1,6 @@
 <loading-screen loading="loading"></loading-screen>
 
-<md-subheader ng-if="!loading" class="md-primary">
-  TV Shows > {{tvShow.title}}
-</md-subheader>
+<navbar ng-if="!loading" model="Navbar"></navbar>
 
 <md-list ng-if="!loading" class="md-padding">
   <md-list-item ng-repeat="season in seasons" class="md-2-line pointer">

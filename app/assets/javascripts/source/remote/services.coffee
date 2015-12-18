@@ -50,4 +50,5 @@ app.service "RemoteControl", [ "KodiRequest", (KodiRequest) ->
     back: -> return KodiRequest.methodRequest "Input.Back", {}
     scanLibrary: -> return KodiRequest.methodRequest "VideoLibrary.Scan", {}
     info: -> return KodiRequest.methodRequest "Input.Info", {}
+    clean: -> return KodiRequest.methodRequest "VideoLibrary.Clean", {}
 ]

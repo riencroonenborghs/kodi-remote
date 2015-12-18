@@ -72,12 +72,16 @@ app.service "Seasons", [ "Request", "Episodes", (Request, Episodes) ->
 ]
 
 app.service "Episodes", [ "Request", (Request) ->
-  properties    = ["title", "plot", "rating", "writer", "firstaired", "playcount", "runtime", "director", "season", "episode", "cast", "thumbnail", "resume"]
+  properties    = ["title", "plot", "rating", "writer", "firstaired", "playcount", "runtime", "director", "season", "episode", "cast", "thumbnail", "resume", "showtitle", "tvshowid"]
   
   resultHandler = (result) -> 
     for episode in (result.episodes || [])
       episode.type = "episode"
     return result.episodes || []
+
+  getResultHandler = (result) -> 
+    result.episodedetails.type = "episode"
+    result.episodedetails
 
   service = 
     all: (tvShowId, season) -> 
@@ -86,6 +90,13 @@ app.service "Episodes", [ "Request", (Request) ->
         season: season
         properties: properties
       return Request.fetch "VideoLibrary.GetEpisodes", resultHandler, params
+
+    get: (episodeId) ->
+      params =
+        episodeid: episodeId
+        properties: properties
+               
+      return Request.fetch "VideoLibrary.GetEpisodeDetails", getResultHandler, params
     
   service
 ]

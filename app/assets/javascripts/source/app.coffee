@@ -11,13 +11,16 @@ app = angular.module "kodiRemote", [
   "kodiRemote.controllers",
   "kodiRemote.services",
   "kodiRemote.directives",
+  "kodiRemote.factories",
   "kodiRemote.tvshows.controllers",
   "kodiRemote.tvshows.services",
   "kodiRemote.movies.controllers",
   "kodiRemote.movies.services",
   "kodiRemote.settings.controllers",
   "kodiRemote.remote.controllers",
-  "kodiRemote.remote.services"
+  "kodiRemote.remote.services",
+  "kodiRemote.music.controllers",
+  "kodiRemote.music.services"
 ]
 
 app.config ($mdThemingProvider) ->
@@ -35,6 +38,7 @@ app.config ($routeProvider, $locationProvider) ->
     .when "/settings",
       templateUrl: "app/views/settings/index.html"
       controller: "SettingsController"
+
     .when "/tvshows",
       templateUrl: "app/views/tvshows/index.html"
       controller: "TvShowsController"
@@ -44,15 +48,28 @@ app.config ($routeProvider, $locationProvider) ->
     .when "/tvshows/:tvshowid/seasons/:id/episodes",
       templateUrl: "app/views/tvshows/seasons/episodes/index.html"
       controller: "EpisodesController"
+    .when "/episodes/:id",
+      templateUrl: "app/views/episodes/show.html"
+      controller: "EpisodeController"
+
     .when "/movies",
       templateUrl: "app/views/movies/index.html"
       controller: "MoviesController"
     .when "/movies/:id",
       templateUrl: "app/views/movies/show.html"
       controller: "MovieController"
+
     .when "/remote",
       templateUrl: "app/views/remote/index.html"
-      controller: "RemoteController"    
+      controller: "RemoteController"
+
+    .when "/music/albums",
+      templateUrl: "app/views/music/albums.html"
+      controller: "AlbumsController"
+    .when "/music/albums/:id/songs",
+      templateUrl: "app/views/music/songs.html"
+      controller: "SongsController"
+
     .otherwise "/tvshows",
       templateUrl: "app/views/tvshows/index.html"
       controller: "TvShowsController"

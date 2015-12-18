@@ -5,8 +5,7 @@
   app = angular.module("kodiRemote.tvshows.controllers", []);
 
   app.controller("TvShowsController", [
-    "$scope", "Topbar", "TvShows", function($scope, Topbar, TvShows) {
-      Topbar.setTitle("TV Shows");
+    "$scope", "NavbarFactory", "TvShows", function($scope, NavbarFactory, TvShows) {
       $scope.tvShows = [];
       $scope.beforeSortLoad = function() {
         $scope.tvShows = [];
@@ -22,7 +21,8 @@
             tvShow = ref[i];
             $scope.tvShows.push(tvShow);
           }
-          Topbar.setTitle("TV Shows (" + data.total + ")");
+          $scope.Navbar = new NavbarFactory;
+          $scope.Navbar.addTitle("TV Shows (" + data.total + ")");
           $scope.paginationAfterLoad(TvShows.perPage, data.total);
         });
       };
@@ -30,14 +30,16 @@
   ]);
 
   app.controller("SeasonsController", [
-    "$scope", "$routeParams", "Topbar", "TvShows", function($scope, $routeParams, Topbar, TvShows) {
+    "$scope", "$routeParams", "NavbarFactory", "TvShows", function($scope, $routeParams, NavbarFactory, TvShows) {
       var tvShowId;
       tvShowId = parseInt($routeParams.id);
       $scope.tvShow = null;
       $scope.seasons = [];
       return TvShows.get(tvShowId).then(function(tvShowData) {
         $scope.tvShow = tvShowData.data;
-        Topbar.setLink("/tvshows", $scope.tvShow.title);
+        $scope.Navbar = new NavbarFactory;
+        $scope.Navbar.addLink("/tvshows", "TV Shows");
+        $scope.Navbar.addTitle($scope.tvShow.title);
         return $scope.tvShow.seasons().then(function(seasonsData) {
           return $scope.seasons = seasonsData.data;
         });
@@ -46,7 +48,7 @@
   ]);
 
   app.controller("EpisodesController", [
-    "$scope", "$routeParams", "Topbar", "TvShows", "Remote", function($scope, $routeParams, Topbar, TvShows, Remote) {
+    "$scope", "$routeParams", "NavbarFactory", "TvShows", "Remote", function($scope, $routeParams, NavbarFactory, TvShows, Remote) {
       var seasonId, tvShowId;
       tvShowId = parseInt($routeParams.tvshowid);
       seasonId = parseInt($routeParams.id);
@@ -61,9 +63,12 @@
           results = [];
           for (i = 0, len = ref.length; i < len; i++) {
             season = ref[i];
-            if (season.seasonid === seasonId) {
+            if (season.seasonid === seasonId || season.season === seasonId) {
               $scope.season = season;
-              Topbar.setLink("/tvshows/" + $scope.tvShow.tvshowid + "/seasons", "Season " + season.season);
+              $scope.Navbar = new NavbarFactory;
+              $scope.Navbar.addLink("/tvshows", "TV Shows");
+              $scope.Navbar.addLink("/tvshows/" + tvShowId + "/seasons", $scope.tvShow.title);
+              $scope.Navbar.addTitle("Season " + season.season);
               results.push(season.episodes().then(function(episodeData) {
                 return $scope.episodes = episodeData.data;
               }));
@@ -77,6 +82,22 @@
       return $scope.play = function(episode) {
         return Remote.playEpisode(episode.episodeid);
       };
+    }
+  ]);
+
+  app.controller("EpisodeController", [
+    "$scope", "$routeParams", "Episodes", "NavbarFactory", function($scope, $routeParams, Episodes, NavbarFactory) {
+      var episodeId;
+      episodeId = parseInt($routeParams.id);
+      $scope.episode = null;
+      return Episodes.get(episodeId).then(function(episodeData) {
+        $scope.episode = episodeData.data;
+        $scope.Navbar = new NavbarFactory;
+        $scope.Navbar.addLink("/tvshows", "TV Shows");
+        $scope.Navbar.addLink("/tvshows/" + $scope.episode.tvshowid + "/seasons", $scope.episode.showtitle);
+        $scope.Navbar.addLink("/tvshows/" + $scope.episode.tvshowid + "/seasons/" + $scope.episode.season + "/episodes", "Season " + $scope.episode.season);
+        return $scope.Navbar.addTitle("Episode " + $scope.episode.episode + ": " + $scope.episode.title);
+      });
     }
   ]);
 

@@ -4,29 +4,6 @@
 
   app = angular.module("kodiRemote.services", []);
 
-  app.service("Topbar", [
-    function() {
-      var service;
-      service = {
-        item: null,
-        setTitle: function(title) {
-          return this.item = {
-            type: "title",
-            title: title
-          };
-        },
-        setLink: function(url, label) {
-          return this.item = {
-            type: "link",
-            url: url,
-            label: label
-          };
-        }
-      };
-      return service;
-    }
-  ]);
-
   app.service("KodiRequest", [
     "$q", "$http", function($q, $http) {
       var methodRequest, perPage, request, service;

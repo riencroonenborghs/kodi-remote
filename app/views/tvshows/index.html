@@ -1,13 +1,16 @@
 <div auto-scroll-paginate sortable>
   <div layout="row">
-    <md-subheader class="md-primary">TV Shows</md-subheader>
-    <div flex></div>    
-    <md-button flex="15" aria-label="Sorting" class="md-icon-button sort-button" ng-click="toggleSortBy()">            
-      {{sort.by.labels[sort.by.current]}}
-    </md-button>    
-    <md-button flex="5" aria-label="Sorting" class="md-icon-button sort-button" ng-click="toggleSortDirection()">
-      <ng-md-icon icon="{{sort.direction.icons[sort.direction.current]}}" size="16" style="fill: rgb(33,150,243);"></ng-md-icon>                  
-    </md-button>
+    <navbar model="Navbar"></navbar>
+
+    <div flex></div>  
+    <div>
+      <md-button aria-label="Sorting" class="md-icon-button sort-button" ng-click="toggleSortBy()">            
+        {{sort.by.labels[sort.by.current]}}
+      </md-button>
+      <md-button aria-label="Sorting" class="md-icon-button sort-button" ng-click="toggleSortDirection()">
+        <ng-md-icon icon="{{sort.direction.icons[sort.direction.current]}}" size="16" style="fill: rgb(33,150,243);"></ng-md-icon>
+      </md-button>
+    </div>
   </div>
 
   <md-list class="md-padding">

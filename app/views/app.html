@@ -19,6 +19,7 @@
     <script src="app/assets/javascripts/build/controllers.js"></script>
     <script src="app/assets/javascripts/build/services.js"></script>
     <script src="app/assets/javascripts/build/directives.js"></script>
+    <script src="app/assets/javascripts/build/factories.js"></script>
     <script src="app/assets/javascripts/build/tvshows/controllers.js"></script>
     <script src="app/assets/javascripts/build/tvshows/services.js"></script>
     <script src="app/assets/javascripts/build/movies/controllers.js"></script>
@@ -26,6 +27,8 @@
     <script src="app/assets/javascripts/build/settings/controllers.js"></script>
     <script src="app/assets/javascripts/build/remote/controllers.js"></script>
     <script src="app/assets/javascripts/build/remote/services.js"></script>
+    <script src="app/assets/javascripts/build/music/controllers.js"></script>
+    <script src="app/assets/javascripts/build/music/services.js"></script>
 
     <link rel="stylesheet" type="text/css" href="app/assets/stylesheets/angular-material-0.11.4.min.css">
     <link rel="stylesheet" type="text/css" href="app/assets/stylesheets/app.css">
@@ -41,9 +44,9 @@
     <div id="content" layout="column" ng-if="hasServer">
       <div id="top" layout="column">
         <ng-include src="'app/views/topbar.html'"></ng-include>
-        <ng-include src="'app/views/remote-control.html'" ng-if="remoteVisible"></ng-include>
+        <ng-include src="'app/views/playing-now.html'" ng-if="playingNowVisible"></ng-include>
       </div>
-      <div id="middle" ng-class="{'remote-visible' : remoteVisible}">
+      <div id="middle" ng-class="{'playing-now-visible' : playingNowVisible}">
         <md-content id="viewContent" ng-if="!showSearch" ng-view></md-content>
         <ng-include id="searchContent" ng-if="showSearch" src="'app/views/search-results.html'"></ng-include>
       </div>

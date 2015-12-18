@@ -62,9 +62,7 @@ app.controller "PlayingNowRemoteController", [ "$scope", "$interval", "Remote", 
     Remote.Player.seek $scope.playerId, $scope.percentage
 ]
 
-app.controller "RemoteController", [ "$scope", "Topbar", "RemoteControl", ($scope, Topbar, RemoteControl) ->
-  Topbar.setTitle "Remote Controller"
-  
+app.controller "RemoteController", [ "$scope", "RemoteControl", ($scope, RemoteControl) ->
   $scope.up = -> RemoteControl.up()
   $scope.down = -> RemoteControl.down()
   $scope.left = -> RemoteControl.left()
@@ -74,4 +72,5 @@ app.controller "RemoteController", [ "$scope", "Topbar", "RemoteControl", ($scop
   $scope.back = -> RemoteControl.back()
   $scope.refresh = -> RemoteControl.scanLibrary()
   $scope.info = -> RemoteControl.info()
+  $scope.clean = -> RemoteControl.clean()
 ]

@@ -1,14 +1,22 @@
 app = angular.module "kodiRemote.controllers", []
 
-app.controller "AppController", [ "$scope", "$interval", "$timeout", "$location", "SearchService", "Topbar", "Remote",
-($scope, $interval, $timeout, $location, SearchService, Topbar, Remote) ->
+app.controller "AppController", [ "$scope", "$interval", "$timeout", "$location", "SearchService", "Remote",
+($scope, $interval, $timeout, $location, SearchService, Remote) ->
 
   # chrome.storage.local.clear()
+
+  # visits
+  $scope.visit = (path) ->
+    $scope.showSearch = false
+    $location.path path
+  $scope.visitSeasons   = (tvShowId) -> $scope.visit "/tvshows/#{tvShowId}/seasons"
+  $scope.visitEpisodes  = (tvShowId, seasonId) -> $scope.visit "/tvshows/#{tvShowId}/seasons/#{seasonId}/episodes"
+  $scope.visitEpisode   = (episodeId) -> console.debug(episodeId); $scope.visit "/episodes/#{episodeId}"
+  $scope.visitMovie     = (movieId) -> $scope.visit "/movies/#{movieId}"
 
   # init the app
   # search, location changes, remote, what's playing interval
   initApp = ->
-    $scope.Topbar = Topbar
     
     # search
     $scope.toggleSearch   = -> 
@@ -22,16 +30,8 @@ app.controller "AppController", [ "$scope", "$interval", "$timeout", "$location"
     $scope.searchService  = SearchService
     $scope.performSearch  = -> $scope.searchService.search $scope.search.query
 
-    # visits
-    $scope.visit = (path) ->
-      $scope.showSearch = false
-      $location.path path
-    $scope.visitSeasons   = (tvShowId) -> $location.path "/tvshows/#{tvShowId}/seasons"
-    $scope.visitEpisodes  = (tvShowId, seasonId) -> $location.path "/tvshows/#{tvShowId}/seasons/#{seasonId}/episodes"
-    $scope.visitMovie     = (movieId) -> $location.path "/movies/#{movieId}"
-
     # remote
-    $scope.remoteVisible = false
+    $scope.playingNowVisible = false
 
     # what is playing
     $scope.playing = null
@@ -44,12 +44,12 @@ app.controller "AppController", [ "$scope", "$interval", "$timeout", "$location"
           Remote.Player.playing($scope.playerId).then (data) ->
             # console.debug data
             $scope.playing = data.item
-            $scope.remoteVisible = true
+            $scope.playingNowVisible = true
         else
           $scope.playing = null
-          $scope.remoteVisible = false
+          $scope.playingNowVisible = false
     whatsPlaying()
-    # $interval whatsPlaying, 1000
+    $interval whatsPlaying, 1000
 
     # $scope.keyPressed = (event) ->
     #   console.debug event

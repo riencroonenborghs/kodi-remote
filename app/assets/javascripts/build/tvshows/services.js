@@ -112,8 +112,8 @@
 
   app.service("Episodes", [
     "Request", function(Request) {
-      var properties, resultHandler, service;
-      properties = ["title", "plot", "rating", "writer", "firstaired", "playcount", "runtime", "director", "season", "episode", "cast", "thumbnail", "resume"];
+      var getResultHandler, properties, resultHandler, service;
+      properties = ["title", "plot", "rating", "writer", "firstaired", "playcount", "runtime", "director", "season", "episode", "cast", "thumbnail", "resume", "showtitle", "tvshowid"];
       resultHandler = function(result) {
         var episode, i, len, ref;
         ref = result.episodes || [];
@@ -122,6 +122,10 @@
           episode.type = "episode";
         }
         return result.episodes || [];
+      };
+      getResultHandler = function(result) {
+        result.episodedetails.type = "episode";
+        return result.episodedetails;
       };
       service = {
         all: function(tvShowId, season) {
@@ -132,6 +136,14 @@
             properties: properties
           };
           return Request.fetch("VideoLibrary.GetEpisodes", resultHandler, params);
+        },
+        get: function(episodeId) {
+          var params;
+          params = {
+            episodeid: episodeId,
+            properties: properties
+          };
+          return Request.fetch("VideoLibrary.GetEpisodeDetails", getResultHandler, params);
         }
       };
       return service;

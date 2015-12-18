@@ -5,8 +5,7 @@
   app = angular.module("kodiRemote.settings.controllers", []);
 
   app.controller("SettingsController", [
-    "$scope", "$location", "Topbar", function($scope, $location, Topbar) {
-      Topbar.setTitle("Settings");
+    "$scope", "$location", function($scope, $location) {
       $scope.model = {
         server: {
           ipAddress: kodiRemote.settings.server,

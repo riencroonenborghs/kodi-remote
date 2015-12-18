@@ -7,6 +7,16 @@ app.directive "loadingScreen", [ ->
   templateUrl: "app/views/loading.html"
 ]
 
+app.directive "navbar", [->
+  restrict: "E"
+  scope:
+    model: "="
+  templateUrl: "app/views/ui/navbar.html"
+  controller: [ "$scope", "$location", ($scope, $location) ->
+    $scope.go = (url) -> $location.path url
+  ]
+]
+
 app.directive "autoScrollPaginate", [ "$compile", ($compile) ->
   restrict: "A"
   link: (scope, element, attrs) ->

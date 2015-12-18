@@ -1,6 +1,6 @@
-<div id="remote" ng-controller="PlayingNowRemoteController">
+<div id="playing-now" ng-controller="PlayingNowRemoteController">
 
-  <div id="remote-control" layout="row">
+  <div layout="row">
     <div>
       <md-button class="md-icon-button rew-button" ng-click="rewind()" aria-label="Rewind">
         <ng-md-icon icon="fast_rewind" style="fill: white;" size="32"></ng-md-icon>
@@ -34,7 +34,7 @@
   </div>
 
   <div id="info-details">
-    <div ng-if="playing.type == 'episode'">
+    <div ng-if="playing.type == 'episode'" class="pointer" ng-click="visitEpisode(playing.id)">
       <h1>
         {{playing.showtitle}}
       </h1>

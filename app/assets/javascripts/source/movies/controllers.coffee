@@ -1,8 +1,6 @@
 app = angular.module "kodiRemote.movies.controllers", []
 
-app.controller "MoviesController", [ "$scope", "Topbar", "Movies", ($scope, Topbar, Movies) ->  
-  Topbar.setTitle "Movies"
-
+app.controller "MoviesController", [ "$scope", "NavbarFactory", "Movies", ($scope, NavbarFactory, Movies) ->  
   $scope.movies = []
 
   # sortable directive
@@ -24,20 +22,23 @@ app.controller "MoviesController", [ "$scope", "Topbar", "Movies", ($scope, Topb
       $scope.loading = false
       for movie in data.data
         $scope.movies.push movie
-      Topbar.setTitle "Movies (#{data.total})"
+      $scope.Navbar = new NavbarFactory
+      $scope.Navbar.addTitle "Movies (#{data.total})"
       $scope.paginationAfterLoad Movies.perPage, data.total
       return
 
   
 ]
 
-app.controller "MovieController", [ "$scope", "$routeParams", "Movies", "Topbar", 
-($scope, $routeParams, Movies, Topbar) ->
+app.controller "MovieController", [ "$scope", "$routeParams", "Movies", "NavbarFactory", 
+($scope, $routeParams, Movies, NavbarFactory) ->
   movieId = parseInt $routeParams.id
 
   $scope.movie = null
 
   Movies.get(movieId).then (movieData) ->
     $scope.movie = movieData.data
-    Topbar.setLink "/movies", $scope.movie.title
+    $scope.Navbar = new NavbarFactory
+    $scope.Navbar.addLink "/movies", "Movies"
+    $scope.Navbar.addTitle $scope.movie.title
 ]

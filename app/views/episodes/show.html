@@ -8,49 +8,49 @@
   <md-list-item>
     <div class="md-list-item-text">
       <h4>Genre</h4>
-      <p><span class="genre" ng-repeat="genre in movie.genre">{{genre}}</span></p>
+      <p><span class="genre" ng-repeat="genre in episode.genre">{{genre}}</span></p>
     </div>
   </md-list-item>
 
   <md-list-item>
     <div class="md-list-item-text">
       <h4>Plot</h4>
-      <p>{{movie.plot}}</p>
+      <p>{{episode.plot}}</p>
     </div>
   </md-list-item>
-  
-  <md-list-item>
+
+  <md-list-item ng-if="episode.director">
     <div class="md-list-item-text">
       <h4>Director</h4>
-      <p>{{movie.director.join(', ')}}</p>
+      <p>{{episode.director.join(', ')}}</p>
     </div>
   </md-list-item>
 
-  <md-list-item>
+  <md-list-item ng-if="episode.writer">
     <div class="md-list-item-text">
       <h4>Writer</h4>
-      <p>{{movie.writer.join(', ')}}</p>
+      <p>{{episode.writer.join(', ')}}</p>
     </div>
   </md-list-item>
 
-  <md-list-item>
+  <md-list-item ng-if="episode.studio">
     <div class="md-list-item-text">
       <h4>Studio</h4>
-      <p>{{movie.studio.join(', ')}}</p>
+      <p>{{episode.studio.join(', ')}}</p>
     </div>
   </md-list-item>
 
-  <md-list-item>
+  <md-list-item ng-if="episode.mpaa">
     <div class="md-list-item-text">
       <h4>MPAA Rating</h4>
-      <p>{{movie.mpaa}}</p>
+      <p>{{episode.mpaa}}</p>
     </div>
   </md-list-item>
 
-  <div ng-if="movie.cast.length > 0">
-    <md-subheader class="md-primary">Cast ({{movie.cast.length}})</md-subheader>
+  <div ng-if="episode.cast.length > 0">
+    <md-subheader class="md-primary">Cast ({{episode.cast.length}})</md-subheader>
 
-    <md-list-item ng-repeat="castMember in movie.cast" class="md-3-line cast">
+    <md-list-item ng-repeat="castMember in episode.cast" class="md-3-line cast">
       <avatar-image ng-if="castMember.thumbnail" avatar="castMember.thumbnail"></avatar-image>
       <circle-avatar ng-if="!castMember.thumbnail" label="castMember.name"></circle-avatar>
       <div class="md-list-item-text">
@@ -58,7 +58,7 @@
         <h4>{{castMember.role}}</h4>
         <p>
           <a ng-href="http://www.imdb.com/find?s=nm&q={{castMember.name}}" target="_blank">
-            <ng-md-icon icon="movie" size="12"></ng-md-icon>
+            <ng-md-icon icon="episode" size="12"></ng-md-icon>
             IMDB
           </a>
         </p>

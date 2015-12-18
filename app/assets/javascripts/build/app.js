@@ -5,7 +5,7 @@
 
   kodiRemote = window.kodiRemote || (window.kodiRemote = {});
 
-  app = angular.module("kodiRemote", ["ngAria", "ngAnimate", "ngMaterial", "ngMdIcons", "ngRoute", "kodiRemote.controllers", "kodiRemote.services", "kodiRemote.directives", "kodiRemote.tvshows.controllers", "kodiRemote.tvshows.services", "kodiRemote.movies.controllers", "kodiRemote.movies.services", "kodiRemote.settings.controllers", "kodiRemote.remote.controllers", "kodiRemote.remote.services"]);
+  app = angular.module("kodiRemote", ["ngAria", "ngAnimate", "ngMaterial", "ngMdIcons", "ngRoute", "kodiRemote.controllers", "kodiRemote.services", "kodiRemote.directives", "kodiRemote.factories", "kodiRemote.tvshows.controllers", "kodiRemote.tvshows.services", "kodiRemote.movies.controllers", "kodiRemote.movies.services", "kodiRemote.settings.controllers", "kodiRemote.remote.controllers", "kodiRemote.remote.services", "kodiRemote.music.controllers", "kodiRemote.music.services"]);
 
   app.config(function($mdThemingProvider) {
     return $mdThemingProvider.theme("default").primaryPalette("blue").accentPalette("green");
@@ -29,6 +29,9 @@
     }).when("/tvshows/:tvshowid/seasons/:id/episodes", {
       templateUrl: "app/views/tvshows/seasons/episodes/index.html",
       controller: "EpisodesController"
+    }).when("/episodes/:id", {
+      templateUrl: "app/views/episodes/show.html",
+      controller: "EpisodeController"
     }).when("/movies", {
       templateUrl: "app/views/movies/index.html",
       controller: "MoviesController"
@@ -38,6 +41,9 @@
     }).when("/remote", {
       templateUrl: "app/views/remote/index.html",
       controller: "RemoteController"
+    }).when("/music/albums", {
+      templateUrl: "app/views/music/albums.html",
+      controller: "AlbumsController"
     }).otherwise("/tvshows", {
       templateUrl: "app/views/tvshows/index.html",
       controller: "TvShowsController"

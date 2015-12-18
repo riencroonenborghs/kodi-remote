@@ -16,6 +16,25 @@
     }
   ]);
 
+  app.directive("navbar", [
+    function() {
+      return {
+        restrict: "E",
+        scope: {
+          model: "="
+        },
+        templateUrl: "app/views/ui/navbar.html",
+        controller: [
+          "$scope", "$location", function($scope, $location) {
+            return $scope.go = function(url) {
+              return $location.path(url);
+            };
+          }
+        ]
+      };
+    }
+  ]);
+
   app.directive("autoScrollPaginate", [
     "$compile", function($compile) {
       return {

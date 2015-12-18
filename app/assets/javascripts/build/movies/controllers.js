@@ -5,8 +5,7 @@
   app = angular.module("kodiRemote.movies.controllers", []);
 
   app.controller("MoviesController", [
-    "$scope", "Topbar", "Movies", function($scope, Topbar, Movies) {
-      Topbar.setTitle("Movies");
+    "$scope", "NavbarFactory", "Movies", function($scope, NavbarFactory, Movies) {
       $scope.movies = [];
       $scope.beforeSortLoad = function() {
         $scope.movies = [];
@@ -22,7 +21,8 @@
             movie = ref[i];
             $scope.movies.push(movie);
           }
-          Topbar.setTitle("Movies (" + data.total + ")");
+          $scope.Navbar = new NavbarFactory;
+          $scope.Navbar.addTitle("Movies (" + data.total + ")");
           $scope.paginationAfterLoad(Movies.perPage, data.total);
         });
       };
@@ -30,13 +30,15 @@
   ]);
 
   app.controller("MovieController", [
-    "$scope", "$routeParams", "Movies", "Topbar", function($scope, $routeParams, Movies, Topbar) {
+    "$scope", "$routeParams", "Movies", "NavbarFactory", function($scope, $routeParams, Movies, NavbarFactory) {
       var movieId;
       movieId = parseInt($routeParams.id);
       $scope.movie = null;
       return Movies.get(movieId).then(function(movieData) {
         $scope.movie = movieData.data;
-        return Topbar.setLink("/movies", $scope.movie.title);
+        $scope.Navbar = new NavbarFactory;
+        $scope.Navbar.addLink("/movies", "Movies");
+        return $scope.Navbar.addTitle($scope.movie.title);
       });
     }
   ]);

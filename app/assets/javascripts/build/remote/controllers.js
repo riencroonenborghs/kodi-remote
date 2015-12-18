@@ -84,8 +84,7 @@
   ]);
 
   app.controller("RemoteController", [
-    "$scope", "Topbar", "RemoteControl", function($scope, Topbar, RemoteControl) {
-      Topbar.setTitle("Remote Controller");
+    "$scope", "RemoteControl", function($scope, RemoteControl) {
       $scope.up = function() {
         return RemoteControl.up();
       };
@@ -110,8 +109,11 @@
       $scope.refresh = function() {
         return RemoteControl.scanLibrary();
       };
-      return $scope.info = function() {
+      $scope.info = function() {
         return RemoteControl.info();
+      };
+      return $scope.clean = function() {
+        return RemoteControl.clean();
       };
     }
   ]);

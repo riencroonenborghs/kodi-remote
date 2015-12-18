@@ -131,6 +131,9 @@
         },
         info: function() {
           return KodiRequest.methodRequest("Input.Info", {});
+        },
+        clean: function() {
+          return KodiRequest.methodRequest("VideoLibrary.Clean", {});
         }
       };
     }

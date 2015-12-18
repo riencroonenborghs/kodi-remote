@@ -1,14 +1,5 @@
 app = angular.module "kodiRemote.services", []
 
-app.service "Topbar", [->
-  service =    
-    item: null
-    setTitle: (title) -> @item = {type: "title", title: title}
-    setLink: (url, label) -> @item = {type: "link", url: url, label: label}
-
-  service
-]
-
 app.service "KodiRequest", [ "$q", "$http", ($q, $http) ->  
   request = (payload) ->
     deferred = $q.defer()
