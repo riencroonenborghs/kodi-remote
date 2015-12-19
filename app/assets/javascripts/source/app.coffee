@@ -49,7 +49,7 @@ app.config ($routeProvider, $locationProvider) ->
       templateUrl: "app/views/tvshows/seasons/episodes/index.html"
       controller: "EpisodesController"
     .when "/episodes/:id",
-      templateUrl: "app/views/episodes/show.html"
+      templateUrl: "app/views/tvshows/seasons/episodes/show.html"
       controller: "EpisodeController"
 
     .when "/movies",

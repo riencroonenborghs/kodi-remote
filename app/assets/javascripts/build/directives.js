@@ -142,6 +142,48 @@
     }
   ]);
 
+  app.directive("videoButtons", [
+    function() {
+      return {
+        restrict: "E",
+        scope: {
+          video: "="
+        },
+        templateUrl: "app/views/ui/video-buttons.html",
+        controller: [
+          "$scope", "Remote", function($scope, Remote) {
+            return $scope.play = function() {
+              if ($scope.video.type === "movie") {
+                Remote.playMovie($scope.video.movieid);
+              }
+              if ($scope.video.type === "episode") {
+                return Remote.playEpisode($scope.video.episodeid);
+              }
+            };
+          }
+        ]
+      };
+    }
+  ]);
+
+  app.directive("videoButtonsEvents", [
+    function() {
+      return {
+        restrict: "A",
+        controller: [
+          "$scope", function($scope) {
+            $scope.showPlayButton = function(event) {
+              return $(event.currentTarget).find(".hoverable-video-avatar").find("button").show();
+            };
+            return $scope.hidePlayButton = function(event) {
+              return $(event.currentTarget).find(".hoverable-video-avatar").find("button").hide();
+            };
+          }
+        ]
+      };
+    }
+  ]);
+
   app.directive("avatarImage", [
     function() {
       return {

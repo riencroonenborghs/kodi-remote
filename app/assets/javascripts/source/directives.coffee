@@ -94,6 +94,29 @@ app.directive "sortable", [->
   ]
 ]
 
+app.directive "videoButtons", [->
+  restrict: "E"
+  scope:
+    video: "="
+  templateUrl: "app/views/ui/video-buttons.html"
+  controller: [ "$scope", "Remote", ($scope, Remote) ->
+    $scope.play = -> 
+      if $scope.video.type == "movie"
+        Remote.playMovie($scope.video.movieid)
+      if $scope.video.type == "episode"
+        Remote.playEpisode($scope.video.episodeid)
+  ]
+]
+app.directive "videoButtonsEvents", [->
+  restrict: "A"
+  controller: ["$scope", ($scope) ->
+    $scope.showPlayButton = (event) -> 
+      $(event.currentTarget).find(".hoverable-video-avatar").find("button").show()
+    $scope.hidePlayButton = (event) -> 
+      $(event.currentTarget).find(".hoverable-video-avatar").find("button").hide()
+  ]
+]
+
 # ---------- avatars ----------
 
 app.directive "avatarImage", [ ->

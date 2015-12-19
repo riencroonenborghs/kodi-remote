@@ -12,7 +12,7 @@
         $scope.movies = [];
         return $scope.pagination.page = 1;
       };
-      $scope.load = function() {
+      return $scope.load = function() {
         $scope.loading = true;
         return Movies.all($scope.pagination.page, $scope.sortParams).then(function(data) {
           var i, len, movie, ref;
@@ -27,15 +27,6 @@
           $scope.Navbar.addTitle("Movies (" + data.total + ")");
           $scope.paginationAfterLoad(Movies.perPage, data.total);
         });
-      };
-      $scope.play = function(movie) {
-        return Remote.playMovie(movie.movieid);
-      };
-      $scope.showPlayButton = function(event) {
-        return $(event.currentTarget).find(".hoverable-video-avatar").find("button").show();
-      };
-      return $scope.hidePlayButton = function(event) {
-        return $(event.currentTarget).find(".hoverable-video-avatar").find("button").hide();
       };
     }
   ]);

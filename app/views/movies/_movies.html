@@ -1,14 +1,8 @@
 <div class="md-padding" layout="column">
-  <div ng-repeat="movieGroup in movieGroups" layout="row">
-    <div flex="50" ng-repeat="movie in movieGroup" layout="column" class="tvshow pointer" ng-click="visitMovie(movie.movieid)" ng-mouseover="showPlayButton($event)" ng-mouseout="hidePlayButton($event)">
-      <div class="hoverable-video-avatar" layout="column">
-        <md-button style="display: none;" flex="100" class="md-primary md-raised play-button video-avatar-play" ng-click="play(movie); $event.stopPropagation();" aria-label="Play movie">
-          <ng-md-icon icon="play_arrow" style="fill: white;"></ng-md-icon>
-          Play
-        </md-button>
-        <img src="{{movie.thumbnail}}" class="video-avatar" ng-if="movie.thumbnail" />
-        <empty-avatar ng-if="!movie.thumbnail"></empty-avatar>
-      </div>
+  <div ng-repeat="movieGroup in movieGroups" layout="row">    
+    <div flex="50" ng-repeat="movie in movieGroup" layout="column" class="tvshow pointer" ng-click="visitMovie(movie.movieid)" ng-mouseover="showPlayButton($event)" ng-mouseout="hidePlayButton($event)" video-buttons-events>
+      <video-buttons video="movie"></video-buttons>
+
       <h2 class="center">
         <watched-it model="movie"></watched-it>
         {{movie.title}}

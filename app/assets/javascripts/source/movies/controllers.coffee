@@ -31,11 +31,10 @@ app.controller "MoviesController", [ "$scope", "NavbarFactory", "Movies", "Remot
       $scope.paginationAfterLoad Movies.perPage, data.total
       return
 
-  $scope.play = (movie) -> Remote.playMovie(movie.movieid)
-  $scope.showPlayButton = (event) -> 
-    $(event.currentTarget).find(".hoverable-video-avatar").find("button").show()
-  $scope.hidePlayButton = (event) -> 
-    $(event.currentTarget).find(".hoverable-video-avatar").find("button").hide()
+  # $scope.showPlayButton = (event) -> 
+  #   $(event.currentTarget).find(".hoverable-video-avatar").find("button").show()
+  # $scope.hidePlayButton = (event) -> 
+  #   $(event.currentTarget).find(".hoverable-video-avatar").find("button").hide()
   
 ]
 
