@@ -117,6 +117,16 @@ app.directive "videoButtonsEvents", [->
   ]
 ]
 
+app.directive "castMembers", [->
+  restrict: "E"
+  scope:
+    video: "="
+  templateUrl: "app/views/ui/cast-members.html"
+  controller: [ "$scope", ($scope) ->
+    $scope.video.castGroups = kodiRemote.array.inGroupsOf $scope.video.cast, 2
+  ]
+]
+
 # ---------- avatars ----------
 
 app.directive "avatarImage", [ ->
@@ -147,6 +157,11 @@ app.directive "emptyAvatar", [->
   restrict: "E"
   replace: true
   template: "<div class='empty-avatar video-avatar'>&nbsp;</div>"
+]
+app.directive "emptyCast", [->
+  restrict: "E"
+  replace: true
+  template: "<div class='empty-cast'>&nbsp;</div>"
 ]
 
 # ---------- video details ----------

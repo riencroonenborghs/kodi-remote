@@ -72,7 +72,7 @@
       $scope.season = null;
       $scope.episodes = [];
       $scope.episodeGroups = [];
-      TvShows.get(tvShowId).then(function(tvShowData) {
+      return TvShows.get(tvShowId).then(function(tvShowData) {
         $scope.tvShow = tvShowData.data;
         return $scope.tvShow.seasons().then(function(seasonsData) {
           var i, len, ref, results, season;
@@ -97,15 +97,6 @@
           return results;
         });
       });
-      $scope.play = function(episode) {
-        return Remote.playEpisode(episode.episodeid);
-      };
-      $scope.showPlayButton = function(event) {
-        return $(event.currentTarget).find(".hoverable-video-avatar").find("button").show();
-      };
-      return $scope.hidePlayButton = function(event) {
-        return $(event.currentTarget).find(".hoverable-video-avatar").find("button").hide();
-      };
     }
   ]);
 

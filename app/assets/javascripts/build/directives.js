@@ -184,6 +184,23 @@
     }
   ]);
 
+  app.directive("castMembers", [
+    function() {
+      return {
+        restrict: "E",
+        scope: {
+          video: "="
+        },
+        templateUrl: "app/views/ui/cast-members.html",
+        controller: [
+          "$scope", function($scope) {
+            return $scope.video.castGroups = kodiRemote.array.inGroupsOf($scope.video.cast, 2);
+          }
+        ]
+      };
+    }
+  ]);
+
   app.directive("avatarImage", [
     function() {
       return {
@@ -228,6 +245,16 @@
         restrict: "E",
         replace: true,
         template: "<div class='empty-avatar video-avatar'>&nbsp;</div>"
+      };
+    }
+  ]);
+
+  app.directive("emptyCast", [
+    function() {
+      return {
+        restrict: "E",
+        replace: true,
+        template: "<div class='empty-cast'>&nbsp;</div>"
       };
     }
   ]);

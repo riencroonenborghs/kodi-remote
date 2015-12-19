@@ -30,12 +30,6 @@ app.controller "MoviesController", [ "$scope", "NavbarFactory", "Movies", "Remot
       $scope.Navbar.addTitle "Movies (#{data.total})"
       $scope.paginationAfterLoad Movies.perPage, data.total
       return
-
-  # $scope.showPlayButton = (event) -> 
-  #   $(event.currentTarget).find(".hoverable-video-avatar").find("button").show()
-  # $scope.hidePlayButton = (event) -> 
-  #   $(event.currentTarget).find(".hoverable-video-avatar").find("button").hide()
-  
 ]
 
 app.controller "MovieController", [ "$scope", "$routeParams", "Movies", "NavbarFactory", 

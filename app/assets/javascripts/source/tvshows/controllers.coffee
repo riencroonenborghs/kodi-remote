@@ -82,13 +82,6 @@ app.controller "EpisodesController", [ "$scope", "$routeParams", "NavbarFactory"
           season.episodes().then (episodeData) ->
             $scope.episodes = episodeData.data
             $scope.episodeGroups = kodiRemote.array.inGroupsOf $scope.episodes, 2
-
-  $scope.play = (episode) -> Remote.playEpisode(episode.episodeid)
-  
-  $scope.showPlayButton = (event) -> 
-    $(event.currentTarget).find(".hoverable-video-avatar").find("button").show()
-  $scope.hidePlayButton = (event) -> 
-    $(event.currentTarget).find(".hoverable-video-avatar").find("button").hide()
 ]
 
 app.controller "EpisodeController", [ "$scope", "$routeParams", "Episodes", "NavbarFactory",
@@ -99,6 +92,7 @@ app.controller "EpisodeController", [ "$scope", "$routeParams", "Episodes", "Nav
 
   Episodes.get(episodeId).then (episodeData) ->
     $scope.episode = episodeData.data
+    # $scope.episode.cast = kodiRemote.array.inGroupsOf $scope.episode.cast, 3
     $scope.Navbar = new NavbarFactory
     $scope.Navbar.addLink "/tvshows", "TV Shows"
     $scope.Navbar.addLink "/tvshows/#{$scope.episode.tvshowid}/seasons", $scope.episode.showtitle

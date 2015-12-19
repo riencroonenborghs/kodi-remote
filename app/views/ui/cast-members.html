@@ -1,0 +1,14 @@
+<div class="md-padding" layout="column">
+  <div ng-repeat="castGroup in video.castGroups" layout="row">    
+    <div flex="50" ng-repeat="castMember in castGroup" class="cast" layout="row">
+      <a ng-href="http://www.imdb.com/find?s=nm&q={{castMember.name}}" flex="40" class="image" target="_blank">
+        <avatar-image ng-if="castMember.thumbnail" avatar="castMember.thumbnail"></avatar-image>
+        <empty-cast ng-if="!castMember.thumbnail"></empty-cast>
+      </a>
+      <div flex="60" layout="column">
+        <h3>{{castMember.name}}</h3>
+        <h4>{{castMember.role}}</h4>
+      </div>
+    </div>
+  </div>
+</div>

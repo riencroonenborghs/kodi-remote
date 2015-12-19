@@ -58,30 +58,7 @@
 
   <md-tab label="Cast">
 
-    <md-list>
-      <md-list-item ng-repeat="castMember in movie.cast" class="md-3-line cast">
-        <avatar-image ng-if="castMember.thumbnail" avatar="castMember.thumbnail"></avatar-image>
-        <circle-avatar ng-if="!castMember.thumbnail" label="castMember.name"></circle-avatar>
-        <div class="md-list-item-text">
-          <h3>{{castMember.name}}</h3>
-          <h4>{{castMember.role}}</h4>
-          <p>
-            <a ng-href="http://www.imdb.com/find?s=nm&q={{castMember.name}}" target="_blank">
-              <ng-md-icon icon="movie" size="12"></ng-md-icon>
-              IMDB
-            </a>
-          </p>
-        </div>
-      </md-list-item>
-    </md-list>
+    <cast-members video="movie"></cast-members>
 
   </md-tab>
 </md-tabs>
-
-
-<!-- <div>
-  <md-button class="md-primary md-raised play-button" ng-click="play(movie); $event.stopPropagation();" aria-label="Play movie">
-    <ng-md-icon icon="play_arrow" style="fill: white;"></ng-md-icon>             
-    Play
-  </md-button>     
-</div> -->
