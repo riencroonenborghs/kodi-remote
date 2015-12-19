@@ -40,11 +40,11 @@
       </h1>
       <h3>S{{playing.season | zeroPrepend : 2}}E{{playing.episode | zeroPrepend : 2}}: {{playing.title}}</h3>
     </div>
-    <div ng-if="playing.type == 'movie'">
-      <h2>
+    <div ng-if="playing.type == 'movie'" class="pointer" ng-click="visitMovie(playing.id)">
+      <h1>
         {{playing.title}}
         <span ng-if="playing.year">({{playing.year}})</span>
-      </h2>
+      </h1>
     </div>          
   </div>
 

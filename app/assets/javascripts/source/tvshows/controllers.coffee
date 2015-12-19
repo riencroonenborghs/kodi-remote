@@ -84,6 +84,11 @@ app.controller "EpisodesController", [ "$scope", "$routeParams", "NavbarFactory"
             $scope.episodeGroups = kodiRemote.array.inGroupsOf $scope.episodes, 2
 
   $scope.play = (episode) -> Remote.playEpisode(episode.episodeid)
+  
+  $scope.showPlayButton = (event) -> 
+    $(event.currentTarget).find(".hoverable-video-avatar").find("button").show()
+  $scope.hidePlayButton = (event) -> 
+    $(event.currentTarget).find(".hoverable-video-avatar").find("button").hide()
 ]
 
 app.controller "EpisodeController", [ "$scope", "$routeParams", "Episodes", "NavbarFactory",

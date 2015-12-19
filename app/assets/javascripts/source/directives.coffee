@@ -94,8 +94,6 @@ app.directive "sortable", [->
   ]
 ]
 
-
-
 # ---------- avatars ----------
 
 app.directive "avatarImage", [ ->
@@ -120,6 +118,12 @@ app.directive "circleAvatar", [->
     else
       $scope.initials = parts[0][0] + parts[1][0]
   ]
+]
+
+app.directive "emptyAvatar", [->
+  restrict: "E"
+  replace: true
+  template: "<div class='empty-avatar video-avatar'>&nbsp;</div>"
 ]
 
 # ---------- video details ----------

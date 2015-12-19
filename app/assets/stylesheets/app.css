@@ -84,9 +84,9 @@ md-list-item:not(:last-child) { padding-bottom: 8px !important; border-bottom: 1
 
 
 
-img.video-avatar { width: 175px; }
+.video-avatar { width: 175px; }
 .tvshow { padding-bottom: 24px; }
-.tvshow img.video-avatar { margin-left: auto; margin-right: auto; }
+.tvshow .video-avatar { margin-left: auto; margin-right: auto; }
 .tvshow h2, .tvshow h5 { padding: 0; margin: 0; }
 .tvshow h2 { color: rgba(33,150,243,1); }
 .tvshow h5 { color: rgba(33,150,243,0.5); }
@@ -99,4 +99,10 @@ img.video-avatar { width: 175px; }
 .rating svg { position: relative; top: 2px; }
 .rating.big svg { top: 4px; }
 
- .plot { text-align: justify; padding-right: 16px; }
+.plot { text-align: justify; padding-right: 16px; }
+
+.empty-avatar { width: 175px; height: 253px; background: rgba(33,150,243,0.2); }
+
+
+ .hoverable-video-avatar { position: relative; }
+ .hoverable-video-avatar button { position: absolute; top: 0; left: 32px; -z-index: 10; }

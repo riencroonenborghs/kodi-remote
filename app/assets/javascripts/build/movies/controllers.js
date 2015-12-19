@@ -5,14 +5,14 @@
   app = angular.module("kodiRemote.movies.controllers", []);
 
   app.controller("MoviesController", [
-    "$scope", "NavbarFactory", "Movies", function($scope, NavbarFactory, Movies) {
+    "$scope", "NavbarFactory", "Movies", "Remote", function($scope, NavbarFactory, Movies, Remote) {
       $scope.movies = [];
       $scope.movieGroups = [];
       $scope.beforeSortLoad = function() {
         $scope.movies = [];
         return $scope.pagination.page = 1;
       };
-      return $scope.load = function() {
+      $scope.load = function() {
         $scope.loading = true;
         return Movies.all($scope.pagination.page, $scope.sortParams).then(function(data) {
           var i, len, movie, ref;
@@ -27,6 +27,15 @@
           $scope.Navbar.addTitle("Movies (" + data.total + ")");
           $scope.paginationAfterLoad(Movies.perPage, data.total);
         });
+      };
+      $scope.play = function(movie) {
+        return Remote.playMovie(movie.movieid);
+      };
+      $scope.showPlayButton = function(event) {
+        return $(event.currentTarget).find(".hoverable-video-avatar").find("button").show();
+      };
+      return $scope.hidePlayButton = function(event) {
+        return $(event.currentTarget).find(".hoverable-video-avatar").find("button").hide();
       };
     }
   ]);

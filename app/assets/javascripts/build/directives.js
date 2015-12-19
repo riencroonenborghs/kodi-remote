@@ -180,6 +180,16 @@
     }
   ]);
 
+  app.directive("emptyAvatar", [
+    function() {
+      return {
+        restrict: "E",
+        replace: true,
+        template: "<div class='empty-avatar video-avatar'>&nbsp;</div>"
+      };
+    }
+  ]);
+
   app.directive("rating", [
     function() {
       return {

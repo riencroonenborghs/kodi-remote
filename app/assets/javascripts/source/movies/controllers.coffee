@@ -1,6 +1,7 @@
 app = angular.module "kodiRemote.movies.controllers", []
 
-app.controller "MoviesController", [ "$scope", "NavbarFactory", "Movies", ($scope, NavbarFactory, Movies) ->  
+app.controller "MoviesController", [ "$scope", "NavbarFactory", "Movies", "Remote", 
+($scope, NavbarFactory, Movies, Remote) ->  
   $scope.movies = []
   $scope.movieGroups = []
 
@@ -30,6 +31,11 @@ app.controller "MoviesController", [ "$scope", "NavbarFactory", "Movies", ($scop
       $scope.paginationAfterLoad Movies.perPage, data.total
       return
 
+  $scope.play = (movie) -> Remote.playMovie(movie.movieid)
+  $scope.showPlayButton = (event) -> 
+    $(event.currentTarget).find(".hoverable-video-avatar").find("button").show()
+  $scope.hidePlayButton = (event) -> 
+    $(event.currentTarget).find(".hoverable-video-avatar").find("button").hide()
   
 ]
 
