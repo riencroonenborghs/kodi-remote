@@ -4,7 +4,7 @@
 
 <div class="md-padding" layout="column">
   <div ng-repeat="episodeGroup in episodeGroups" layout="row">
-    <div flex="50" ng-repeat="episode in episodeGroup" layout="column" class="tvshow pointer" ng-click="visitEpisode(episode.episodeid)" ng-mouseover="showPlayButton($event)" ng-mouseout="hidePlayButton($event)" video-buttons-events>
+    <div flex="50" ng-repeat="episode in episodeGroup" layout="column" class="video pointer" ng-click="visitEpisode(episode.episodeid)" ng-mouseover="showPlayButton($event)" ng-mouseout="hidePlayButton($event)" video-buttons-events>
       <video-buttons video="episode"></video-buttons>
 
       <h5 class="center">

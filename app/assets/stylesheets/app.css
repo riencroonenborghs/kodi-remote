@@ -4,6 +4,7 @@ html, body { width: 500px; }
 .content { padding: 20px; }   
 .error { color: red; }
 .md-padding { padding: 16px; }
+.center { text-align: center; }
 
 /*----- avatars -----*/
 .circle-avatar { background: #2196F3; color: white; }
@@ -62,12 +63,16 @@ md-list-item:not(:last-child) { padding-bottom: 8px !important; border-bottom: 1
 .remote-control .cell { margin: auto 0; text-align: center; }
     
 
-/*----- tv shows / movies -----*/    
-.runtime { font-size: 8pt !important; color: grey; }
-.cast a { text-decoration: none; color: black; }
-.second-line,
-.third-line { font-size: 7pt !important; text-align: justify; }
-.second-line { padding-top: 8px; padding-bottom: 8px; }
+/*----- video -----*/
+.video { padding-bottom: 24px; }
+
+.video-avatar { width: 175px; }
+.video .video-avatar { margin-left: auto; margin-right: auto; }
+.empty-avatar { width: 175px; height: 253px; background: rgba(33,150,243,0.2); }
+
+.video h2, .video h5 { padding: 0; margin: 0; }
+.video h2 { color: rgba(33,150,243,1); }
+.video h5 { color: rgba(33,150,243,0.5); }
 
 .genre { 
   padding-left: 4px; 
@@ -81,31 +86,16 @@ md-list-item:not(:last-child) { padding-bottom: 8px !important; border-bottom: 1
   font-weight: 500;
 }
 .genre:hover { background: rgba(33,150,243,1); }
-
-
-
-.video-avatar { width: 175px; }
-.tvshow { padding-bottom: 24px; }
-.tvshow .video-avatar { margin-left: auto; margin-right: auto; }
-.tvshow h2, .tvshow h5 { padding: 0; margin: 0; }
-.tvshow h2 { color: rgba(33,150,243,1); }
-.tvshow h5 { color: rgba(33,150,243,0.5); }
-
-.center { text-align: center; }
-
-
 .rating { color: rgba(33,150,243,1); font-size: 12pt; font-weight: normal; }
 .rating.big { font-size: 24pt; }
 .rating svg { position: relative; top: 2px; }
 .rating.big svg { top: 4px; }
-
 .plot { text-align: justify; padding-right: 16px; }
 
-.empty-avatar { width: 175px; height: 253px; background: rgba(33,150,243,0.2); }
-.empty-cast { width: 75px; height: 100px; background: rgba(33,150,243,0.2); }
 
 .hoverable-video-avatar { position: relative; }
-.hoverable-video-avatar button { position: absolute; top: 0; left: 32px; -z-index: 10; }
+.hoverable-video-avatar button { position: absolute; top: 8px; left: 32px; -z-index: 10; }
 
+.empty-cast { width: 75px; height: 100px; background: rgba(33,150,243,0.2); }
 .cast { padding-bottom: 16px; }
 .cast .image img { width: 75px; }

@@ -1,6 +1,6 @@
 <div class="md-padding" layout="column">
   <div ng-repeat="tvShowGroup in tvShowGroups" layout="row">
-    <div flex="50" ng-repeat="tvShow in tvShowGroup" layout="column" class="tvshow pointer" ng-click="visitSeasons(tvShow.tvshowid)">
+    <div flex="50" ng-repeat="tvShow in tvShowGroup" layout="column" class="video pointer" ng-click="visitSeasons(tvShow.tvshowid)">
       <img src="{{tvShow.thumbnail}}" class="video-avatar" ng-if="tvShow.thumbnail" />
       <empty-avatar ng-if="!tvShow.thumbnail"></empty-avatar>
 
