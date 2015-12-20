@@ -4,92 +4,42 @@
 
   app = angular.module("kodiRemote.services", []);
 
-  app.service("KodiRequest", [
-    "$q", "$http", function($q, $http) {
-      var methodRequest, perPage, request, service;
-      request = function(payload) {
-        var deferred, error, success;
-        deferred = $q.defer();
-        success = function(response) {
-          if (!response.data) {
-            deferred.reject(response);
-          }
-          if (response.data.error) {
-            deferred.reject(response.data.error);
-          }
-          deferred.resolve(response.data.result);
-        };
-        error = function(response) {
-          console.debug(response);
-          deferred.reject(response);
-        };
-        $http.post("http://" + kodiRemote.settings.server + ":" + kodiRemote.settings.port + "/jsonrpc", payload).then(success, error);
-        return deferred.promise;
-      };
-      methodRequest = function(method, params) {
-        var payload;
-        if (params == null) {
-          params = {};
-        }
-        payload = {
-          jsonrpc: "2.0",
-          method: method,
-          id: 1
-        };
-        if (params) {
-          payload.params = params;
-        }
-        return request(payload);
-      };
-      perPage = 10;
+  app.service("Request", [
+    "$websocket", "$q", function($websocket, $q) {
+      var service;
       service = {
-        methodRequest: methodRequest
+        fetch: function(method, handler, params) {
+          var deferred, errorHandler, messagehandler, payload, w;
+          deferred = $q.defer();
+          errorHandler = function(response) {
+            console.error("wsRequest ERROR - " + (new Date()));
+            console.error(response);
+            return console.error("wsRequest ERROR ---------------");
+          };
+          messagehandler = function(response) {
+            var data, parsedResponse, total;
+            parsedResponse = JSON.parse(response.data);
+            data = handler(parsedResponse.result);
+            total = parsedResponse.result.limits ? parsedResponse.result.limits.total : null;
+            deferred.resolve({
+              data: data,
+              total: total
+            });
+          };
+          payload = {
+            jsonrpc: "2.0",
+            method: method,
+            id: 1,
+            params: params
+          };
+          w = $websocket("ws://" + kodiRemote.settings.server + ":" + kodiRemote.settings.port + "/jsonrpc");
+          w.onError(errorHandler);
+          w.onMessage(messagehandler);
+          w.send(payload);
+          return deferred.promise;
+        }
       };
       return service;
-    }
-  ]);
-
-  app.service("Request", [
-    "$q", "$http", function($q, $http) {
-      var fetch;
-      fetch = function(method, resultHandler, params) {
-        var deferred, error, payload, success;
-        payload = {
-          jsonrpc: "2.0",
-          method: method,
-          id: 1,
-          params: params
-        };
-        deferred = $q.defer();
-        success = function(response) {
-          var returnData, total;
-          if (!response.data) {
-            error(response);
-            return;
-          }
-          if (response.data.error) {
-            error(response.data.error);
-            return;
-          }
-          returnData = resultHandler(response.data.result);
-          total = response.data.result.limits ? response.data.result.limits.total : null;
-          deferred.resolve({
-            data: returnData,
-            total: total
-          });
-        };
-        error = function(response) {
-          console.error("ERROR - " + (new Date()));
-          console.error(response);
-          console.error("ERROR ---------------");
-          deferred.reject(response);
-        };
-        $http.post("http://" + kodiRemote.settings.server + ":" + kodiRemote.settings.port + "/jsonrpc", payload).then(success, error);
-        return deferred.promise;
-      };
-      return {
-        fetch: fetch
-      };
     }
   ]);
 

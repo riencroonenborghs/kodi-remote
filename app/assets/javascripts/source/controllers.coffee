@@ -1,7 +1,7 @@
 app = angular.module "kodiRemote.controllers", []
 
-app.controller "AppController", [ "$scope", "$rootScope", "$interval", "$timeout", "$location", "$mdSidenav", "SearchService", "Remote",
-($scope, $rootScope, $interval, $timeout, $location, $mdSidenav, SearchService, Remote) ->
+app.controller "AppController", [ "$scope", "$rootScope", "$interval", "$timeout", "$location", "$mdSidenav", "SearchService","Player",
+($scope, $rootScope, $interval, $timeout, $location, $mdSidenav, SearchService, Player) ->
 
   # chrome.storage.local.clear()
 
@@ -40,12 +40,12 @@ app.controller "AppController", [ "$scope", "$rootScope", "$interval", "$timeout
     $scope.playerId = null
 
     whatsPlaying = ->    
-      Remote.Player.activePlayers().then (data) ->            
+      Player.activePlayers().then (data) ->   
+        data = data.data
         if data.length > 0
           $scope.playerId = data[0].playerid
-          Remote.Player.playing($scope.playerId).then (data) ->
-            # console.debug data
-            $scope.playing = data.item
+          Player.playing($scope.playerId).then (data) ->
+            $scope.playing = data.data.item
             $scope.playingNowVisible = true
         else
           $scope.playing = null
@@ -61,7 +61,7 @@ app.controller "AppController", [ "$scope", "$rootScope", "$interval", "$timeout
     $scope.hasServer = false
     unless kodiRemote.settings.server != null && kodiRemote.settings.port != null
       return
-    Remote.Player.activePlayers().then (data) ->
+    Player.activePlayers().then (data) ->
       $scope.hasServer = true
   checkServer()
 

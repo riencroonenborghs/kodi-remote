@@ -8,6 +8,7 @@ app = angular.module "kodiRemote", [
   "ngMaterial", 
   "ngMdIcons",
   "ngRoute",
+  "ngWebSocket",
   "kodiRemote.controllers",
   "kodiRemote.services",
   "kodiRemote.directives",

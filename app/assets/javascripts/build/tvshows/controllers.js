@@ -64,7 +64,7 @@
   ]);
 
   app.controller("EpisodesController", [
-    "$scope", "$routeParams", "NavbarFactory", "TvShows", "Remote", function($scope, $routeParams, NavbarFactory, TvShows, Remote) {
+    "$scope", "$routeParams", "NavbarFactory", "TvShows", function($scope, $routeParams, NavbarFactory, TvShows) {
       var seasonId, tvShowId;
       tvShowId = parseInt($routeParams.tvshowid);
       seasonId = parseInt($routeParams.id);

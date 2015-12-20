@@ -1,7 +1,7 @@
 app = angular.module "kodiRemote.movies.controllers", []
 
-app.controller "MoviesController", [ "$scope", "NavbarFactory", "Movies", "Remote", 
-($scope, NavbarFactory, Movies, Remote) ->  
+app.controller "MoviesController", [ "$scope", "NavbarFactory", "Movies",
+($scope, NavbarFactory, Movies) ->  
   $scope.movies = []
   $scope.movieGroups = []
 

@@ -1,55 +1,58 @@
 app = angular.module "kodiRemote.remote.services", []
 
-app.service "Remote", [ "KodiRequest", "$rootScope", (KodiRequest, $rootScope) ->
-  service =
-    Player:
-      activePlayers: -> return KodiRequest.methodRequest "Player.GetActivePlayers", {}
-      playing: (playerId) -> 
-        params =
-          playerid: playerId
-          properties: ["title", "showtitle", "year", "runtime", "season", "episode", "streamdetails"]
-        return KodiRequest.methodRequest "Player.GetItem", params
-      open: (playlistId, position) -> 
-        $rootScope.$broadcast "playlist.reload"
-        params = [
-          {playlistid: playlistId, position: position}
-          {resume: true}
-        ]        
-        return KodiRequest.methodRequest "Player.Open", params
-      stop: -> return KodiRequest.methodRequest "Player.Stop", [1]
-      playPause: (playerId) -> return KodiRequest.methodRequest "Player.PlayPause", [playerId]
-      properties: (playerId) -> return KodiRequest.methodRequest "Player.GetProperties", params = [playerId, ["percentage", "time", "subtitles", "audiostreams", "subtitleenabled"]]
-      setSubtitle: (playerId, subtitle) -> return KodiRequest.methodRequest "Player.SetSubtitle", params = [playerId, subtitle]
-      setAudioStream: (playerId, audiostream) -> return KodiRequest.methodRequest "Player.SetAudioStream", params = [playerId, audiostream]
-      seek: (playerId, percentage) ->  return KodiRequest.methodRequest "Player.Seek", params = [playerId, percentage]
-    Playlist:
-      clear: -> return KodiRequest.methodRequest "Playlist.Clear", [1]
-      addEpisode: (episodeId) -> return KodiRequest.methodRequest "Playlist.Add", [1, {episodeid: episodeId}]
-      addMovie: (movieId) -> return KodiRequest.methodRequest "Playlist.Add", [1, {movieid: movieId}]
-    playEpisode: (episodeId) ->
-      @Player.stop().then =>
-        @Playlist.clear().then =>
-          @Playlist.addEpisode(episodeId).then =>
-            @Player.open(1, 0)
-    playMovie: (movieId) ->
-      @Player.stop().then =>
-        @Playlist.clear().then =>
-          @Playlist.addMovie(movieId).then =>
-            @Player.open(1, 0)            
+app.service "Player", [ "$rootScope", "Request", "Playlist", ($rootScope, Request, Playlist) ->
+  emptyHandler = (data) -> return
 
+  returnHandler = (data) -> return data
+
+  service =
+    activePlayers: ->
+      return Request.fetch "Player.GetActivePlayers", returnHandler, {}
+    playing: (playerId) -> 
+      params =
+        playerid: playerId
+        properties: ["title", "showtitle", "year", "runtime", "season", "episode", "streamdetails"]
+      return Request.fetch "Player.GetItem", returnHandler, params
+    open: (playlistId, position) -> 
+      $rootScope.$broadcast "playlist.reload"
+      params = [
+        {playlistid: playlistId, position: position}
+        {resume: true}
+      ]        
+      return Request.fetch "Player.Open", emptyHandler, params
+    stop: -> return Request.fetch "Player.Stop", emptyHandler, [1]
+    playPause: (playerId) -> return Request.fetch "Player.PlayPause", emptyHandler, [playerId]
+    properties: (playerId) -> return Request.fetch "Player.GetProperties", returnHandler, [playerId, ["percentage", "time", "subtitles", "audiostreams", "subtitleenabled"]]
+    setSubtitle: (playerId, subtitle) -> return Request.fetch "Player.SetSubtitle", emptyHandler, [playerId, subtitle]
+    setAudioStream: (playerId, audiostream) -> return Request.fetch "Player.SetAudioStream", emptyHandler, [playerId, audiostream]
+    seek: (playerId, percentage) ->  return Request.fetch "Player.Seek", emptyHandler, [playerId, percentage]
+    playEpisode: (episodeId) ->
+      @stop().then =>
+        Playlist.clear().then =>
+          Playlist.addEpisode(episodeId).then =>
+            @open(1, 0)
+    playMovie: (movieId) ->
+      @stop().then =>
+        Playlist.clear().then =>
+          Playlist.addMovie(movieId).then =>
+            @open(1, 0)  
   service
 ]
 
-app.service "RemoteControl", [ "KodiRequest", (KodiRequest) ->
+app.service "Remote", [ "Request", (Request) ->
+  emptyHandler = (data) -> return
+
   service =    
-    up: -> return KodiRequest.methodRequest "Input.Up", {}
-    down: -> return KodiRequest.methodRequest "Input.Down", {}
-    left: -> return KodiRequest.methodRequest "Input.Left", {}
-    right: -> return KodiRequest.methodRequest "Input.Right", {}
-    home: -> return KodiRequest.methodRequest "Input.Home", {}
-    select: -> return KodiRequest.methodRequest "Input.Select", {}
-    back: -> return KodiRequest.methodRequest "Input.Back", {}
-    scanLibrary: -> return KodiRequest.methodRequest "VideoLibrary.Scan", {}
-    info: -> return KodiRequest.methodRequest "Input.Info", {}
-    clean: -> return KodiRequest.methodRequest "VideoLibrary.Clean", {}
+    up: -> return Request.fetch "Input.Up", emptyHandler {}
+    down: -> return Request.fetch "Input.Down", emptyHandler {}
+    left: -> return Request.fetch "Input.Left", emptyHandler {}
+    right: -> return Request.fetch "Input.Right", emptyHandler {}
+    home: -> return Request.fetch "Input.Home", emptyHandler {}
+    select: -> return Request.fetch "Input.Select", emptyHandler {}
+    back: -> return Request.fetch "Input.Back", emptyHandler {}
+    scanLibrary: -> return Request.fetch "VideoLibrary.Scan", emptyHandler {}
+    info: -> return Request.fetch "Input.Info", emptyHandler {}
+    clean: -> return Request.fetch "VideoLibrary.Clean", emptyHandler {}
+
+  service
 ]

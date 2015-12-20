@@ -4,94 +4,73 @@
 
   app = angular.module("kodiRemote.remote.services", []);
 
-  app.service("Remote", [
-    "KodiRequest", "$rootScope", function(KodiRequest, $rootScope) {
-      var service;
+  app.service("Player", [
+    "$rootScope", "Request", "Playlist", function($rootScope, Request, Playlist) {
+      var emptyHandler, returnHandler, service;
+      emptyHandler = function(data) {};
+      returnHandler = function(data) {
+        return data;
+      };
       service = {
-        Player: {
-          activePlayers: function() {
-            return KodiRequest.methodRequest("Player.GetActivePlayers", {});
-          },
-          playing: function(playerId) {
-            var params;
-            params = {
-              playerid: playerId,
-              properties: ["title", "showtitle", "year", "runtime", "season", "episode", "streamdetails"]
-            };
-            return KodiRequest.methodRequest("Player.GetItem", params);
-          },
-          open: function(playlistId, position) {
-            var params;
-            $rootScope.$broadcast("playlist.reload");
-            params = [
-              {
-                playlistid: playlistId,
-                position: position
-              }, {
-                resume: true
-              }
-            ];
-            return KodiRequest.methodRequest("Player.Open", params);
-          },
-          stop: function() {
-            return KodiRequest.methodRequest("Player.Stop", [1]);
-          },
-          playPause: function(playerId) {
-            return KodiRequest.methodRequest("Player.PlayPause", [playerId]);
-          },
-          properties: function(playerId) {
-            var params;
-            return KodiRequest.methodRequest("Player.GetProperties", params = [playerId, ["percentage", "time", "subtitles", "audiostreams", "subtitleenabled"]]);
-          },
-          setSubtitle: function(playerId, subtitle) {
-            var params;
-            return KodiRequest.methodRequest("Player.SetSubtitle", params = [playerId, subtitle]);
-          },
-          setAudioStream: function(playerId, audiostream) {
-            var params;
-            return KodiRequest.methodRequest("Player.SetAudioStream", params = [playerId, audiostream]);
-          },
-          seek: function(playerId, percentage) {
-            var params;
-            return KodiRequest.methodRequest("Player.Seek", params = [playerId, percentage]);
-          }
+        activePlayers: function() {
+          return Request.fetch("Player.GetActivePlayers", returnHandler, {});
         },
-        Playlist: {
-          clear: function() {
-            return KodiRequest.methodRequest("Playlist.Clear", [1]);
-          },
-          addEpisode: function(episodeId) {
-            return KodiRequest.methodRequest("Playlist.Add", [
-              1, {
-                episodeid: episodeId
-              }
-            ]);
-          },
-          addMovie: function(movieId) {
-            return KodiRequest.methodRequest("Playlist.Add", [
-              1, {
-                movieid: movieId
-              }
-            ]);
-          }
+        playing: function(playerId) {
+          var params;
+          params = {
+            playerid: playerId,
+            properties: ["title", "showtitle", "year", "runtime", "season", "episode", "streamdetails"]
+          };
+          return Request.fetch("Player.GetItem", returnHandler, params);
+        },
+        open: function(playlistId, position) {
+          var params;
+          $rootScope.$broadcast("playlist.reload");
+          params = [
+            {
+              playlistid: playlistId,
+              position: position
+            }, {
+              resume: true
+            }
+          ];
+          return Request.fetch("Player.Open", emptyHandler, params);
+        },
+        stop: function() {
+          return Request.fetch("Player.Stop", emptyHandler, [1]);
+        },
+        playPause: function(playerId) {
+          return Request.fetch("Player.PlayPause", emptyHandler, [playerId]);
+        },
+        properties: function(playerId) {
+          return Request.fetch("Player.GetProperties", returnHandler, [playerId, ["percentage", "time", "subtitles", "audiostreams", "subtitleenabled"]]);
+        },
+        setSubtitle: function(playerId, subtitle) {
+          return Request.fetch("Player.SetSubtitle", emptyHandler, [playerId, subtitle]);
+        },
+        setAudioStream: function(playerId, audiostream) {
+          return Request.fetch("Player.SetAudioStream", emptyHandler, [playerId, audiostream]);
+        },
+        seek: function(playerId, percentage) {
+          return Request.fetch("Player.Seek", emptyHandler, [playerId, percentage]);
         },
         playEpisode: function(episodeId) {
-          return this.Player.stop().then((function(_this) {
+          return this.stop().then((function(_this) {
             return function() {
-              return _this.Playlist.clear().then(function() {
-                return _this.Playlist.addEpisode(episodeId).then(function() {
-                  return _this.Player.open(1, 0);
+              return Playlist.clear().then(function() {
+                return Playlist.addEpisode(episodeId).then(function() {
+                  return _this.open(1, 0);
                 });
               });
             };
           })(this));
         },
         playMovie: function(movieId) {
-          return this.Player.stop().then((function(_this) {
+          return this.stop().then((function(_this) {
             return function() {
-              return _this.Playlist.clear().then(function() {
-                return _this.Playlist.addMovie(movieId).then(function() {
-                  return _this.Player.open(1, 0);
+              return Playlist.clear().then(function() {
+                return Playlist.addMovie(movieId).then(function() {
+                  return _this.open(1, 0);
                 });
               });
             };
@@ -102,41 +81,43 @@
     }
   ]);
 
-  app.service("RemoteControl", [
-    "KodiRequest", function(KodiRequest) {
-      var service;
-      return service = {
+  app.service("Remote", [
+    "Request", function(Request) {
+      var emptyHandler, service;
+      emptyHandler = function(data) {};
+      service = {
         up: function() {
-          return KodiRequest.methodRequest("Input.Up", {});
+          return Request.fetch("Input.Up", emptyHandler({}));
         },
         down: function() {
-          return KodiRequest.methodRequest("Input.Down", {});
+          return Request.fetch("Input.Down", emptyHandler({}));
         },
         left: function() {
-          return KodiRequest.methodRequest("Input.Left", {});
+          return Request.fetch("Input.Left", emptyHandler({}));
         },
         right: function() {
-          return KodiRequest.methodRequest("Input.Right", {});
+          return Request.fetch("Input.Right", emptyHandler({}));
         },
         home: function() {
-          return KodiRequest.methodRequest("Input.Home", {});
+          return Request.fetch("Input.Home", emptyHandler({}));
         },
         select: function() {
-          return KodiRequest.methodRequest("Input.Select", {});
+          return Request.fetch("Input.Select", emptyHandler({}));
         },
         back: function() {
-          return KodiRequest.methodRequest("Input.Back", {});
+          return Request.fetch("Input.Back", emptyHandler({}));
         },
         scanLibrary: function() {
-          return KodiRequest.methodRequest("VideoLibrary.Scan", {});
+          return Request.fetch("VideoLibrary.Scan", emptyHandler({}));
         },
         info: function() {
-          return KodiRequest.methodRequest("Input.Info", {});
+          return Request.fetch("Input.Info", emptyHandler({}));
         },
         clean: function() {
-          return KodiRequest.methodRequest("VideoLibrary.Clean", {});
+          return Request.fetch("VideoLibrary.Clean", emptyHandler({}));
         }
       };
+      return service;
     }
   ]);
 

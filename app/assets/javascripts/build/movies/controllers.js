@@ -5,7 +5,7 @@
   app = angular.module("kodiRemote.movies.controllers", []);
 
   app.controller("MoviesController", [
-    "$scope", "NavbarFactory", "Movies", "Remote", function($scope, NavbarFactory, Movies, Remote) {
+    "$scope", "NavbarFactory", "Movies", function($scope, NavbarFactory, Movies) {
       $scope.movies = [];
       $scope.movieGroups = [];
       $scope.beforeSortLoad = function() {

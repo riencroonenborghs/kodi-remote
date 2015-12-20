@@ -5,22 +5,22 @@
   app = angular.module("kodiRemote.remote.controllers", []);
 
   app.controller("PlayingNowRemoteController", [
-    "$scope", "$interval", "Remote", function($scope, $interval, Remote) {
+    "$scope", "$interval", "Player", function($scope, $interval, Player) {
       var getProperties;
       $scope.stop = function() {
-        return Remote.Player.stop();
+        return Player.stop();
       };
       $scope.playPauseState = false;
       $scope.playPause = function() {
-        return Remote.Player.playPause($scope.playerId).then(function(data) {
+        return Player.playPause($scope.playerId).then(function(data) {
           return $scope.playPauseState = !$scope.playPauseState;
         });
       };
       $scope.fastForward = function() {
-        return Remote.Player.seek($scope.playerId, $scope.percentage + 1);
+        return Player.seek($scope.playerId, $scope.percentage + 1);
       };
       $scope.rewind = function() {
-        return Remote.Player.seek($scope.playerId, $scope.percentage - 1);
+        return Player.seek($scope.playerId, $scope.percentage - 1);
       };
       $scope.subtitles = {
         enabled: false,
@@ -31,7 +31,7 @@
       $scope.switchSubtitle = function() {
         var subtitle;
         subtitle = $scope.subtitles.valid[$scope.subtitles.current];
-        Remote.Player.setSubtitle($scope.playerId, subtitle);
+        Player.setSubtitle($scope.playerId, subtitle);
         $scope.subtitles.current += 1;
         if ($scope.subtitles.current === $scope.subtitles.valid.length) {
           return $scope.subtitles.current = 0;
@@ -45,7 +45,7 @@
       $scope.switchAudioStream = function() {
         var audioStream;
         audioStream = $scope.audioStreams.valid[$scope.audioStreams.current];
-        Remote.Player.setAudioStream($scope.playerId, audioStream);
+        Player.setAudioStream($scope.playerId, audioStream);
         $scope.audioStreams.current += 1;
         if ($scope.audioStreams.current === $scope.audioStreams.valid.length) {
           return $scope.audioStreams.current = 0;
@@ -56,14 +56,14 @@
       $scope.timeRemaining = 0;
       getProperties = function() {
         if ($scope.playing) {
-          return Remote.Player.properties($scope.playerId).then(function(data) {
+          return Player.properties($scope.playerId).then(function(data) {
             var hours, minutes, seconds, timeElapsedInSeconds;
-            $scope.percentage = data.percentage;
-            $scope.timeElapsed = data.time;
-            $scope.subtitles.available = data.subtitles;
-            $scope.subtitles.enabled = data.subtitleenabled;
-            $scope.audioStreams.available = data.audiostreams;
-            timeElapsedInSeconds = data.time.hours * 3600 + data.time.minutes * 60 + data.time.seconds;
+            $scope.percentage = data.data.percentage;
+            $scope.timeElapsed = data.data.time;
+            $scope.subtitles.available = data.data.subtitles;
+            $scope.subtitles.enabled = data.data.subtitleenabled;
+            $scope.audioStreams.available = data.data.audiostreams;
+            timeElapsedInSeconds = data.data.time.hours * 3600 + data.data.time.minutes * 60 + data.data.time.seconds;
             seconds = $scope.playing.runtime - timeElapsedInSeconds;
             hours = Math.floor(seconds / 3600);
             minutes = Math.floor((seconds - (hours * 3600)) / 60);
@@ -78,42 +78,42 @@
       };
       $interval(getProperties, 1000);
       return $scope.jumpTo = function() {
-        return Remote.Player.seek($scope.playerId, $scope.percentage);
+        return Player.seek($scope.playerId, $scope.percentage);
       };
     }
   ]);
 
   app.controller("RemoteController", [
-    "$scope", "RemoteControl", function($scope, RemoteControl) {
+    "$scope", "Remote", function($scope, Remote) {
       $scope.up = function() {
-        return RemoteControl.up();
+        return Remote.up();
       };
       $scope.down = function() {
-        return RemoteControl.down();
+        return Remote.down();
       };
       $scope.left = function() {
-        return RemoteControl.left();
+        return Remote.left();
       };
       $scope.right = function() {
-        return RemoteControl.right();
+        return Remote.right();
       };
       $scope.home = function() {
-        return RemoteControl.home();
+        return Remote.home();
       };
       $scope.enter = function() {
-        return RemoteControl.select();
+        return Remote.select();
       };
       $scope.back = function() {
-        return RemoteControl.back();
+        return Remote.back();
       };
       $scope.refresh = function() {
-        return RemoteControl.scanLibrary();
+        return Remote.scanLibrary();
       };
       $scope.info = function() {
-        return RemoteControl.info();
+        return Remote.info();
       };
       return $scope.clean = function() {
-        return RemoteControl.clean();
+        return Remote.clean();
       };
     }
   ]);

@@ -59,8 +59,8 @@ app.controller "SeasonsController", [ "$scope", "$routeParams", "NavbarFactory",
 ]
 
 
-app.controller "EpisodesController", [ "$scope", "$routeParams", "NavbarFactory", "TvShows", "Remote",
-($scope, $routeParams, NavbarFactory, TvShows, Remote) ->  
+app.controller "EpisodesController", [ "$scope", "$routeParams", "NavbarFactory", "TvShows",
+($scope, $routeParams, NavbarFactory, TvShows) ->  
   tvShowId = parseInt $routeParams.tvshowid  
   seasonId = parseInt $routeParams.id
 

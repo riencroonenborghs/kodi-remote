@@ -1,17 +1,17 @@
 app = angular.module "kodiRemote.remote.controllers", []
 
-app.controller "PlayingNowRemoteController", [ "$scope", "$interval", "Remote", ($scope, $interval, Remote) ->
-  $scope.stop = -> Remote.Player.stop()
+app.controller "PlayingNowRemoteController", [ "$scope", "$interval", "Player", ($scope, $interval, Player) ->
+  $scope.stop = -> Player.stop()
 
   $scope.playPauseState = false
   $scope.playPause = -> 
-    Remote.Player.playPause($scope.playerId).then (data) ->
+    Player.playPause($scope.playerId).then (data) ->
       $scope.playPauseState = !$scope.playPauseState
 
   $scope.fastForward = ->
-    Remote.Player.seek $scope.playerId, $scope.percentage + 1
+    Player.seek $scope.playerId, $scope.percentage + 1
   $scope.rewind = ->
-    Remote.Player.seek $scope.playerId, $scope.percentage - 1
+    Player.seek $scope.playerId, $scope.percentage - 1
 
   $scope.subtitles =
     enabled: false
@@ -20,7 +20,7 @@ app.controller "PlayingNowRemoteController", [ "$scope", "$interval", "Remote", 
     current: 0  
   $scope.switchSubtitle = -> 
     subtitle = $scope.subtitles.valid[$scope.subtitles.current]
-    Remote.Player.setSubtitle $scope.playerId, subtitle
+    Player.setSubtitle $scope.playerId, subtitle
     $scope.subtitles.current += 1
     $scope.subtitles.current = 0 if $scope.subtitles.current == $scope.subtitles.valid.length
 
@@ -30,7 +30,7 @@ app.controller "PlayingNowRemoteController", [ "$scope", "$interval", "Remote", 
     available: []
   $scope.switchAudioStream = ->
     audioStream = $scope.audioStreams.valid[$scope.audioStreams.current]
-    Remote.Player.setAudioStream $scope.playerId, audioStream
+    Player.setAudioStream $scope.playerId, audioStream
     $scope.audioStreams.current += 1
     $scope.audioStreams.current = 0 if $scope.audioStreams.current == $scope.audioStreams.valid.length
 
@@ -39,14 +39,14 @@ app.controller "PlayingNowRemoteController", [ "$scope", "$interval", "Remote", 
   $scope.timeRemaining = 0
   getProperties = ->
     if $scope.playing
-      Remote.Player.properties($scope.playerId).then (data) ->        
-        $scope.percentage             = data.percentage
-        $scope.timeElapsed            = data.time
-        $scope.subtitles.available    = data.subtitles
-        $scope.subtitles.enabled      = data.subtitleenabled
-        $scope.audioStreams.available = data.audiostreams
+      Player.properties($scope.playerId).then (data) ->              
+        $scope.percentage             = data.data.percentage
+        $scope.timeElapsed            = data.data.time
+        $scope.subtitles.available    = data.data.subtitles
+        $scope.subtitles.enabled      = data.data.subtitleenabled
+        $scope.audioStreams.available = data.data.audiostreams
 
-        timeElapsedInSeconds = data.time.hours * 3600 + data.time.minutes * 60 + data.time.seconds
+        timeElapsedInSeconds = data.data.time.hours * 3600 + data.data.time.minutes * 60 + data.data.time.seconds
         seconds = $scope.playing.runtime - timeElapsedInSeconds
         hours   = Math.floor(seconds / 3600)
         minutes = Math.floor((seconds - (hours * 3600)) / 60)
@@ -59,18 +59,18 @@ app.controller "PlayingNowRemoteController", [ "$scope", "$interval", "Remote", 
   $interval getProperties, 1000
 
   $scope.jumpTo = ->
-    Remote.Player.seek $scope.playerId, $scope.percentage
+    Player.seek $scope.playerId, $scope.percentage
 ]
 
-app.controller "RemoteController", [ "$scope", "RemoteControl", ($scope, RemoteControl) ->
-  $scope.up = -> RemoteControl.up()
-  $scope.down = -> RemoteControl.down()
-  $scope.left = -> RemoteControl.left()
-  $scope.right = -> RemoteControl.right()
-  $scope.home = -> RemoteControl.home()
-  $scope.enter = -> RemoteControl.select()
-  $scope.back = -> RemoteControl.back()
-  $scope.refresh = -> RemoteControl.scanLibrary()
-  $scope.info = -> RemoteControl.info()
-  $scope.clean = -> RemoteControl.clean()
+app.controller "RemoteController", [ "$scope", "Remote", ($scope, Remote) ->
+  $scope.up = -> Remote.up()
+  $scope.down = -> Remote.down()
+  $scope.left = -> Remote.left()
+  $scope.right = -> Remote.right()
+  $scope.home = -> Remote.home()
+  $scope.enter = -> Remote.select()
+  $scope.back = -> Remote.back()
+  $scope.refresh = -> Remote.scanLibrary()
+  $scope.info = -> Remote.info()
+  $scope.clean = -> Remote.clean()
 ]

@@ -5,7 +5,7 @@
   app = angular.module("kodiRemote.controllers", []);
 
   app.controller("AppController", [
-    "$scope", "$rootScope", "$interval", "$timeout", "$location", "$mdSidenav", "SearchService", "Remote", function($scope, $rootScope, $interval, $timeout, $location, $mdSidenav, SearchService, Remote) {
+    "$scope", "$rootScope", "$interval", "$timeout", "$location", "$mdSidenav", "SearchService", "Player", function($scope, $rootScope, $interval, $timeout, $location, $mdSidenav, SearchService, Player) {
       var checkServer, initApp, loadSettings, loadSettingsInterval;
       $scope.visit = function(path) {
         $scope.showSearch = false;
@@ -51,11 +51,12 @@
         $scope.playing = null;
         $scope.playerId = null;
         whatsPlaying = function() {
-          return Remote.Player.activePlayers().then(function(data) {
+          return Player.activePlayers().then(function(data) {
+            data = data.data;
             if (data.length > 0) {
               $scope.playerId = data[0].playerid;
-              return Remote.Player.playing($scope.playerId).then(function(data) {
-                $scope.playing = data.item;
+              return Player.playing($scope.playerId).then(function(data) {
+                $scope.playing = data.data.item;
                 return $scope.playingNowVisible = true;
               });
             } else {
@@ -72,7 +73,7 @@
         if (!(kodiRemote.settings.server !== null && kodiRemote.settings.port !== null)) {
           return;
         }
-        return Remote.Player.activePlayers().then(function(data) {
+        return Player.activePlayers().then(function(data) {
           return $scope.hasServer = true;
         });
       };

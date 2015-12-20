@@ -1,70 +1,37 @@
 app = angular.module "kodiRemote.services", []
 
-app.service "KodiRequest", [ "$q", "$http", ($q, $http) ->  
-  request = (payload) ->
-    deferred = $q.defer()
-
-    success = (response) ->
-      deferred.reject response unless response.data
-      deferred.reject response.data.error if response.data.error
-      deferred.resolve response.data.result
-      return
-
-    error = (response) -> 
-      console.debug response
-      deferred.reject response
-      return
-
-    $http.post("http://#{kodiRemote.settings.server}:#{kodiRemote.settings.port}/jsonrpc", payload).then(success, error)
-
-    return deferred.promise
-
-  methodRequest = (method, params = {}) ->
-    payload = {jsonrpc: "2.0", method: method, id: 1}
-    if params
-      payload.params = params
-    return request(payload)
-
-  perPage = 10
-
+app.service "Request", [ "$websocket", "$q", ($websocket, $q) ->
   service =
-    methodRequest: methodRequest
-        
+    # websocket: $websocket("ws://#{kodiRemote.settings.server}:#{kodiRemote.settings.port}/jsonrpc")
+    fetch: (method, handler, params) ->
+      deferred = $q.defer()
+
+      errorHandler = (response) ->
+        console.error "wsRequest ERROR - #{new Date()}"
+        console.error response
+        console.error "wsRequest ERROR ---------------"        
+
+      messagehandler = (response) ->
+        parsedResponse  = JSON.parse response.data
+        data            = handler parsedResponse.result
+        total           = if parsedResponse.result.limits then parsedResponse.result.limits.total else null
+        deferred.resolve {data: data, total: total}
+        return
+
+      payload = {jsonrpc: "2.0", method: method, id: 1, params: params}
+      
+      # @websocket.onError errorHandler
+      # @websocket.onMessage messagehandler
+      # @websocket.send payload
+
+      w = $websocket("ws://#{kodiRemote.settings.server}:#{kodiRemote.settings.port}/jsonrpc")
+      w.onError errorHandler
+      w.onMessage messagehandler
+      w.send payload
+
+      deferred.promise
+
   service
-]
-
-
-app.service "Request", [ "$q", "$http", ($q, $http) ->  
-  fetch = (method, resultHandler, params) ->
-    payload = {jsonrpc: "2.0", method: method, id: 1, params: params}
-
-    deferred = $q.defer()
-
-    success = (response) ->
-      unless response.data
-        error response
-        return
-
-      if response.data.error
-        error response.data.error
-        return
-
-      returnData  = resultHandler response.data.result
-      total       = if response.data.result.limits then response.data.result.limits.total else null
-      deferred.resolve {data: returnData, total: total}
-      return
-
-    error = (response) -> 
-      console.error "ERROR - #{new Date()}"
-      console.error response
-      console.error "ERROR ---------------"
-      deferred.reject response
-      return
-        
-    $http.post("http://#{kodiRemote.settings.server}:#{kodiRemote.settings.port}/jsonrpc", payload).then(success, error)
-    return deferred.promise
-
-  fetch: fetch
 ]
 
 app.service "SearchService", [ "TvShows", "Movies", (TvShows, Movies) ->
