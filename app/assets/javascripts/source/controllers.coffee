@@ -1,7 +1,7 @@
 app = angular.module "kodiRemote.controllers", []
 
-app.controller "AppController", [ "$scope", "$interval", "$timeout", "$location", "SearchService", "Remote",
-($scope, $interval, $timeout, $location, SearchService, Remote) ->
+app.controller "AppController", [ "$scope", "$interval", "$timeout", "$location", "$mdSidenav", "SearchService", "Remote",
+($scope, $interval, $timeout, $location, $mdSidenav, SearchService, Remote) ->
 
   # chrome.storage.local.clear()
 
@@ -29,6 +29,8 @@ app.controller "AppController", [ "$scope", "$interval", "$timeout", "$location"
     $scope.search         = {query: ""}
     $scope.searchService  = SearchService
     $scope.performSearch  = -> $scope.searchService.search $scope.search.query
+
+    $scope.openPlaylist = -> $mdSidenav("playlist").toggle()
 
     # what is playing now?
     $scope.playingNowVisible = false

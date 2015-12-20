@@ -173,10 +173,10 @@
         controller: [
           "$scope", function($scope) {
             $scope.showPlayButton = function(event) {
-              return $(event.currentTarget).find(".hoverable-video-avatar").find("button").show();
+              return $(event.currentTarget).find(".hoverable-video-avatar").find(".buttons").show();
             };
             return $scope.hidePlayButton = function(event) {
-              return $(event.currentTarget).find(".hoverable-video-avatar").find("button").hide();
+              return $(event.currentTarget).find(".hoverable-video-avatar").find(".buttons").hide();
             };
           }
         ]

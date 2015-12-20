@@ -1,7 +1,16 @@
 <div class="hoverable-video-avatar" layout="column">
-  <md-button style="display: none;" flex="100" class="md-primary md-raised md-icon-button md-fab play-button video-avatar-play" ng-click="play(); $event.stopPropagation();" aria-label="Play video">
-    <ng-md-icon icon="play_arrow" style="fill: white;"></ng-md-icon>    
-  </md-button>
+  <div layout="row" style="display: none;" flex="100" class="buttons">
+    <md-button  class="md-primary md-raised md-icon-button md-fab-mini play-button video-avatar-play" 
+                ng-click="play(); $event.stopPropagation();" 
+                aria-label="Play">
+      <ng-md-icon icon="play_arrow" style="fill: white;"></ng-md-icon>    
+    </md-button>
+    <md-button  class="md-primary md-raised md-icon-button md-fab-mini play-button video-avatar-play" 
+                ng-click="addToPlaylist(); $event.stopPropagation();" 
+                aria-label="Add to playlist">
+      <ng-md-icon icon="playlist_add" style="fill: white;"></ng-md-icon>    
+    </md-button>
+  </div>
   <img src="{{video.thumbnail}}" class="video-avatar" ng-if="video.thumbnail" />
   <empty-avatar ng-if="!video.thumbnail"></empty-avatar>
 </div>

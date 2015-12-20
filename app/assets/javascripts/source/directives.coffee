@@ -111,9 +111,9 @@ app.directive "videoButtonsEvents", [->
   restrict: "A"
   controller: ["$scope", ($scope) ->
     $scope.showPlayButton = (event) -> 
-      $(event.currentTarget).find(".hoverable-video-avatar").find("button").show()
+      $(event.currentTarget).find(".hoverable-video-avatar").find(".buttons").show()
     $scope.hidePlayButton = (event) -> 
-      $(event.currentTarget).find(".hoverable-video-avatar").find("button").hide()
+      $(event.currentTarget).find(".hoverable-video-avatar").find(".buttons").hide()
   ]
 ]
 

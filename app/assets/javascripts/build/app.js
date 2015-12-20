@@ -5,7 +5,7 @@
 
   kodiRemote = window.kodiRemote || (window.kodiRemote = {});
 
-  app = angular.module("kodiRemote", ["ngAria", "ngAnimate", "ngMaterial", "ngMdIcons", "ngRoute", "kodiRemote.controllers", "kodiRemote.services", "kodiRemote.directives", "kodiRemote.factories", "kodiRemote.tvshows.controllers", "kodiRemote.tvshows.services", "kodiRemote.movies.controllers", "kodiRemote.movies.services", "kodiRemote.settings.controllers", "kodiRemote.remote.controllers", "kodiRemote.remote.services", "kodiRemote.music.controllers", "kodiRemote.music.services"]);
+  app = angular.module("kodiRemote", ["ngAria", "ngAnimate", "ngMaterial", "ngMdIcons", "ngRoute", "kodiRemote.controllers", "kodiRemote.services", "kodiRemote.directives", "kodiRemote.factories", "kodiRemote.tvshows.controllers", "kodiRemote.tvshows.services", "kodiRemote.movies.controllers", "kodiRemote.movies.services", "kodiRemote.settings.controllers", "kodiRemote.remote.controllers", "kodiRemote.remote.services", "kodiRemote.playlist.controllers"]);
 
   app.config(function($mdThemingProvider) {
     return $mdThemingProvider.theme("default").primaryPalette("blue").accentPalette("green");
