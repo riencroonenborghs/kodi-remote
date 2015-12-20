@@ -6,7 +6,7 @@ kodiRemote is a Chrome extension to browse Kodi and acts as a remote control
 
 ## Build
 
-The extension comes pre-built, but you can easily build it yourself: `bash build.sh`
+The extension comes pre-built, but you can easily build it yourself. See `build.sh` for instructions.
 
 ## Install
 
@@ -17,20 +17,22 @@ The extension comes pre-built, but you can easily build it yourself: `bash build
 - point it to the extension (the folder with the manifest.json file)
 - click `Select`
 
+## Kodi Settings
+
+The extension uses websockets. See [Enabling JSON-RPC](http://kodi.wiki/view/JSON-RPC_API#Enabling_JSON-RPC) how to enable it.
+
 # Functions
 
 - update server settings
 - browse TV Shows and Movies libraries
 - search TV Shows and Movies libraries
-- play videos
-- stop, pause, fast forward, rewind, seek video
+- play, stop, pause, fast forward, rewind, seek videos
 - toggle subtitles and audio streams
 - up/down/left/right/back/select remote with home, scan library and show info buttons
 
 # TODO
 
 - browse by genre and year on TV Shows and Movies libraries
-- browse recently added on TV Shows and Movies libraries
 - browse Music library
 - browse files
 - playlists
