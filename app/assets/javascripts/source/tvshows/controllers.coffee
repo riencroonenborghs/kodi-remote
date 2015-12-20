@@ -92,7 +92,6 @@ app.controller "EpisodeController", [ "$scope", "$routeParams", "Episodes", "Nav
 
   Episodes.get(episodeId).then (episodeData) ->
     $scope.episode = episodeData.data
-    # $scope.episode.cast = kodiRemote.array.inGroupsOf $scope.episode.cast, 3
     $scope.Navbar = new NavbarFactory
     $scope.Navbar.addLink "/tvshows", "TV Shows"
     $scope.Navbar.addLink "/tvshows/#{$scope.episode.tvshowid}/seasons", $scope.episode.showtitle

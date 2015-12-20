@@ -128,7 +128,8 @@ app.directive "castMembers", [->
     video: "="
   templateUrl: "app/views/ui/cast-members.html"
   controller: [ "$scope", ($scope) ->
-    $scope.video.castGroups = kodiRemote.array.inGroupsOf $scope.video.cast, 2
+    $scope.$watch "video", ->
+      $scope.video.castGroups = kodiRemote.array.inGroupsOf $scope.video.cast, 2
   ]
 ]
 

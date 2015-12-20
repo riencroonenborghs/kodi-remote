@@ -202,7 +202,9 @@
         templateUrl: "app/views/ui/cast-members.html",
         controller: [
           "$scope", function($scope) {
-            return $scope.video.castGroups = kodiRemote.array.inGroupsOf($scope.video.cast, 2);
+            return $scope.$watch("video", function() {
+              return $scope.video.castGroups = kodiRemote.array.inGroupsOf($scope.video.cast, 2);
+            });
           }
         ]
       };
