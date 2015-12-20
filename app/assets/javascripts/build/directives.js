@@ -151,13 +151,21 @@
         },
         templateUrl: "app/views/ui/video-buttons.html",
         controller: [
-          "$scope", "Remote", function($scope, Remote) {
-            return $scope.play = function() {
+          "$scope", "Remote", "Playlist", function($scope, Remote, Playlist) {
+            $scope.play = function() {
               if ($scope.video.type === "movie") {
                 Remote.playMovie($scope.video.movieid);
               }
               if ($scope.video.type === "episode") {
                 return Remote.playEpisode($scope.video.episodeid);
+              }
+            };
+            return $scope.addToPlaylist = function() {
+              if ($scope.video.type === "episode") {
+                Playlist.addEpisode($scope.video.episodeid);
+              }
+              if ($scope.video.type === "movie") {
+                return Playlist.addMovie($scope.video.movieeid);
               }
             };
           }

@@ -99,12 +99,17 @@ app.directive "videoButtons", [->
   scope:
     video: "="
   templateUrl: "app/views/ui/video-buttons.html"
-  controller: [ "$scope", "Remote", ($scope, Remote) ->
+  controller: [ "$scope", "Remote", "Playlist", ($scope, Remote, Playlist) ->
     $scope.play = -> 
       if $scope.video.type == "movie"
         Remote.playMovie($scope.video.movieid)
       if $scope.video.type == "episode"
         Remote.playEpisode($scope.video.episodeid)
+    $scope.addToPlaylist = ->
+      if $scope.video.type == "episode"
+        Playlist.addEpisode $scope.video.episodeid
+      if $scope.video.type == "movie"
+        Playlist.addMovie $scope.video.movieeid
   ]
 ]
 app.directive "videoButtonsEvents", [->

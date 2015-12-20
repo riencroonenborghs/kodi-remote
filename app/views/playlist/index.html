@@ -4,7 +4,7 @@
   </md-toolbar>
   <md-content ng-controller="PlaylistController" layout-padding>
     <md-list>
-      <md-list-item ng-repeat="item in items" class="pointer {{item.type == 'episode' ? 'md-3-line' : 'md-1-line'}}" ng-click="visitItem(item)">
+      <md-list-item ng-repeat="item in items" class="pointer {{item.type == 'episode' ? 'md-3-line' : 'md-1-line'}}" ng-click="visitItem(item)" aria-label="Go to video">
         <avatar-image avatar="item.thumbnail" ng-if="item.thumbnail"></avatar-image>
         <circle-avatar avatar="item.title" ng-if="!item.thumbnail"></circle-avatar>
         <div class="md-list-item-text" ng-if="item.type == 'episode'">
@@ -20,7 +20,7 @@
 
     <div layout="row">
       <div flex></div>
-      <md-button ng-click="close()" class="md-primary close-button">
+      <md-button ng-click="close()" class="md-primary close-button" aria-label="Close">
         <ng-md-icon icon="close" size="24" style="fill: rgba(33,150,243,1);"></ng-md-icon>
         Close
       </md-button>
