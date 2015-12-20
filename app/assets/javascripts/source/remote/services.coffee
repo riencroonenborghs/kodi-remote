@@ -43,16 +43,16 @@ app.service "Remote", [ "Request", (Request) ->
   emptyHandler = (data) -> return
 
   service =    
-    up: -> return Request.fetch "Input.Up", emptyHandler {}
-    down: -> return Request.fetch "Input.Down", emptyHandler {}
-    left: -> return Request.fetch "Input.Left", emptyHandler {}
-    right: -> return Request.fetch "Input.Right", emptyHandler {}
-    home: -> return Request.fetch "Input.Home", emptyHandler {}
-    select: -> return Request.fetch "Input.Select", emptyHandler {}
-    back: -> return Request.fetch "Input.Back", emptyHandler {}
-    scanLibrary: -> return Request.fetch "VideoLibrary.Scan", emptyHandler {}
-    info: -> return Request.fetch "Input.Info", emptyHandler {}
-    clean: -> return Request.fetch "VideoLibrary.Clean", emptyHandler {}
+    up: -> return Request.fetch "Input.Up", emptyHandler, {}
+    down: -> return Request.fetch "Input.Down", emptyHandler, {}
+    left: -> return Request.fetch "Input.Left", emptyHandler, {}
+    right: -> return Request.fetch "Input.Right", emptyHandler, {}
+    home: -> return Request.fetch "Input.Home", emptyHandler, {}
+    select: -> return Request.fetch "Input.Select", emptyHandler, {}
+    back: -> return Request.fetch "Input.Back", emptyHandler, {}
+    scanLibrary: -> return Request.fetch "VideoLibrary.Scan", emptyHandler, {}
+    info: -> return Request.fetch "Input.Info", emptyHandler, {}
+    clean: -> return Request.fetch "VideoLibrary.Clean", emptyHandler, {}
 
   service
 ]

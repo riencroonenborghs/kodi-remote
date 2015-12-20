@@ -87,34 +87,34 @@
       emptyHandler = function(data) {};
       service = {
         up: function() {
-          return Request.fetch("Input.Up", emptyHandler({}));
+          return Request.fetch("Input.Up", emptyHandler, {});
         },
         down: function() {
-          return Request.fetch("Input.Down", emptyHandler({}));
+          return Request.fetch("Input.Down", emptyHandler, {});
         },
         left: function() {
-          return Request.fetch("Input.Left", emptyHandler({}));
+          return Request.fetch("Input.Left", emptyHandler, {});
         },
         right: function() {
-          return Request.fetch("Input.Right", emptyHandler({}));
+          return Request.fetch("Input.Right", emptyHandler, {});
         },
         home: function() {
-          return Request.fetch("Input.Home", emptyHandler({}));
+          return Request.fetch("Input.Home", emptyHandler, {});
         },
         select: function() {
-          return Request.fetch("Input.Select", emptyHandler({}));
+          return Request.fetch("Input.Select", emptyHandler, {});
         },
         back: function() {
-          return Request.fetch("Input.Back", emptyHandler({}));
+          return Request.fetch("Input.Back", emptyHandler, {});
         },
         scanLibrary: function() {
-          return Request.fetch("VideoLibrary.Scan", emptyHandler({}));
+          return Request.fetch("VideoLibrary.Scan", emptyHandler, {});
         },
         info: function() {
-          return Request.fetch("Input.Info", emptyHandler({}));
+          return Request.fetch("Input.Info", emptyHandler, {});
         },
         clean: function() {
-          return Request.fetch("VideoLibrary.Clean", emptyHandler({}));
+          return Request.fetch("VideoLibrary.Clean", emptyHandler, {});
         }
       };
       return service;

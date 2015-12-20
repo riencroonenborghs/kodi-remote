@@ -12,10 +12,15 @@ app.service "Request", [ "$websocket", "$q", ($websocket, $q) ->
         console.error "wsRequest ERROR ---------------"        
 
       messagehandler = (response) ->
-        parsedResponse  = JSON.parse response.data
-        data            = handler parsedResponse.result
-        total           = if parsedResponse.result.limits then parsedResponse.result.limits.total else null
-        deferred.resolve {data: data, total: total}
+        parsedResponse  = JSON.parse response.data        
+        
+        if parsedResponse.result
+          data = handler parsedResponse.result
+          if parsedResponse.result == "OK"
+            deferred.resolve {data: data, total: 0}
+          else
+            total = if parsedResponse.result.limits then parsedResponse.result.limits.total else null
+            deferred.resolve {data: data, total: total}
         return
 
       payload = {jsonrpc: "2.0", method: method, id: 1, params: params}

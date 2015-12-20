@@ -19,12 +19,21 @@
           messagehandler = function(response) {
             var data, parsedResponse, total;
             parsedResponse = JSON.parse(response.data);
-            data = handler(parsedResponse.result);
-            total = parsedResponse.result.limits ? parsedResponse.result.limits.total : null;
-            deferred.resolve({
-              data: data,
-              total: total
-            });
+            if (parsedResponse.result) {
+              data = handler(parsedResponse.result);
+              if (parsedResponse.result === "OK") {
+                deferred.resolve({
+                  data: data,
+                  total: 0
+                });
+              } else {
+                total = parsedResponse.result.limits ? parsedResponse.result.limits.total : null;
+                deferred.resolve({
+                  data: data,
+                  total: total
+                });
+              }
+            }
           };
           payload = {
             jsonrpc: "2.0",
