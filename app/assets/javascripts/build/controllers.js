@@ -5,7 +5,7 @@
   app = angular.module("kodiRemote.controllers", []);
 
   app.controller("AppController", [
-    "$scope", "$interval", "$timeout", "$location", "$mdSidenav", "SearchService", "Remote", function($scope, $interval, $timeout, $location, $mdSidenav, SearchService, Remote) {
+    "$scope", "$rootScope", "$interval", "$timeout", "$location", "$mdSidenav", "SearchService", "Remote", function($scope, $rootScope, $interval, $timeout, $location, $mdSidenav, SearchService, Remote) {
       var checkServer, initApp, loadSettings, loadSettingsInterval;
       $scope.visit = function(path) {
         $scope.showSearch = false;
@@ -44,6 +44,7 @@
           return $scope.searchService.search($scope.search.query);
         };
         $scope.openPlaylist = function() {
+          $rootScope.$broadcast("playlist.reload");
           return $mdSidenav("playlist").toggle();
         };
         $scope.playingNowVisible = false;

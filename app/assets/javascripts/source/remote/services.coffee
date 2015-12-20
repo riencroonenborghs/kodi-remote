@@ -1,6 +1,6 @@
 app = angular.module "kodiRemote.remote.services", []
 
-app.service "Remote", [ "KodiRequest", (KodiRequest) ->
+app.service "Remote", [ "KodiRequest", "$rootScope", (KodiRequest, $rootScope) ->
   service =
     Player:
       activePlayers: -> return KodiRequest.methodRequest "Player.GetActivePlayers", {}
@@ -10,6 +10,7 @@ app.service "Remote", [ "KodiRequest", (KodiRequest) ->
           properties: ["title", "showtitle", "year", "runtime", "season", "episode", "streamdetails"]
         return KodiRequest.methodRequest "Player.GetItem", params
       open: (playlistId, position) -> 
+        $rootScope.$broadcast "playlist.reload"
         params = [
           {playlistid: playlistId, position: position}
           {resume: true}
@@ -34,7 +35,7 @@ app.service "Remote", [ "KodiRequest", (KodiRequest) ->
       @Player.stop().then =>
         @Playlist.clear().then =>
           @Playlist.addMovie(movieId).then =>
-            @Player.open(1, 0)
+            @Player.open(1, 0)            
 
   service
 ]

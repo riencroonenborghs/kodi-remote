@@ -5,7 +5,7 @@
   app = angular.module("kodiRemote.remote.services", []);
 
   app.service("Remote", [
-    "KodiRequest", function(KodiRequest) {
+    "KodiRequest", "$rootScope", function(KodiRequest, $rootScope) {
       var service;
       service = {
         Player: {
@@ -22,6 +22,7 @@
           },
           open: function(playlistId, position) {
             var params;
+            $rootScope.$broadcast("playlist.reload");
             params = [
               {
                 playlistid: playlistId,

@@ -19,7 +19,8 @@ app = angular.module "kodiRemote", [
   "kodiRemote.settings.controllers",
   "kodiRemote.remote.controllers",
   "kodiRemote.remote.services",
-  "kodiRemote.playlist.controllers"
+  "kodiRemote.playlist.controllers",
+  "kodiRemote.playlist.services"
 ]
 
 app.config ($mdThemingProvider) ->

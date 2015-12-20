@@ -3,7 +3,20 @@
     <h1 class="md-toolbar-tools">Playlist</h1>
   </md-toolbar>
   <md-content ng-controller="PlaylistController" layout-padding>
-    Something here
+    <md-list>
+      <md-list-item ng-repeat="item in items" class="pointer {{item.type == 'episode' ? 'md-3-line' : 'md-1-line'}}" ng-click="visitItem(item)">
+        <avatar-image avatar="item.thumbnail" ng-if="item.thumbnail"></avatar-image>
+        <circle-avatar avatar="item.title" ng-if="!item.thumbnail"></circle-avatar>
+        <div class="md-list-item-text" ng-if="item.type == 'episode'">
+          <h3>{{item.showtitle}}</h3>
+          <h4>Season {{item.season}}, Episode {{item.episode}}</h4>
+          <p>{{item.title}}</p>
+        </div>
+        <div class="md-list-item-text" ng-if="item.type == 'movie'">
+          <h3>{{item.title}}</h3>
+        </div>
+      </md-list-item>
+    </md-list>
 
     <div layout="row">
       <div flex></div>

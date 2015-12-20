@@ -5,9 +5,29 @@
   app = angular.module("kodiRemote.playlist.controllers", []);
 
   app.controller("PlaylistController", [
-    "$scope", "$mdSidenav", function($scope, $mdSidenav) {
-      return $scope.close = function() {
+    "$scope", "$mdSidenav", "Playlist", function($scope, $mdSidenav, Playlist) {
+      var loadItems;
+      $scope.close = function() {
         return $mdSidenav("playlist").close();
+      };
+      $scope.items = [];
+      loadItems = function() {
+        return Playlist.items().then(function(data) {
+          return $scope.items = data.data;
+        });
+      };
+      loadItems();
+      $scope.$on("playlist.reload", function() {
+        return loadItems();
+      });
+      return $scope.visitItem = function(item) {
+        if (item.type === "episode") {
+          $scope.visitEpisode(item.id);
+        }
+        if (item.type === "movie") {
+          $scope.visitMovie(item.id);
+        }
+        return $scope.close();
       };
     }
   ]);
