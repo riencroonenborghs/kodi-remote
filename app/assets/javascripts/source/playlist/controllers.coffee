@@ -1,7 +1,8 @@
 app = angular.module "kodiRemote.playlist.controllers", []
 
-app.controller "PlaylistController", [ "$scope", "$mdSidenav", "Playlist", ($scope, $mdSidenav, Playlist) ->
-  $scope.close = -> $mdSidenav("playlist").close()
+app.controller "PlaylistController", [ "$scope", "$mdSidenav", "$timeout", "Playlist", 
+($scope, $mdSidenav, $timeout, Playlist) ->
+  # $scope.close = -> $mdSidenav("playlist").close()
 
   $scope.items = []
 
@@ -19,4 +20,12 @@ app.controller "PlaylistController", [ "$scope", "$mdSidenav", "Playlist", ($sco
     if item.type == "movie"
       $scope.visitMovie item.id
     $scope.close()
+
+  $scope.removeItem = (index) ->
+    Playlist.remove(index)
+    $timeout (-> loadItems()), 500
+
+  $scope.clear = -> 
+    Playlist.clear()
+    $timeout (-> loadItems()), 500
 ]

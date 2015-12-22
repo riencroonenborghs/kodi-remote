@@ -3,27 +3,37 @@
     <h1 class="md-toolbar-tools">Playlist</h1>
   </md-toolbar>
   <md-content ng-controller="PlaylistController" layout-padding>
-    <md-list>
-      <md-list-item ng-repeat="item in items" class="pointer {{item.type == 'episode' ? 'md-3-line' : 'md-1-line'}}" ng-click="visitItem(item)" aria-label="Go to video">
-        <avatar-image avatar="item.thumbnail" ng-if="item.thumbnail"></avatar-image>
-        <circle-avatar avatar="item.title" ng-if="!item.thumbnail"></circle-avatar>
-        <div class="md-list-item-text" ng-if="item.type == 'episode'">
-          <h3>{{item.showtitle}}</h3>
-          <h4>Season {{item.season}}, Episode {{item.episode}}</h4>
-          <p>{{item.title}}</p>
+
+    <div layout="column" class="playlist">
+      <div ng-repeat="item in items" class="playlist-item" layout="row">
+        <md-button ng-click="playItem(item); $event.stopPropagation();" class="md-primary md-raised md-icon-button md-fab-mini play-button" aria-label="Play">
+          <ng-md-icon icon="play_arrow" style="fill: white;"></ng-md-icon>          
+        </md-button>
+        <div class="text">
+          <div class="md-list-item-text" ng-if="item.type == 'episode'">
+            <h3>{{item.showtitle}}</h3>
+            <h4>Season {{item.season}}, Episode {{item.episode}}</h4>
+            <p>{{item.title}}</p>          
+          </div>
+          <div class="md-list-item-text" ng-if="item.type == 'movie'">
+            <h3>{{item.title}}</h3>
+          </div>
         </div>
-        <div class="md-list-item-text" ng-if="item.type == 'movie'">
-          <h3>{{item.title}}</h3>
-        </div>
-      </md-list-item>
-    </md-list>
+        <div flex></div>
+        <md-button ng-click="removeItem($index); $event.stopPropagation();" class="md-icon-button" aria-label="Options">
+          <ng-md-icon icon="clear"></ng-md-icon>          
+        </md-button>
+      </div>
+    </div>
 
     <div layout="row">
       <div flex></div>
-      <md-button ng-click="close()" class="md-primary close-button" aria-label="Close">
-        <ng-md-icon icon="close" size="24" style="fill: rgba(33,150,243,1);"></ng-md-icon>
-        Close
+      <md-button ng-click="clear(item)" class="md-primary md-raised play-button" aria-label="Play">
+        <ng-md-icon icon="clear" style="fill: white;"></ng-md-icon>          
+        Clear
       </md-button>
     </div>
+
+
   </md-content>
 </md-sidenav>

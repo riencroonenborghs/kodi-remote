@@ -12,7 +12,7 @@ app.service "Request", [ "$websocket", "$q", ($websocket, $q) ->
         console.error "wsRequest ERROR ---------------"        
 
       messagehandler = (response) ->
-        parsedResponse  = JSON.parse response.data        
+        parsedResponse  = JSON.parse response.data
         
         if parsedResponse.result
           data = handler parsedResponse.result

@@ -98,27 +98,35 @@ app.directive "videoButtons", [->
   restrict: "E"
   scope:
     video: "="
+    visible: "="
   templateUrl: "app/views/ui/video-buttons.html"
-  controller: [ "$scope", "Player", "Playlist", ($scope, Player, Playlist) ->
+  controller: [ "$scope", "$rootScope", "Player", "Playlist", ($scope, $rootScope, Player, Playlist) ->
+
     $scope.play = -> 
       if $scope.video.type == "movie"
-        Player.playMovie($scope.video.movieid)
+        Player.playMovie $scope.video.movieid
       if $scope.video.type == "episode"
-        Player.playEpisode($scope.video.episodeid)
-    $scope.addToPlaylist = ->
+        Player.playEpisode $scope.video.episodeid
+
+    $scope.addedToPlaylist = false
+    $scope.addToPlaylist =  (event) ->
       if $scope.video.type == "episode"
         Playlist.addEpisode $scope.video.episodeid
+        $scope.addedToPlaylist = true
       if $scope.video.type == "movie"
-        Playlist.addMovie $scope.video.movieeid
+        Playlist.addMovie $scope.video.movieid
+        $scope.addedToPlaylist = true
   ]
 ]
 app.directive "videoButtonsEvents", [->
   restrict: "A"
   controller: ["$scope", ($scope) ->
-    $scope.showPlayButton = (event) -> 
-      $(event.currentTarget).find(".hoverable-video-avatar").find(".buttons").show()
+    $scope.visible = false
+    $scope.showPlayButton = (event) -> $scope.visible = true
     $scope.hidePlayButton = (event) -> 
-      $(event.currentTarget).find(".hoverable-video-avatar").find(".buttons").hide()
+      element = $(event.toElement)
+      if element.parents(".hoverable-video-avatar").length == 0
+        $scope.visible = false
   ]
 ]
 

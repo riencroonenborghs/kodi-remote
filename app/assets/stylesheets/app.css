@@ -65,7 +65,7 @@ md-list-item:not(:last-child) { padding-bottom: 8px !important; border-bottom: 1
     
 
 /*----- video -----*/
-.video { padding-bottom: 24px; }
+.video { margin-bottom: 24px; }
 
 .video-avatar { width: 175px; }
 .video .video-avatar { margin-left: auto; margin-right: auto; }
@@ -102,3 +102,11 @@ md-list-item:not(:last-child) { padding-bottom: 8px !important; border-bottom: 1
 .cast .image img { width: 75px; }
 
 
+md-toast { background-color: rgba(33,150,243,1); }
+
+.playlist { margin-bottom: 16px; }
+.playlist-item { padding-top: 8px; }
+.playlist-item .text { padding-left: 8px; padding-right: 8px; }
+.playlist-item .text h3,
+.playlist-item .text h4 { padding: 0; margin: 0; }
+.playlist-item:not(:last-child) { border-bottom: 1px solid rgba(33, 150, 243, 0.12); }

@@ -6,7 +6,7 @@ kodiRemote.parseImage = (image) ->
   return if image.endsWith("/") then image.slice(0, -1) else image
 
 app.service "TvShows", [ "Request", "Seasons", (Request, Seasons) ->
-  properties    = ["title", "genre", "year", "rating", "plot", "studio", "mpaa", "cast", "playcount", "episode", "imdbnumber", "premiered", "thumbnail", "season", "watchedepisodes"]
+  properties = ["title", "genre", "year", "rating", "plot", "studio", "mpaa", "cast", "playcount", "episode", "imdbnumber", "premiered", "thumbnail", "season", "watchedepisodes"]
   
   allResultHandler = (result) ->
     for show in (result.tvshows || [])
@@ -35,8 +35,7 @@ app.service "TvShows", [ "Request", "Seasons", (Request, Seasons) ->
           filter:
             field: "title"
             operator: "contains"
-            value: query
-         
+            value: query         
         return Request.fetch "VideoLibrary.GetTVShows", allResultHandler, params
 
     all: (pageParams = 1, sortParams = {by: "label", direction: "ascending"}) -> 
@@ -48,22 +47,19 @@ app.service "TvShows", [ "Request", "Seasons", (Request, Seasons) ->
         limits:
           start: (pageParams - 1) * @perPage
           end: pageParams * @perPage
-       
       return Request.fetch "VideoLibrary.GetTVShows", allResultHandler, params
 
     get: (tvShowId) ->
       params =
         tvshowid: tvShowId
-        properties: properties
-               
+        properties: properties    
       return Request.fetch "VideoLibrary.GetTVShowDetails", getResultHandler, params
 
-    
   service
 ]
 
 app.service "Seasons", [ "Request", "Episodes", (Request, Episodes) ->
-  properties    = ["season", "playcount", "episode", "thumbnail", "tvshowid", "watchedepisodes"]
+  properties = ["season", "playcount", "episode", "thumbnail", "tvshowid", "watchedepisodes"]
 
   resultHandler = (result) ->
     for season in (result.seasons || [])
@@ -76,15 +72,14 @@ app.service "Seasons", [ "Request", "Episodes", (Request, Episodes) ->
     all: (tvShowId) -> 
       params =
         tvshowid: tvShowId
-        properties: properties
-            
+        properties: properties 
       return Request.fetch "VideoLibrary.GetSeasons", resultHandler, params
     
   service
 ]
 
 app.service "Episodes", [ "Request", (Request) ->
-  properties    = ["title", "plot", "rating", "writer", "firstaired", "playcount", "runtime", "director", "season", "episode", "cast", "thumbnail", "resume", "showtitle", "tvshowid"]
+  properties = ["title", "plot", "rating", "writer", "firstaired", "playcount", "runtime", "director", "season", "episode", "cast", "thumbnail", "resume", "showtitle", "tvshowid"]
   
   resultHandler = (result) -> 
     for episode in (result.episodes || [])
@@ -110,9 +105,8 @@ app.service "Episodes", [ "Request", (Request) ->
     get: (episodeId) ->
       params =
         episodeid: episodeId
-        properties: properties
-               
+        properties: properties   
       return Request.fetch "VideoLibrary.GetEpisodeDetails", getResultHandler, params
-    
+      
   service
 ]

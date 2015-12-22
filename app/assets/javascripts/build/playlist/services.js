@@ -24,6 +24,11 @@
           params = [this.playlistId];
           return Request.fetch("Playlist.Clear", emptyHandler, params);
         },
+        remove: function(index) {
+          var params;
+          params = [this.playlistId, index];
+          return Request.fetch("Playlist.Remove", emptyHandler, params);
+        },
         addEpisode: function(episodeId) {
           var params;
           params = [
@@ -35,6 +40,7 @@
         },
         addMovie: function(movieId) {
           var params;
+          console.debug("addMovie " + movieId);
           params = [
             this.playlistId, {
               movieid: movieId
@@ -44,7 +50,7 @@
         },
         items: function() {
           var params, properties;
-          properties = ["title", "showtitle", "playcount", "season", "episode", "thumbnail", "tvshowid", "uniqueid"];
+          properties = ["title", "showtitle", "playcount", "season", "episode", "thumbnail", "tvshowid", "uniqueid", "art"];
           params = {
             playlistid: this.playlistId,
             properties: properties

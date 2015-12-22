@@ -27,7 +27,6 @@ app.service "Movies", [ "Request", (Request) ->
             field: "title"
             operator: "contains"
             value: query
-         
         return Request.fetch "VideoLibrary.GetMovies", allResultHandler, params    
 
     all: (pageParams = 1, sortParams = {by: "label", direction: "ascending"}) -> 
@@ -39,14 +38,12 @@ app.service "Movies", [ "Request", (Request) ->
         limits:
           start: (pageParams - 1) * @perPage
           end: pageParams * @perPage
-       
       return Request.fetch "VideoLibrary.GetMovies", allResultHandler, params
 
     get: (movieId) ->
       params =
         movieid: movieId
         properties: properties
-               
       return Request.fetch "VideoLibrary.GetMovieDetails", getResultHandler, params
     
   service

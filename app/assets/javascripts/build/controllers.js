@@ -5,7 +5,7 @@
   app = angular.module("kodiRemote.controllers", []);
 
   app.controller("AppController", [
-    "$scope", "$rootScope", "$interval", "$timeout", "$location", "$mdSidenav", "SearchService", "Player", function($scope, $rootScope, $interval, $timeout, $location, $mdSidenav, SearchService, Player) {
+    "$scope", "$rootScope", "$interval", "$timeout", "$location", "$mdSidenav", "$mdToast", "SearchService", "Player", function($scope, $rootScope, $interval, $timeout, $location, $mdSidenav, $mdToast, SearchService, Player) {
       var checkServer, initApp, loadSettings, loadSettingsInterval;
       $scope.loading = true;
       $scope.$on("topbar.loading", function(event, value) {
@@ -52,6 +52,17 @@
           $rootScope.$broadcast("playlist.reload");
           return $mdSidenav("playlist").toggle();
         };
+        $scope.$on("show.message", function(event, message) {
+          return $mdToast.show({
+            controller: "MessageController",
+            templateUrl: "app/views/ui/message.html",
+            hideDelay: 2000,
+            position: "bottom right",
+            locals: {
+              message: message
+            }
+          });
+        });
         $scope.playingNowVisible = false;
         $scope.playing = null;
         $scope.playerId = null;
@@ -108,6 +119,12 @@
       } else {
         $location.path("/settings");
       }
+    }
+  ]);
+
+  app.controller("MessageController", [
+    "$scope", "message", function($scope, message) {
+      return $scope.message = message;
     }
   ]);
 

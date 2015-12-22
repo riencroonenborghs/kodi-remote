@@ -1,7 +1,7 @@
 app = angular.module "kodiRemote.controllers", []
 
-app.controller "AppController", [ "$scope", "$rootScope", "$interval", "$timeout", "$location", "$mdSidenav", "SearchService","Player",
-($scope, $rootScope, $interval, $timeout, $location, $mdSidenav, SearchService, Player) ->
+app.controller "AppController", [ "$scope", "$rootScope", "$interval", "$timeout", "$location", "$mdSidenav", "$mdToast", "SearchService","Player",
+($scope, $rootScope, $interval, $timeout, $location, $mdSidenav, $mdToast, SearchService, Player) ->
 
   # chrome.storage.local.clear()
 
@@ -38,6 +38,15 @@ app.controller "AppController", [ "$scope", "$rootScope", "$interval", "$timeout
     $scope.openPlaylist = -> 
       $rootScope.$broadcast "playlist.reload"
       $mdSidenav("playlist").toggle()
+
+    $scope.$on "show.message", (event, message) ->
+      $mdToast.show
+        controller: "MessageController"
+        templateUrl: "app/views/ui/message.html"
+        hideDelay: 2000
+        position: "bottom right"
+        locals:
+          message: message
 
     # what is playing now?
     $scope.playingNowVisible = false
@@ -96,3 +105,6 @@ app.controller "AppController", [ "$scope", "$rootScope", "$interval", "$timeout
     return      
 ]
 
+app.controller "MessageController", [ "$scope", "message", ($scope, message) ->
+  $scope.message = message
+]

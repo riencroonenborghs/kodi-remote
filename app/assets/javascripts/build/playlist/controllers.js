@@ -5,11 +5,8 @@
   app = angular.module("kodiRemote.playlist.controllers", []);
 
   app.controller("PlaylistController", [
-    "$scope", "$mdSidenav", "Playlist", function($scope, $mdSidenav, Playlist) {
+    "$scope", "$mdSidenav", "$timeout", "Playlist", function($scope, $mdSidenav, $timeout, Playlist) {
       var loadItems;
-      $scope.close = function() {
-        return $mdSidenav("playlist").close();
-      };
       $scope.items = [];
       loadItems = function() {
         return Playlist.items().then(function(data) {
@@ -20,7 +17,7 @@
       $scope.$on("playlist.reload", function() {
         return loadItems();
       });
-      return $scope.visitItem = function(item) {
+      $scope.visitItem = function(item) {
         if (item.type === "episode") {
           $scope.visitEpisode(item.id);
         }
@@ -28,6 +25,18 @@
           $scope.visitMovie(item.id);
         }
         return $scope.close();
+      };
+      $scope.removeItem = function(index) {
+        Playlist.remove(index);
+        return $timeout((function() {
+          return loadItems();
+        }), 500);
+      };
+      return $scope.clear = function() {
+        Playlist.clear();
+        return $timeout((function() {
+          return loadItems();
+        }), 500);
       };
     }
   ]);

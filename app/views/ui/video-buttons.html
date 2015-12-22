@@ -1,15 +1,18 @@
-<div class="hoverable-video-avatar" layout="column">
-  <div layout="row" style="display: none;" flex="100" class="buttons">
+<div class="hoverable-video-avatar" layout="column">  
+  <div layout="row" ng-if="visible" flex="100" class="buttons">
     <md-button  class="md-primary md-raised md-icon-button md-fab-mini play-button video-avatar-play" 
-                ng-click="play(); $event.stopPropagation();" 
-                aria-label="Play">
+                ng-click="play(); $event.stopPropagation();"                 
+                aria-label="Play"
+                >
       <ng-md-icon icon="play_arrow" style="fill: white;"></ng-md-icon>    
     </md-button>
     <md-button  class="md-primary md-raised md-icon-button md-fab-mini play-button video-avatar-play" 
-                ng-click="addToPlaylist(); $event.stopPropagation();" 
+                ng-if="!addedToPlaylist"
+                ng-click="addToPlaylist($event); $event.stopPropagation();" 
                 aria-label="Add to playlist">
-      <ng-md-icon icon="playlist_add" style="fill: white;"></ng-md-icon>    
+      <ng-md-icon icon="playlist_add" style="fill: white;"></ng-md-icon>
     </md-button>
+    <ng-md-icon class="okay-icon play-button" ng-if="addedToPlaylist" icon="thumb_up" style="fill: rgba(0,200,0,0.75);"></ng-md-icon>
   </div>
   <img src="{{video.thumbnail}}" class="video-avatar" ng-if="video.thumbnail" />
   <empty-avatar ng-if="!video.thumbnail"></empty-avatar>

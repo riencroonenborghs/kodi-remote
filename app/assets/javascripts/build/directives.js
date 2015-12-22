@@ -147,11 +147,17 @@
       return {
         restrict: "E",
         scope: {
-          video: "="
+          video: "=",
+          visible: "="
         },
         templateUrl: "app/views/ui/video-buttons.html",
         controller: [
-          "$scope", "Player", "Playlist", function($scope, Player, Playlist) {
+          "$scope", "$rootScope", "Player", "Playlist", function($scope, $rootScope, Player, Playlist) {
+            var showMessage;
+            showMessage = function(message) {
+              return $rootScope.$broadcast("show.message", message);
+            };
+            $scope.addedToPlaylist = false;
             $scope.play = function() {
               if ($scope.video.type === "movie") {
                 Player.playMovie($scope.video.movieid);
@@ -160,12 +166,14 @@
                 return Player.playEpisode($scope.video.episodeid);
               }
             };
-            return $scope.addToPlaylist = function() {
+            return $scope.addToPlaylist = function(event) {
               if ($scope.video.type === "episode") {
                 Playlist.addEpisode($scope.video.episodeid);
+                $scope.addedToPlaylist = true;
               }
               if ($scope.video.type === "movie") {
-                return Playlist.addMovie($scope.video.movieeid);
+                Playlist.addMovie($scope.video.movieid);
+                return $scope.addedToPlaylist = true;
               }
             };
           }
@@ -180,11 +188,16 @@
         restrict: "A",
         controller: [
           "$scope", function($scope) {
+            $scope.visible = false;
             $scope.showPlayButton = function(event) {
-              return $(event.currentTarget).find(".hoverable-video-avatar").find(".buttons").show();
+              return $scope.visible = true;
             };
             return $scope.hidePlayButton = function(event) {
-              return $(event.currentTarget).find(".hoverable-video-avatar").find(".buttons").hide();
+              var element;
+              element = $(event.toElement);
+              if (element.parents(".hoverable-video-avatar").length === 0) {
+                return $scope.visible = false;
+              }
             };
           }
         ]
