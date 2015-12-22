@@ -5,17 +5,19 @@
   app = angular.module("kodiRemote.movies.controllers", []);
 
   app.controller("MoviesController", [
-    "$scope", "NavbarFactory", "Movies", function($scope, NavbarFactory, Movies) {
+    "$scope", "$rootScope", "NavbarFactory", "Movies", function($scope, $rootScope, NavbarFactory, Movies) {
       $scope.movies = [];
       $scope.movieGroups = [];
       $scope.beforeSortLoad = function() {
         $scope.movies = [];
         return $scope.pagination.page = 1;
       };
+      $rootScope.$broadcast("topbar.loading", true);
       return $scope.load = function() {
         $scope.loading = true;
         return Movies.all($scope.pagination.page, $scope.sortParams).then(function(data) {
           var i, len, movie, ref;
+          $rootScope.$broadcast("topbar.loading", false);
           $scope.loading = false;
           ref = data.data;
           for (i = 0, len = ref.length; i < len; i++) {
@@ -32,11 +34,13 @@
   ]);
 
   app.controller("MovieController", [
-    "$scope", "$routeParams", "Movies", "NavbarFactory", function($scope, $routeParams, Movies, NavbarFactory) {
+    "$scope", "$rootScope", "$routeParams", "Movies", "NavbarFactory", function($scope, $rootScope, $routeParams, Movies, NavbarFactory) {
       var movieId;
       movieId = parseInt($routeParams.id);
       $scope.movie = null;
+      $rootScope.$broadcast("topbar.loading", true);
       return Movies.get(movieId).then(function(movieData) {
+        $rootScope.$broadcast("topbar.loading", false);
         $scope.movie = movieData.data;
         $scope.Navbar = new NavbarFactory;
         $scope.Navbar.addLink("/movies", "Movies");

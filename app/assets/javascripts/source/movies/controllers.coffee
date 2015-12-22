@@ -1,7 +1,7 @@
 app = angular.module "kodiRemote.movies.controllers", []
 
-app.controller "MoviesController", [ "$scope", "NavbarFactory", "Movies",
-($scope, NavbarFactory, Movies) ->  
+app.controller "MoviesController", [ "$scope", "$rootScope", "NavbarFactory", "Movies",
+($scope, $rootScope, NavbarFactory, Movies) ->  
   $scope.movies = []
   $scope.movieGroups = []
 
@@ -18,9 +18,11 @@ app.controller "MoviesController", [ "$scope", "NavbarFactory", "Movies",
   # - uses $scope.paginationAfterLoad to calculate $scope.pagination.more
   # - uses $scope.loading
 
+  $rootScope.$broadcast "topbar.loading", true
   $scope.load = ->
     $scope.loading = true
     Movies.all($scope.pagination.page, $scope.sortParams).then (data) ->
+      $rootScope.$broadcast "topbar.loading", false
       $scope.loading = false
       for movie in data.data
         $scope.movies.push movie
@@ -32,13 +34,15 @@ app.controller "MoviesController", [ "$scope", "NavbarFactory", "Movies",
       return
 ]
 
-app.controller "MovieController", [ "$scope", "$routeParams", "Movies", "NavbarFactory", 
-($scope, $routeParams, Movies, NavbarFactory) ->
+app.controller "MovieController", [ "$scope", "$rootScope", "$routeParams", "Movies", "NavbarFactory", 
+($scope, $rootScope, $routeParams, Movies, NavbarFactory) ->
   movieId = parseInt $routeParams.id
 
   $scope.movie = null
 
+  $rootScope.$broadcast "topbar.loading", true
   Movies.get(movieId).then (movieData) ->
+    $rootScope.$broadcast "topbar.loading", false
     $scope.movie = movieData.data
     $scope.Navbar = new NavbarFactory
     $scope.Navbar.addLink "/movies", "Movies"

@@ -30,7 +30,7 @@
         return result.moviedetails;
       };
       service = {
-        perPage: 5,
+        perPage: 10,
         where: {
           title: function(query) {
             var params;

@@ -100,3 +100,5 @@ md-list-item:not(:last-child) { padding-bottom: 8px !important; border-bottom: 1
 .empty-cast { width: 75px; height: 100px; background: rgba(33,150,243,0.2); }
 .cast { padding-bottom: 16px; }
 .cast .image img { width: 75px; }
+
+

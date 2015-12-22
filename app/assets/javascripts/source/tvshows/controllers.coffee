@@ -8,7 +8,7 @@ kodiRemote.array =
       newList.push list.splice(0, number)
     return newList
 
-app.controller "TvShowsController", [ "$scope", "NavbarFactory", "TvShows", ($scope, NavbarFactory, TvShows) ->  
+app.controller "TvShowsController", [ "$scope", "$rootScope", "NavbarFactory", "TvShows", ($scope, $rootScope, NavbarFactory, TvShows) ->  
   $scope.tvShows = []  
   $scope.tvShowGroups = []
 
@@ -23,12 +23,11 @@ app.controller "TvShowsController", [ "$scope", "NavbarFactory", "TvShows", ($sc
   # autoScrollPaginate directive
   # - sets $scope.pagination hash
   # - uses $scope.paginationAfterLoad to calculate $scope.pagination.more
-  # - uses $scope.loading
 
   $scope.load = ->
-    $scope.loading = true
+    $rootScope.$broadcast "topbar.loading", true
     TvShows.all($scope.pagination.page, $scope.sortParams).then (data) ->
-      $scope.loading = false
+      $rootScope.$broadcast "topbar.loading", false
       for tvShow in data.data
         $scope.tvShows.push tvShow
 
@@ -40,15 +39,17 @@ app.controller "TvShowsController", [ "$scope", "NavbarFactory", "TvShows", ($sc
       return
 ]
 
-app.controller "SeasonsController", [ "$scope", "$routeParams", "NavbarFactory", "TvShows", 
-($scope, $routeParams, NavbarFactory, TvShows) ->  
+app.controller "SeasonsController", [ "$scope", "$rootScope", "$routeParams", "NavbarFactory", "TvShows", 
+($scope, $rootScope, $routeParams, NavbarFactory, TvShows) ->  
   tvShowId = parseInt $routeParams.id
 
   $scope.tvShow = null
   $scope.seasons = []
   $scope.seasonGroups = []
 
+  $rootScope.$broadcast "topbar.loading", true
   TvShows.get(tvShowId).then (tvShowData) ->
+    $rootScope.$broadcast "topbar.loading", false
     $scope.tvShow = tvShowData.data    
     $scope.Navbar = new NavbarFactory
     $scope.Navbar.addLink "/tvshows", "TV Shows"
@@ -59,8 +60,8 @@ app.controller "SeasonsController", [ "$scope", "$routeParams", "NavbarFactory",
 ]
 
 
-app.controller "EpisodesController", [ "$scope", "$routeParams", "NavbarFactory", "TvShows",
-($scope, $routeParams, NavbarFactory, TvShows) ->  
+app.controller "EpisodesController", [ "$scope", "$rootScope", "$routeParams", "NavbarFactory", "TvShows",
+($scope, $rootScope, $routeParams, NavbarFactory, TvShows) ->  
   tvShowId = parseInt $routeParams.tvshowid  
   seasonId = parseInt $routeParams.id
 
@@ -69,6 +70,7 @@ app.controller "EpisodesController", [ "$scope", "$routeParams", "NavbarFactory"
   $scope.episodes = []
   $scope.episodeGroups = []
 
+  $rootScope.$broadcast "topbar.loading", true
   TvShows.get(tvShowId).then (tvShowData) ->
     $scope.tvShow = tvShowData.data
     $scope.tvShow.seasons().then (seasonsData) ->
@@ -80,17 +82,20 @@ app.controller "EpisodesController", [ "$scope", "$routeParams", "NavbarFactory"
           $scope.Navbar.addLink "/tvshows/#{tvShowId}/seasons", $scope.tvShow.title
           $scope.Navbar.addTitle "Season #{season.season}"
           season.episodes().then (episodeData) ->
+            $rootScope.$broadcast "topbar.loading", false
             $scope.episodes = episodeData.data
             $scope.episodeGroups = kodiRemote.array.inGroupsOf $scope.episodes, 2
 ]
 
-app.controller "EpisodeController", [ "$scope", "$routeParams", "Episodes", "NavbarFactory",
-($scope, $routeParams, Episodes, NavbarFactory) ->
+app.controller "EpisodeController", [ "$scope", "$rootScope", "$routeParams", "Episodes", "NavbarFactory",
+($scope, $rootScope, $routeParams, Episodes, NavbarFactory) ->
   episodeId = parseInt $routeParams.id
 
   $scope.episode = null  
 
+  $rootScope.$broadcast "topbar.loading", true
   Episodes.get(episodeId).then (episodeData) ->
+    $rootScope.$broadcast "topbar.loading", false
     $scope.episode = episodeData.data
     $scope.Navbar = new NavbarFactory
     $scope.Navbar.addLink "/tvshows", "TV Shows"

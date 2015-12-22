@@ -7,6 +7,11 @@
   app.controller("AppController", [
     "$scope", "$rootScope", "$interval", "$timeout", "$location", "$mdSidenav", "SearchService", "Player", function($scope, $rootScope, $interval, $timeout, $location, $mdSidenav, SearchService, Player) {
       var checkServer, initApp, loadSettings, loadSettingsInterval;
+      $scope.loading = true;
+      $scope.$on("topbar.loading", function(event, value) {
+        console.debug("topbar.loading " + value);
+        return $scope.loading = value;
+      });
       $scope.visit = function(path) {
         $scope.showSearch = false;
         return $location.path(path);

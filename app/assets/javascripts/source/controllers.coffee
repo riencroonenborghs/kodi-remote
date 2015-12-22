@@ -5,6 +5,11 @@ app.controller "AppController", [ "$scope", "$rootScope", "$interval", "$timeout
 
   # chrome.storage.local.clear()
 
+  $scope.loading = true
+  $scope.$on "topbar.loading", (event, value) ->
+    console.debug "topbar.loading #{value}"
+    $scope.loading = value
+
   # visits
   $scope.visit = (path) ->
     $scope.showSearch = false

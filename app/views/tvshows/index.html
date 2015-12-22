@@ -1,9 +1,11 @@
+<loading-screen loading="loading"></loading-screen>
+
 <div auto-scroll-paginate sortable>
   <div layout="row">
     <navbar model="Navbar"></navbar>
 
     <div flex></div>  
-    <div>
+    <div ng-if="!loading">
       <md-button aria-label="Sorting" class="md-icon-button sort-button" ng-click="toggleSortBy()">            
         {{sort.by.labels[sort.by.current]}}
       </md-button>
