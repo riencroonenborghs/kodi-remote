@@ -4,7 +4,7 @@
 
 <div class="md-padding">
   <h4 layout="row">          
-    <span class="genre pointer" ng-repeat="genre in tvShow.genre" ng-click="sortByGenre(genre); $event.stopPropagation();">{{genre}}</span>
+    <span class="genre pointer" ng-repeat="genre in tvShow.genre" ng-click="visitGenre('tvshows', genre); $event.stopPropagation();">{{genre}}</span>
     <rating rating="tvShow.rating"></rating>
   </h4>
   <p>

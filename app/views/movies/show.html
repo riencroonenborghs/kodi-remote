@@ -1,64 +1,66 @@
 <loading-screen loading="loading"></loading-screen>
 
-<navbar model="Navbar"></navbar>
+<div ng-if="!loading">
+  <navbar model="Navbar"></navbar>
 
-<div class="md-padding">
-  <h3>{{movie.tagline}}</h3>
-  <div>
-    <span class="genre" ng-repeat="genre in movie.genre">{{genre}}</span>
-    {{movie.runtime | secondsToDateTime | date:'HH:mm:ss'}}
+  <div class="md-padding">
+    <h3>{{movie.tagline}}</h3>
+    <div>
+      <span class="genre pointer" ng-repeat="genre in movie.genre" ng-click="visitGenre('movies', genre); $event.stopPropagation();">{{genre}}</span>
+      {{movie.runtime | secondsToDateTime | date:'HH:mm:ss'}}
+    </div>
+    <div layout="row">
+      <p class="plot" flex>{{movie.plot}}</p>
+      <rating flex="25" size="big" rating="movie.rating"></rating>
+    </div>    
   </div>
-  <div layout="row">
-    <p class="plot" flex>{{movie.plot}}</p>
-    <rating flex="25" size="big" rating="movie.rating"></rating>
-  </div>    
+
+  <md-tabs md-dynamic-height md-border-bottom>
+    <md-tab label="Overview">
+
+      <md-list>
+        <md-list-item>
+          <div class="md-list-item-text">
+            <h4>Plot</h4>
+            <p>{{movie.plot}}</p>
+          </div>
+        </md-list-item>
+        
+        <md-list-item>
+          <div class="md-list-item-text">
+            <h4>Director</h4>
+            <p>{{movie.director.join(', ')}}</p>
+          </div>
+        </md-list-item>
+
+        <md-list-item>
+          <div class="md-list-item-text">
+            <h4>Writer</h4>
+            <p>{{movie.writer.join(', ')}}</p>
+          </div>
+        </md-list-item>
+
+        <md-list-item>
+          <div class="md-list-item-text">
+            <h4>Studio</h4>
+            <p>{{movie.studio.join(', ')}}</p>
+          </div>
+        </md-list-item>
+
+        <md-list-item>
+          <div class="md-list-item-text">
+            <h4>MPAA Rating</h4>
+            <p>{{movie.mpaa}}</p>
+          </div>
+        </md-list-item>
+      </md-list>
+
+    </md-tab>
+
+    <md-tab label="Cast">
+
+      <cast-members video="movie"></cast-members>
+
+    </md-tab>
+  </md-tabs>
 </div>
-
-<md-tabs md-dynamic-height md-border-bottom>
-  <md-tab label="Overview">
-
-    <md-list>
-      <md-list-item>
-        <div class="md-list-item-text">
-          <h4>Plot</h4>
-          <p>{{movie.plot}}</p>
-        </div>
-      </md-list-item>
-      
-      <md-list-item>
-        <div class="md-list-item-text">
-          <h4>Director</h4>
-          <p>{{movie.director.join(', ')}}</p>
-        </div>
-      </md-list-item>
-
-      <md-list-item>
-        <div class="md-list-item-text">
-          <h4>Writer</h4>
-          <p>{{movie.writer.join(', ')}}</p>
-        </div>
-      </md-list-item>
-
-      <md-list-item>
-        <div class="md-list-item-text">
-          <h4>Studio</h4>
-          <p>{{movie.studio.join(', ')}}</p>
-        </div>
-      </md-list-item>
-
-      <md-list-item>
-        <div class="md-list-item-text">
-          <h4>MPAA Rating</h4>
-          <p>{{movie.mpaa}}</p>
-        </div>
-      </md-list-item>
-    </md-list>
-
-  </md-tab>
-
-  <md-tab label="Cast">
-
-    <cast-members video="movie"></cast-members>
-
-  </md-tab>
-</md-tabs>

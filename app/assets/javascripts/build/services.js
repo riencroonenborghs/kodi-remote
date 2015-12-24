@@ -74,6 +74,8 @@
           searchingTvShows = true;
           searchingMovies = true;
           this.searching = searchingTvShows && searchingMovies;
+          this.tvShows = [];
+          this.movies = [];
           TvShows.where.title(query).then((function(_this) {
             return function(tvShowsData) {
               _this.tvShows = tvShowsData.data;
