@@ -14,7 +14,8 @@ app.controller "TvShowsController", [ "$scope", "$rootScope", "NavbarFactory", "
 
   # sortable directive
   # - set $scope.sortParams before load
-  # - call $scope.beforeSortLoad  before load
+  # - call $scope.beforeSortLoad before load
+  $scope.showSortDirection = true
 
   $scope.beforeSortLoad = ->
     $scope.tvShows = []
@@ -37,6 +38,20 @@ app.controller "TvShowsController", [ "$scope", "$rootScope", "NavbarFactory", "
       $scope.Navbar.addTitle "TV Shows (#{data.total})"
       $scope.paginationAfterLoad TvShows.perPage, data.total
       return
+]
+
+app.controller "TvShowGenresController", [ "$scope", "$rootScope", "NavbarFactory", "Genres", ($scope, $rootScope,NavbarFactory, Genres) ->  
+  $scope.genres = []
+  $scope.genreGroups = []
+
+  $rootScope.$broadcast "topbar.loading", true
+  Genres.all("tvshow").then (data) ->    
+    $rootScope.$broadcast "topbar.loading", false
+    $scope.genres = data.data
+    $scope.genreGroups = kodiRemote.array.inGroupsOf $scope.genres, 2
+    $scope.Navbar = new NavbarFactory
+    $scope.Navbar.addLink "/tvshows", "TV Shows"
+    $scope.Navbar.addTitle "Genres (#{data.total})"  
 ]
 
 app.controller "SeasonsController", [ "$scope", "$rootScope", "$routeParams", "NavbarFactory", "TvShows", 

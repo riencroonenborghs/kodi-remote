@@ -1,0 +1,13 @@
+<loading-screen loading="loading"></loading-screen>
+
+<navbar ng-if="!loading" model="Navbar"></navbar>
+
+<div class="md-padding" layout="column">
+  <div ng-repeat="genreGroup in genreGroups" layout="row">
+    <div flex="50" ng-repeat="genre in genreGroup" layout="column" class="video pointer" ng-click="visitGenre(genre.title)">
+      <h2 class="center">
+        {{genre.title}}
+      </h2>
+    </div>
+  </div>
+</div>

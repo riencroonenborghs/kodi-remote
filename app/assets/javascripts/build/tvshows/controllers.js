@@ -20,6 +20,7 @@
     "$scope", "$rootScope", "NavbarFactory", "TvShows", function($scope, $rootScope, NavbarFactory, TvShows) {
       $scope.tvShows = [];
       $scope.tvShowGroups = [];
+      $scope.showSortDirection = true;
       $scope.beforeSortLoad = function() {
         $scope.tvShows = [];
         return $scope.pagination.page = 1;
@@ -40,6 +41,22 @@
           $scope.paginationAfterLoad(TvShows.perPage, data.total);
         });
       };
+    }
+  ]);
+
+  app.controller("TvShowGenresController", [
+    "$scope", "$rootScope", "NavbarFactory", "Genres", function($scope, $rootScope, NavbarFactory, Genres) {
+      $scope.genres = [];
+      $scope.genreGroups = [];
+      $rootScope.$broadcast("topbar.loading", true);
+      return Genres.all("tvshow").then(function(data) {
+        $rootScope.$broadcast("topbar.loading", false);
+        $scope.genres = data.data;
+        $scope.genreGroups = kodiRemote.array.inGroupsOf($scope.genres, 2);
+        $scope.Navbar = new NavbarFactory;
+        $scope.Navbar.addLink("/tvshows", "TV Shows");
+        return $scope.Navbar.addTitle("Genres (" + data.total + ")");
+      });
     }
   ]);
 

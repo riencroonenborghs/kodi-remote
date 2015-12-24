@@ -99,40 +99,28 @@
         restrict: "A",
         controller: [
           "$scope", function($scope) {
-            var setSortParams;
             $scope.sort = {
-              by: {
-                labels: ["Name", "Recent"],
-                methods: ["label", "dateadded"],
-                current: 0
-              },
               direction: {
                 icons: ["sort_ascending", "sort_descending"],
                 methods: ["ascending", "descending"],
                 current: 0
               }
             };
-            setSortParams = function() {
-              return $scope.sortParams = {
-                by: $scope.sort.by.methods[$scope.sort.by.current],
-                direction: $scope.sort.direction.methods[$scope.sort.direction.current]
-              };
+            $scope.sortByTitle = function() {
+              return $scope.visit("/tvshows/");
             };
-            $scope.toggleSortDirection = function() {
+            $scope.sortByGenre = function() {
+              return $scope.visitGenres("tvshows");
+            };
+            return $scope.toggleSortDirection = function() {
               $scope.sort.direction.current += 1;
               if ($scope.sort.direction.current === $scope.sort.direction.methods.length) {
                 $scope.sort.direction.current = 0;
               }
-              setSortParams();
-              $scope.beforeSortLoad();
-              return $scope.load();
-            };
-            return $scope.toggleSortBy = function() {
-              $scope.sort.by.current += 1;
-              if ($scope.sort.by.current === $scope.sort.by.methods.length) {
-                $scope.sort.by.current = 0;
-              }
-              setSortParams();
+              $scope.sortParams = {
+                by: "title",
+                direction: $scope.sort.direction.methods[$scope.sort.direction.current]
+              };
               $scope.beforeSortLoad();
               return $scope.load();
             };
@@ -153,11 +141,6 @@
         templateUrl: "app/views/ui/video-buttons.html",
         controller: [
           "$scope", "$rootScope", "Player", "Playlist", function($scope, $rootScope, Player, Playlist) {
-            var showMessage;
-            showMessage = function(message) {
-              return $rootScope.$broadcast("show.message", message);
-            };
-            $scope.addedToPlaylist = false;
             $scope.play = function() {
               if ($scope.video.type === "movie") {
                 Player.playMovie($scope.video.movieid);
@@ -166,6 +149,7 @@
                 return Player.playEpisode($scope.video.episodeid);
               }
             };
+            $scope.addedToPlaylist = false;
             return $scope.addToPlaylist = function(event) {
               if ($scope.video.type === "episode") {
                 Playlist.addEpisode($scope.video.episodeid);

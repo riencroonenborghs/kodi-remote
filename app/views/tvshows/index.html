@@ -1,16 +1,22 @@
 <loading-screen loading="loading"></loading-screen>
 
 <div auto-scroll-paginate sortable>
-  <div layout="row">
-    <navbar model="Navbar"></navbar>
 
+  <div layout="row" ng-if="!loading">
+    <navbar model="Navbar"></navbar>
     <div flex></div>  
-    <div ng-if="!loading">
-      <md-button aria-label="Sorting" class="md-icon-button sort-button" ng-click="toggleSortBy()">            
-        {{sort.by.labels[sort.by.current]}}
+    <div>
+      <md-button aria-label="Sort by title" class="md-icon-button md-fab-mini sort-button" ng-click="sortByTitle()">
+        <ng-md-icon icon="label_outline" size="24" style="fill: rgb(33,150,243);"></ng-md-icon>
       </md-button>
-      <md-button aria-label="Sorting" class="md-icon-button sort-button" ng-click="toggleSortDirection()">
-        <ng-md-icon icon="{{sort.direction.icons[sort.direction.current]}}" size="16" style="fill: rgb(33,150,243);"></ng-md-icon>
+      <md-button aria-label="Sort by genre" class="md-icon-button sort-button" ng-click="sortByGenre()">
+        <ng-md-icon icon="mood" size="24" style="fill: rgb(33,150,243);"></ng-md-icon>
+      </md-button>
+      <md-button aria-label="Sort by recently added" class="md-icon-button sort-button" ng-click="sortByRecentlyAdded()">
+        <ng-md-icon icon="my_library_add" size="24" style="fill: rgb(33,150,243);"></ng-md-icon>                
+      </md-button>
+      <md-button aria-label="Sorting" class="md-icon-button sort-button" ng-click="toggleSortDirection()" ng-if="showSortDirection">
+        <ng-md-icon icon="{{sort.direction.icons[sort.direction.current]}}" size="24" style="fill: rgb(33,150,243);"></ng-md-icon>
       </md-button>
     </div>
   </div>

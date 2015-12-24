@@ -64,33 +64,57 @@ app.directive "sortable", [->
   restrict: "A"
   controller: [ "$scope", ($scope) ->
     $scope.sort = 
-      by: 
-        labels: ["Name", "Recent"]
-        methods: ["label", "dateadded"]
-        current: 0
       direction:
         icons: ["sort_ascending", "sort_descending"]
         methods: ["ascending", "descending"]
         current: 0
 
-    setSortParams = ->
-      $scope.sortParams =
-        by: $scope.sort.by.methods[$scope.sort.by.current]
-        direction: $scope.sort.direction.methods[$scope.sort.direction.current]
+    $scope.sortByTitle = -> $scope.visit "/tvshows/"
+    $scope.sortByGenre = -> $scope.visitGenres("tvshows")
 
     $scope.toggleSortDirection = ->
       $scope.sort.direction.current += 1
       $scope.sort.direction.current = 0 if $scope.sort.direction.current == $scope.sort.direction.methods.length
-      setSortParams()
+      $scope.sortParams =
+        by: "title"
+        direction: $scope.sort.direction.methods[$scope.sort.direction.current]
       $scope.beforeSortLoad()
       $scope.load()
 
-    $scope.toggleSortBy = -> 
-      $scope.sort.by.current += 1
-      $scope.sort.by.current = 0 if $scope.sort.by.current == $scope.sort.by.methods.length
-      setSortParams()
-      $scope.beforeSortLoad()
-      $scope.load()
+
+    # $scope.sortByGenre = ->
+    #   $scope.sortParams =
+    #     by: "title"
+    #     direction: $scope.sort.direction.methods[$scope.sort.direction.current]
+
+    # $scope.sort = 
+    #   by: 
+    #     labels: ["Name", "Recent"]
+    #     methods: ["label", "dateadded"]
+    #     current: 0
+    #   direction:
+    #     icons: ["sort_ascending", "sort_descending"]
+    #     methods: ["ascending", "descending"]
+    #     current: 0
+
+    # setSortParams = ->
+    #   $scope.sortParams =
+    #     by: $scope.sort.by.methods[$scope.sort.by.current]
+    #     direction: $scope.sort.direction.methods[$scope.sort.direction.current]
+
+    # $scope.toggleSortDirection = ->
+    #   $scope.sort.direction.current += 1
+    #   $scope.sort.direction.current = 0 if $scope.sort.direction.current == $scope.sort.direction.methods.length
+    #   setSortParams()
+    #   $scope.beforeSortLoad()
+    #   $scope.load()
+
+    # $scope.toggleSortBy = -> 
+    #   $scope.sort.by.current += 1
+    #   $scope.sort.by.current = 0 if $scope.sort.by.current == $scope.sort.by.methods.length
+    #   setSortParams()
+    #   $scope.beforeSortLoad()
+    #   $scope.load()
   ]
 ]
 

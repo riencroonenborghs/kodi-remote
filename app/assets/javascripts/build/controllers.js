@@ -28,6 +28,12 @@
       $scope.visitMovie = function(movieId) {
         return $scope.visit("/movies/" + movieId);
       };
+      $scope.visitGenres = function(type) {
+        return $scope.visit(type + "/genres");
+      };
+      $scope.visitGenre = function(genre) {
+        return $scope.visit("/genres/" + genre);
+      };
       initApp = function() {
         var whatsPlaying;
         $scope.toggleSearch = function() {

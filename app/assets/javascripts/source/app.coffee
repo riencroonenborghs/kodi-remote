@@ -21,7 +21,8 @@ app = angular.module "kodiRemote", [
   "kodiRemote.remote.controllers",
   "kodiRemote.remote.services",
   "kodiRemote.playlist.controllers",
-  "kodiRemote.playlist.services"
+  "kodiRemote.playlist.services",
+  "kodiRemote.genres.controllers"
 ]
 
 app.config ($mdThemingProvider) ->
@@ -43,6 +44,9 @@ app.config ($routeProvider, $locationProvider) ->
     .when "/tvshows",
       templateUrl: "app/views/tvshows/index.html"
       controller: "TvShowsController"
+    .when "/tvshows/genres",
+      templateUrl: "app/views/genres/index.html"
+      controller: "TvShowGenresController"
     .when "/tvshows/:id/seasons",
       templateUrl: "app/views/tvshows/seasons/index.html"
       controller: "SeasonsController"
@@ -70,6 +74,10 @@ app.config ($routeProvider, $locationProvider) ->
     .when "/music/albums/:id/songs",
       templateUrl: "app/views/music/songs.html"
       controller: "SongsController"
+
+    .when "/genres/:genre",
+      templateUrl: "app/views/genres/show.html"
+      controller: "GenreController"
 
     .otherwise "/tvshows",
       templateUrl: "app/views/tvshows/index.html"
