@@ -41,6 +41,7 @@ app.controller "TvShowsController", [ "$scope", "$rootScope", "NavbarFactory", "
 ]
 
 app.controller "TvShowGenresController", [ "$scope", "$rootScope", "NavbarFactory", "Genres", ($scope, $rootScope,NavbarFactory, Genres) ->  
+  $scope.type = "tvshows"
   $scope.genres = []
   $scope.genreGroups = []
 

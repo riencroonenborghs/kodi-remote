@@ -46,6 +46,7 @@
 
   app.controller("TvShowGenresController", [
     "$scope", "$rootScope", "NavbarFactory", "Genres", function($scope, $rootScope, NavbarFactory, Genres) {
+      $scope.type = "tvshows";
       $scope.genres = [];
       $scope.genreGroups = [];
       $rootScope.$broadcast("topbar.loading", true);

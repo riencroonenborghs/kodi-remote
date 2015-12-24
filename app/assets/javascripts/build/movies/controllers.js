@@ -8,6 +8,7 @@
     "$scope", "$rootScope", "NavbarFactory", "Movies", function($scope, $rootScope, NavbarFactory, Movies) {
       $scope.movies = [];
       $scope.movieGroups = [];
+      $scope.showSortDirection = true;
       $scope.beforeSortLoad = function() {
         $scope.movies = [];
         return $scope.pagination.page = 1;
@@ -30,6 +31,23 @@
           $scope.paginationAfterLoad(Movies.perPage, data.total);
         });
       };
+    }
+  ]);
+
+  app.controller("MovieGenresController", [
+    "$scope", "$rootScope", "NavbarFactory", "Genres", function($scope, $rootScope, NavbarFactory, Genres) {
+      $scope.type = "movies";
+      $scope.genres = [];
+      $scope.genreGroups = [];
+      $rootScope.$broadcast("topbar.loading", true);
+      return Genres.all("movie").then(function(data) {
+        $rootScope.$broadcast("topbar.loading", false);
+        $scope.genres = data.data;
+        $scope.genreGroups = kodiRemote.array.inGroupsOf($scope.genres, 2);
+        $scope.Navbar = new NavbarFactory;
+        $scope.Navbar.addLink("/movies", "Movies");
+        return $scope.Navbar.addTitle("Genres (" + data.total + ")");
+      });
     }
   ]);
 

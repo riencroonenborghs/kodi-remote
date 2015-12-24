@@ -31,8 +31,8 @@
       $scope.visitGenres = function(type) {
         return $scope.visit(type + "/genres");
       };
-      $scope.visitGenre = function(genre) {
-        return $scope.visit("/genres/" + genre);
+      $scope.visitGenre = function(type, genre) {
+        return $scope.visit("/genres/" + type + "/" + genre);
       };
       initApp = function() {
         var whatsPlaying;

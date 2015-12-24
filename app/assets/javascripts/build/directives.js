@@ -106,11 +106,8 @@
                 current: 0
               }
             };
-            $scope.sortByTitle = function() {
-              return $scope.visit("/tvshows/");
-            };
-            $scope.sortByGenre = function() {
-              return $scope.visitGenres("tvshows");
+            $scope.sortByGenre = function(type) {
+              return $scope.visitGenres(type);
             };
             return $scope.toggleSortDirection = function() {
               $scope.sort.direction.current += 1;
