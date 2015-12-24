@@ -23,16 +23,16 @@ The extension uses websockets. See [Enabling JSON-RPC](http://kodi.wiki/view/JSO
 
 # Functions
 
-- update server settings
-- browse TV Shows and Movies libraries
-- search TV Shows and Movies libraries
-- play, stop, pause, fast forward, rewind, seek videos
+- browse, search, scan and clean libraries
+- play, stop, pause, fast forward, rewind, seek within a video
 - toggle subtitles and audio streams
-- up/down/left/right/back/select remote with home, scan library and show info buttons
+- update server settings
+- remote control with up, down, left, right, back, select, info, home, scan and clean buttons
 
 # TODO
 
-- browse by genre and year on TV Shows and Movies libraries
+- browse by recenly added on TV Shows and Movies libraries
+- browse by year on Movies libraries
 - browse Music library
 - browse files
-- playlists
+- proper playlists
