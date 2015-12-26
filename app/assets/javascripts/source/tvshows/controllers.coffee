@@ -119,3 +119,18 @@ app.controller "EpisodeController", [ "$scope", "$rootScope", "$routeParams", "E
     $scope.Navbar.addLink "/tvshows/#{$scope.episode.tvshowid}/seasons/#{$scope.episode.season}/episodes", "Season #{$scope.episode.season}"
     $scope.Navbar.addTitle "Episode #{$scope.episode.episode}: #{$scope.episode.title}"
 ]
+
+app.controller "RecentlyAddedEpisodesController", [ "$scope", "$rootScope", "$routeParams", "NavbarFactory", "Episodes",
+($scope, $rootScope, $routeParams, NavbarFactory, Episodes) ->  
+  $scope.episodes = []
+  $scope.episodeGroups = []
+
+  $rootScope.$broadcast "topbar.loading", true
+  Episodes.recentlyAdded().then (data) ->
+    $rootScope.$broadcast "topbar.loading", false
+    $scope.episodes = data.data
+    $scope.episodeGroups = kodiRemote.array.inGroupsOf $scope.episodes, 2
+    $scope.Navbar = new NavbarFactory
+    $scope.Navbar.addLink "/tvshows", "TV Shows"
+    $scope.Navbar.addTitle "Recently Added Episodes (#{data.total})"
+]

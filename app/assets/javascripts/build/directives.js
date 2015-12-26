@@ -109,6 +109,9 @@
             $scope.sortByGenre = function(type) {
               return $scope.visitGenres(type);
             };
+            $scope.sortByRecentlyAdded = function(type) {
+              return $scope.visitRecentlyAdded(type);
+            };
             return $scope.toggleSortDirection = function() {
               $scope.sort.direction.current += 1;
               if ($scope.sort.direction.current === $scope.sort.direction.methods.length) {

@@ -1,0 +1,21 @@
+<loading-screen loading="loading"></loading-screen>
+
+<navbar ng-if="!loading" model="Navbar"></navbar>
+
+<div class="md-padding" layout="column">
+  <div ng-repeat="episodeGroup in episodeGroups" layout="row">
+    <div flex="50" ng-repeat="episode in episodeGroup" layout="column" class="video pointer" ng-click="visitEpisode(episode.episodeid)" ng-mouseover="showPlayButton($event)" ng-mouseout="hidePlayButton($event)" video-buttons-events>
+      <video-buttons video="episode" visible="visible"></video-buttons>
+
+      <h5 class="center">
+        Episode {{episode.episode}} -
+        {{episode.runtime | secondsToDateTime | date:'HH:mm:ss'}}
+        
+      </h5>
+      <h2 class="center">
+        <watched-it model="episode"></watched-it>        
+        {{episode.title}}        
+      </h2>
+    </div>
+  </div>
+</div>

@@ -140,4 +140,20 @@
     }
   ]);
 
+  app.controller("RecentlyAddedEpisodesController", [
+    "$scope", "$rootScope", "$routeParams", "NavbarFactory", "Episodes", function($scope, $rootScope, $routeParams, NavbarFactory, Episodes) {
+      $scope.episodes = [];
+      $scope.episodeGroups = [];
+      $rootScope.$broadcast("topbar.loading", true);
+      return Episodes.recentlyAdded().then(function(data) {
+        $rootScope.$broadcast("topbar.loading", false);
+        $scope.episodes = data.data;
+        $scope.episodeGroups = kodiRemote.array.inGroupsOf($scope.episodes, 2);
+        $scope.Navbar = new NavbarFactory;
+        $scope.Navbar.addLink("/tvshows", "TV Shows");
+        return $scope.Navbar.addTitle("Recently Added Episodes (" + data.total + ")");
+      });
+    }
+  ]);
+
 }).call(this);

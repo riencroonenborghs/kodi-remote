@@ -54,6 +54,9 @@ app.config ($routeProvider, $locationProvider) ->
     .when "/tvshows/:tvshowid/seasons/:id/episodes",
       templateUrl: "app/views/tvshows/seasons/episodes/index.html"
       controller: "EpisodesController"
+    .when "/episodes/recently-added",
+      templateUrl: "app/views/tvshows/seasons/episodes/recently-added.html"
+      controller: "RecentlyAddedEpisodesController"
     .when "/episodes/:id",
       templateUrl: "app/views/tvshows/seasons/episodes/show.html"
       controller: "EpisodeController"
@@ -64,6 +67,9 @@ app.config ($routeProvider, $locationProvider) ->
     .when "/movies/genres",
       templateUrl: "app/views/genres/index.html"
       controller: "MovieGenresController"
+    .when "/movies/recently-added",
+      templateUrl: "app/views/movies/recently-added.html"
+      controller: "RecentlyAddedMoviesController"
     .when "/movies/:id",
       templateUrl: "app/views/movies/show.html"
       controller: "MovieController"

@@ -31,7 +31,6 @@ The extension uses websockets. See [Enabling JSON-RPC](http://kodi.wiki/view/JSO
 
 # TODO
 
-- browse by recenly added on TV Shows and Movies libraries
 - browse by year on Movies libraries
 - browse Music library
 - browse files

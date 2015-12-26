@@ -40,6 +40,11 @@ app.service "Movies", [ "Request", (Request) ->
           end: pageParams * @perPage
       return Request.fetch "VideoLibrary.GetMovies", allResultHandler, params
 
+    recentlyAdded: ->
+      params =
+        properties: properties
+      return Request.fetch "VideoLibrary.GetRecentlyAddedMovies", allResultHandler, params
+
     get: (movieId) ->
       params =
         movieid: movieId

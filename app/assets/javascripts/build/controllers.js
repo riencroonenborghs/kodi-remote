@@ -34,6 +34,9 @@
       $scope.visitGenre = function(type, genre) {
         return $scope.visit("/genres/" + type + "/" + genre);
       };
+      $scope.visitRecentlyAdded = function(type) {
+        return $scope.visit("/" + type + "/recently-added");
+      };
       initApp = function() {
         var whatsPlaying;
         $scope.toggleSearch = function() {

@@ -102,6 +102,11 @@ app.service "Episodes", [ "Request", (Request) ->
         properties: properties
       return Request.fetch "VideoLibrary.GetEpisodes", resultHandler, params
 
+    recentlyAdded: ->
+      params =
+        properties: properties
+      return Request.fetch "VideoLibrary.GetRecentlyAddedEpisodes", resultHandler, params
+
     get: (episodeId) ->
       params =
         episodeid: episodeId

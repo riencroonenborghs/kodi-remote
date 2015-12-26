@@ -34,6 +34,22 @@
     }
   ]);
 
+  app.controller("RecentlyAddedMoviesController", [
+    "$scope", "$rootScope", "NavbarFactory", "Movies", function($scope, $rootScope, NavbarFactory, Movies) {
+      $scope.movies = [];
+      $scope.movieGroups = [];
+      $rootScope.$broadcast("topbar.loading", true);
+      return Movies.recentlyAdded().then(function(data) {
+        $rootScope.$broadcast("topbar.loading", false);
+        $scope.movies = data.data;
+        $scope.movieGroups = kodiRemote.array.inGroupsOf($scope.movies, 2);
+        $scope.Navbar = new NavbarFactory;
+        $scope.Navbar.addLink("/movies", "Movies");
+        $scope.Navbar.addTitle("Recently Added (" + data.total + ")");
+      });
+    }
+  ]);
+
   app.controller("MovieGenresController", [
     "$scope", "$rootScope", "NavbarFactory", "Genres", function($scope, $rootScope, NavbarFactory, Genres) {
       $scope.type = "movies";

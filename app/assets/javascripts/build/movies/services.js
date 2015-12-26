@@ -69,6 +69,13 @@
           };
           return Request.fetch("VideoLibrary.GetMovies", allResultHandler, params);
         },
+        recentlyAdded: function() {
+          var params;
+          params = {
+            properties: properties
+          };
+          return Request.fetch("VideoLibrary.GetRecentlyAddedMovies", allResultHandler, params);
+        },
         get: function(movieId) {
           var params;
           params = {

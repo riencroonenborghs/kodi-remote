@@ -35,6 +35,23 @@ app.controller "MoviesController", [ "$scope", "$rootScope", "NavbarFactory", "M
       return
 ]
 
+app.controller "RecentlyAddedMoviesController", [ "$scope", "$rootScope", "NavbarFactory", "Movies",
+($scope, $rootScope, NavbarFactory, Movies) ->  
+  $scope.movies = []
+  $scope.movieGroups = []
+
+  $rootScope.$broadcast "topbar.loading", true
+  Movies.recentlyAdded().then (data) ->
+    $rootScope.$broadcast "topbar.loading", false
+    $scope.movies = data.data
+    $scope.movieGroups = kodiRemote.array.inGroupsOf $scope.movies, 2
+    $scope.Navbar = new NavbarFactory
+    $scope.Navbar.addLink "/movies", "Movies"
+    $scope.Navbar.addTitle "Recently Added (#{data.total})"
+    return
+]
+
+
 app.controller "MovieGenresController", [ "$scope", "$rootScope", "NavbarFactory", "Genres", ($scope, $rootScope,NavbarFactory, Genres) ->  
   $scope.type = "movies"
   $scope.genres = []

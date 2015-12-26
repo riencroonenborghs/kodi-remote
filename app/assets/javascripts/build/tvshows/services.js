@@ -171,6 +171,13 @@
           };
           return Request.fetch("VideoLibrary.GetEpisodes", resultHandler, params);
         },
+        recentlyAdded: function() {
+          var params;
+          params = {
+            properties: properties
+          };
+          return Request.fetch("VideoLibrary.GetRecentlyAddedEpisodes", resultHandler, params);
+        },
         get: function(episodeId) {
           var params;
           params = {
