@@ -16,6 +16,8 @@ app.service "Movies", [ "Request", (Request) ->
       castMember.thumbnail = kodiRemote.parseImage castMember.thumbnail
     result.moviedetails
 
+  yearsResultHandler = (result) -> return result.movies || []
+
   service = 
     perPage: 10
 
@@ -50,6 +52,23 @@ app.service "Movies", [ "Request", (Request) ->
         movieid: movieId
         properties: properties
       return Request.fetch "VideoLibrary.GetMovieDetails", getResultHandler, params
+
+    years: -> 
+      params =
+        properties: ["year"]
+      return Request.fetch "VideoLibrary.GetMovies", yearsResultHandler, params
+
+    year: (year, pageParams = 1) -> 
+      params =
+        properties: properties
+        filter:
+          field: "year"
+          operator: "is"
+          value: "#{year}"
+        limits:
+            start: (pageParams - 1) * @perPage
+            end: pageParams * @perPage
+      return Request.fetch "VideoLibrary.GetMovies", allResultHandler, params
     
   service
 ]

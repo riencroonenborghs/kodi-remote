@@ -71,6 +71,7 @@ app.directive "sortable", [->
 
     $scope.sortByGenre = (type) -> $scope.visitGenres(type)
     $scope.sortByRecentlyAdded = (type) -> $scope.visitRecentlyAdded(type)
+    $scope.sortByYear = -> $scope.visitYears()
 
     $scope.toggleSortDirection = ->
       $scope.sort.direction.current += 1

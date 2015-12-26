@@ -81,3 +81,45 @@ app.controller "MovieController", [ "$scope", "$rootScope", "$routeParams", "Mov
     $scope.Navbar.addLink "/movies", "Movies"
     $scope.Navbar.addTitle $scope.movie.title
 ]
+
+app.controller "MovieYearsController", [ "$scope", "$rootScope", "Movies", "NavbarFactory", ($scope, $rootScope, Movies, NavbarFactory) ->
+  $scope.years = []
+
+  $rootScope.$broadcast "topbar.loading", true
+  Movies.years().then (data) ->
+    $rootScope.$broadcast "topbar.loading", false
+    $scope.Navbar = new NavbarFactory
+    $scope.Navbar.addLink "/movies", "Movies"
+    $scope.Navbar.addTitle "By Year"
+    years = for movie in data.data
+      movie.year
+    $scope.years = $.unique(years).sort().reverse()
+    $scope.yearGroups = kodiRemote.array.inGroupsOf $scope.years, 5
+]
+
+app.controller "MovieYearController", [ "$scope", "$rootScope", "$routeParams", "Movies", "NavbarFactory", ($scope, $rootScope, $routeParams, Movies, NavbarFactory) ->
+  year = parseInt $routeParams.year
+
+  $scope.movies = []
+  $scope.movieGroups = []
+
+  # autoScrollPaginate directive
+  # - sets $scope.pagination hash
+  # - uses $scope.paginationAfterLoad to calculate $scope.pagination.more
+  # - uses $scope.loading
+
+  $rootScope.$broadcast "topbar.loading", true
+  $scope.load = ->
+    $scope.loading = true
+    Movies.year(year, $scope.pagination.page).then (data) ->
+      console.debug data
+      $rootScope.$broadcast "topbar.loading", false
+      $scope.loading = false
+      for movie in data.data
+        $scope.movies.push movie
+      $scope.movieGroups = kodiRemote.array.inGroupsOf $scope.movies, 2
+      $scope.Navbar = new NavbarFactory
+      $scope.Navbar.addLink "/movies", "Movies"
+      $scope.Navbar.addLink "/movies/years", "By Year"
+      $scope.Navbar.addTitle "#{year} (#{data.total})"
+]

@@ -47,6 +47,12 @@
     }).when("/movies/recently-added", {
       templateUrl: "app/views/movies/recently-added.html",
       controller: "RecentlyAddedMoviesController"
+    }).when("/movies/years", {
+      templateUrl: "app/views/movies/years/index.html",
+      controller: "MovieYearsController"
+    }).when("/movies/years/:year", {
+      templateUrl: "app/views/movies/years/show.html",
+      controller: "MovieYearController"
     }).when("/movies/:id", {
       templateUrl: "app/views/movies/show.html",
       controller: "MovieController"

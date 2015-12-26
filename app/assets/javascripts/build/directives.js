@@ -112,6 +112,9 @@
             $scope.sortByRecentlyAdded = function(type) {
               return $scope.visitRecentlyAdded(type);
             };
+            $scope.sortByYear = function() {
+              return $scope.visitYears();
+            };
             return $scope.toggleSortDirection = function() {
               $scope.sort.direction.current += 1;
               if ($scope.sort.direction.current === $scope.sort.direction.methods.length) {

@@ -14,13 +14,15 @@ app.controller "AppController", [ "$scope", "$rootScope", "$interval", "$timeout
   $scope.visit = (path) ->
     $scope.showSearch = false
     $location.path path
-  $scope.visitSeasons   = (tvShowId) -> $scope.visit "/tvshows/#{tvShowId}/seasons"
-  $scope.visitEpisodes  = (tvShowId, seasonId) -> $scope.visit "/tvshows/#{tvShowId}/seasons/#{seasonId}/episodes"
-  $scope.visitEpisode   = (episodeId) -> $scope.visit "/episodes/#{episodeId}"
-  $scope.visitMovie     = (movieId) -> $scope.visit "/movies/#{movieId}"
-  $scope.visitGenres    = (type) -> $scope.visit "#{type}/genres"
-  $scope.visitGenre     = (type, genre) -> $scope.visit "/genres/#{type}/#{genre}"
-  $scope.visitRecentlyAdded = (type) -> $scope.visit "/#{type}/recently-added"
+  $scope.visitSeasons         = (tvShowId) -> $scope.visit "/tvshows/#{tvShowId}/seasons"
+  $scope.visitEpisodes        = (tvShowId, seasonId) -> $scope.visit "/tvshows/#{tvShowId}/seasons/#{seasonId}/episodes"
+  $scope.visitEpisode         = (episodeId) -> $scope.visit "/episodes/#{episodeId}"
+  $scope.visitMovie           = (movieId) -> $scope.visit "/movies/#{movieId}"
+  $scope.visitGenres          = (type) -> $scope.visit "#{type}/genres"
+  $scope.visitGenre           = (type, genre) -> $scope.visit "/genres/#{type}/#{genre}"
+  $scope.visitRecentlyAdded   = (type) -> $scope.visit "/#{type}/recently-added"
+  $scope.visitYears           = -> $scope.visit "/movies/years"
+  $scope.visitYear            = (year) -> $scope.visit "/movies/years/#{year}"
 
   # init the app
   # search, location changes, remote, what's playing interval

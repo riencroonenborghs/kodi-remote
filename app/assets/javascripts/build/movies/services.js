@@ -6,7 +6,7 @@
 
   app.service("Movies", [
     "Request", function(Request) {
-      var allResultHandler, getResultHandler, properties, service;
+      var allResultHandler, getResultHandler, properties, service, yearsResultHandler;
       properties = ["title", "genre", "year", "rating", "director", "tagline", "plot", "plotoutline", "playcount", "writer", "studio", "mpaa", "cast", "imdbnumber", "runtime", "thumbnail", "resume"];
       allResultHandler = function(result) {
         var i, len, movie, ref;
@@ -28,6 +28,9 @@
           castMember.thumbnail = kodiRemote.parseImage(castMember.thumbnail);
         }
         return result.moviedetails;
+      };
+      yearsResultHandler = function(result) {
+        return result.movies || [];
       };
       service = {
         perPage: 10,
@@ -83,6 +86,32 @@
             properties: properties
           };
           return Request.fetch("VideoLibrary.GetMovieDetails", getResultHandler, params);
+        },
+        years: function() {
+          var params;
+          params = {
+            properties: ["year"]
+          };
+          return Request.fetch("VideoLibrary.GetMovies", yearsResultHandler, params);
+        },
+        year: function(year, pageParams) {
+          var params;
+          if (pageParams == null) {
+            pageParams = 1;
+          }
+          params = {
+            properties: properties,
+            filter: {
+              field: "year",
+              operator: "is",
+              value: "" + year
+            },
+            limits: {
+              start: (pageParams - 1) * this.perPage,
+              end: pageParams * this.perPage
+            }
+          };
+          return Request.fetch("VideoLibrary.GetMovies", allResultHandler, params);
         }
       };
       return service;

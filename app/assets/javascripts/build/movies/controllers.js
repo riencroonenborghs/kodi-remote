@@ -83,4 +83,59 @@
     }
   ]);
 
+  app.controller("MovieYearsController", [
+    "$scope", "$rootScope", "Movies", "NavbarFactory", function($scope, $rootScope, Movies, NavbarFactory) {
+      $scope.years = [];
+      $rootScope.$broadcast("topbar.loading", true);
+      return Movies.years().then(function(data) {
+        var movie, years;
+        $rootScope.$broadcast("topbar.loading", false);
+        $scope.Navbar = new NavbarFactory;
+        $scope.Navbar.addLink("/movies", "Movies");
+        $scope.Navbar.addTitle("By Year");
+        years = (function() {
+          var i, len, ref, results;
+          ref = data.data;
+          results = [];
+          for (i = 0, len = ref.length; i < len; i++) {
+            movie = ref[i];
+            results.push(movie.year);
+          }
+          return results;
+        })();
+        $scope.years = $.unique(years).sort().reverse();
+        return $scope.yearGroups = kodiRemote.array.inGroupsOf($scope.years, 5);
+      });
+    }
+  ]);
+
+  app.controller("MovieYearController", [
+    "$scope", "$rootScope", "$routeParams", "Movies", "NavbarFactory", function($scope, $rootScope, $routeParams, Movies, NavbarFactory) {
+      var year;
+      year = parseInt($routeParams.year);
+      $scope.movies = [];
+      $scope.movieGroups = [];
+      $rootScope.$broadcast("topbar.loading", true);
+      return $scope.load = function() {
+        $scope.loading = true;
+        return Movies.year(year, $scope.pagination.page).then(function(data) {
+          var i, len, movie, ref;
+          console.debug(data);
+          $rootScope.$broadcast("topbar.loading", false);
+          $scope.loading = false;
+          ref = data.data;
+          for (i = 0, len = ref.length; i < len; i++) {
+            movie = ref[i];
+            $scope.movies.push(movie);
+          }
+          $scope.movieGroups = kodiRemote.array.inGroupsOf($scope.movies, 2);
+          $scope.Navbar = new NavbarFactory;
+          $scope.Navbar.addLink("/movies", "Movies");
+          $scope.Navbar.addLink("/movies/years", "By Year");
+          return $scope.Navbar.addTitle(year + " (" + data.total + ")");
+        });
+      };
+    }
+  ]);
+
 }).call(this);

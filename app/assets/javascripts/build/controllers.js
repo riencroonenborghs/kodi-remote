@@ -37,6 +37,12 @@
       $scope.visitRecentlyAdded = function(type) {
         return $scope.visit("/" + type + "/recently-added");
       };
+      $scope.visitYears = function() {
+        return $scope.visit("/movies/years");
+      };
+      $scope.visitYear = function(year) {
+        return $scope.visit("/movies/years/" + year);
+      };
       initApp = function() {
         var whatsPlaying;
         $scope.toggleSearch = function() {

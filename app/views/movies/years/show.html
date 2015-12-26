@@ -1,0 +1,7 @@
+<div auto-scroll-paginate>
+  <loading-screen loading="loading"></loading-screen>
+
+  <navbar ng-if="!loading" model="Navbar"></navbar>
+
+  <ng-include src="'app/views/movies/_movies.html'"></ng-include>
+</div>

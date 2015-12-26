@@ -1,0 +1,13 @@
+<loading-screen loading="loading"></loading-screen>
+
+<navbar ng-if="!loading" model="Navbar"></navbar>
+
+<div class="md-padding" layout="column">
+  <div ng-repeat="yearGroup in yearGroups" layout="row">
+    <div flex="20" ng-repeat="year in yearGroup" layout="column" class="video pointer" ng-click="visitYear(year)">
+      <h2 class="center">
+        {{year}}
+      </h2>
+    </div>
+  </div>
+</div>
