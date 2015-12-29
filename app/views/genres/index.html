@@ -1,10 +1,14 @@
 <loading-screen loading="loading"></loading-screen>
 
-<navbar ng-if="!loading" model="Navbar"></navbar>
+<div sortable layout="row" ng-if="!loading">
+  <navbar model="Navbar"></navbar>
+  <div flex></div>
+  <ng-include ng-if="genreType == 'tvshows'" src="'app/views/tvshows/_menu.html'"></ng-include>
+</div>
 
 <div class="md-padding" layout="column">
   <div ng-repeat="genreGroup in genreGroups" layout="row">
-    <div flex="50" ng-repeat="genre in genreGroup" layout="column" class="video pointer" ng-click="visitGenre(type, genre.title)">
+    <div flex="50" ng-repeat="genre in genreGroup" layout="column" class="video pointer" ng-click="visitGenre(genreType, genre.title)">
       <h2 class="center">
         {{genre.title}}
       </h2>

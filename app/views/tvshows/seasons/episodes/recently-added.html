@@ -1,8 +1,12 @@
 <loading-screen loading="loading"></loading-screen>
 
-<navbar ng-if="!loading" model="Navbar"></navbar>
-
-<div class="md-padding" layout="column">
+<div sortable layout="row" ng-if="!loading">
+  <navbar model="Navbar"></navbar>
+  <div flex></div>
+  <ng-include src="'app/views/tvshows/_menu.html'"></ng-include>
+</div>
+  
+<div class="md-padding" layout="column" ng-if="!loading">
   <div ng-repeat="episodeGroup in episodeGroups" layout="row">
     <div flex="50" ng-repeat="episode in episodeGroup" layout="column" class="video pointer" ng-click="visitEpisode(episode.episodeid)" ng-mouseover="showPlayButton($event)" ng-mouseout="hidePlayButton($event)" video-buttons-events>
       <div ng-include="'app/views/tvshows/seasons/episodes/_episode.html'"></div>

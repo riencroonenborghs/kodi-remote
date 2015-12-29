@@ -18,10 +18,14 @@ app.controller "AppController", [ "$scope", "$rootScope", "$interval", "$timeout
   $scope.visitEpisode         = (episodeId) -> $scope.visit "/episodes/#{episodeId}"
   $scope.visitMovie           = (movieId) -> $scope.visit "/movies/#{movieId}"
   $scope.visitGenres          = (type) -> $scope.visit "#{type}/genres"
-  $scope.visitGenre           = (type, genre) -> $scope.visit "/genres/#{type}/#{genre}"
+  $scope.visitGenre           = (type, genre) -> 
+    console.debug "visitGenre"
+    console.debug "/genres/#{type}/#{genre}" 
+    $scope.visit "/genres/#{type}/#{genre}"
   $scope.visitRecentlyAdded   = (type) -> $scope.visit "/#{type}/recently-added"
   $scope.visitYears           = -> $scope.visit "/movies/years"
   $scope.visitYear            = (year) -> $scope.visit "/movies/years/#{year}"
+  $scope.visitRating          = (type) -> $scope.visit "#{type}/rating"
 
   # init the app
   # search, location changes, remote, what's playing interval

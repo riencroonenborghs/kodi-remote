@@ -116,6 +116,9 @@
             $scope.sortByYear = function() {
               return $scope.visitYears();
             };
+            $scope.sortByRating = function(type) {
+              return $scope.visitRating(type);
+            };
             return $scope.toggleSortDirection = function() {
               $scope.sort.direction.current += 1;
               if ($scope.sort.direction.current === $scope.sort.direction.methods.length) {

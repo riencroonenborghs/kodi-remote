@@ -49,12 +49,12 @@
           };
           return Request.fetch("VideoLibrary.GetGenres", allResultHandler, params);
         },
-        get: function(type, genre) {
+        get: function(type, genre, sortDirection) {
           var params;
           params = {
             sort: {
               method: "title",
-              order: "ascending"
+              order: sortDirection
             },
             filter: {
               field: "genre",

@@ -15,8 +15,10 @@ app.controller "TvShowsController", [ "$scope", "$rootScope", "NavbarFactory", "
   # sortable directive
   # - set $scope.sortParams before load
   # - call $scope.beforeSortLoad before load
+  $scope.showGenre = true
+  $scope.showRating = true
+  $scope.showRecentlyAdded = true
   $scope.showSortDirection = true
-
   $scope.beforeSortLoad = ->
     $scope.tvShows = []
     $scope.pagination.page = 1
@@ -26,7 +28,7 @@ app.controller "TvShowsController", [ "$scope", "$rootScope", "NavbarFactory", "
   # - uses $scope.paginationAfterLoad to calculate $scope.pagination.more
 
   $scope.load = ->
-    $rootScope.$broadcast "topbar.loading", true
+    $rootScope.$broadcast "topbar.loading", true    
     TvShows.all($scope.pagination.page, $scope.sortParams).then (data) ->
       $rootScope.$broadcast "topbar.loading", false
       for tvShow in data.data
@@ -40,8 +42,11 @@ app.controller "TvShowsController", [ "$scope", "$rootScope", "NavbarFactory", "
       return
 ]
 
-app.controller "TvShowGenresController", [ "$scope", "$rootScope", "NavbarFactory", "Genres", ($scope, $rootScope,NavbarFactory, Genres) ->  
-  $scope.type = "tvshows"
+app.controller "TvShowGenresController", [ "$scope", "$rootScope", "NavbarFactory", "Genres", ($scope, $rootScope,NavbarFactory, Genres) ->    
+  $scope.showRating = true
+  $scope.showRecentlyAdded = true
+  
+  $scope.genreType = "tvshows"
   $scope.genres = []
   $scope.genreGroups = []
 
@@ -125,6 +130,9 @@ app.controller "RecentlyAddedEpisodesController", [ "$scope", "$rootScope", "$ro
   $scope.episodes = []
   $scope.episodeGroups = []
 
+  $scope.showGenre = true
+  $scope.showRating = true
+
   $rootScope.$broadcast "topbar.loading", true
   Episodes.recentlyAdded().then (data) ->
     $rootScope.$broadcast "topbar.loading", false
@@ -132,5 +140,46 @@ app.controller "RecentlyAddedEpisodesController", [ "$scope", "$rootScope", "$ro
     $scope.episodeGroups = kodiRemote.array.inGroupsOf $scope.episodes, 2
     $scope.Navbar = new NavbarFactory
     $scope.Navbar.addLink "/tvshows", "TV Shows"
+    $scope.Navbar.addTitle "Episodes"
     $scope.Navbar.addTitle "Recently Added (#{data.total})"
+]
+
+app.controller "TvShowsRatingController", [ "$scope", "$rootScope", "NavbarFactory", "TvShows", ($scope, $rootScope, NavbarFactory, TvShows) ->  
+  $scope.tvShows = []  
+  $scope.tvShowGroups = []
+
+  # sortable directive
+  # - set $scope.sortParams before load
+  # - call $scope.beforeSortLoad before load
+  $scope.showGenre = true
+  $scope.showRecentlyAdded = true
+  $scope.showSortDirection = true
+  $scope.beforeSortLoad = ->
+    $scope.tvShows = []
+    $scope.pagination.page = 1
+
+  # autoScrollPaginate directive
+  # - sets $scope.pagination hash
+  # - uses $scope.paginationAfterLoad to calculate $scope.pagination.more
+
+  $scope.load = ->
+    $rootScope.$broadcast "topbar.loading", true
+
+    $scope.sortParams =
+      by: "rating"
+      direction: "ascending"
+    $scope.sortParams.direction = $scope.sort.direction.methods[$scope.sort.direction.current] if $scope.sort
+
+    TvShows.all($scope.pagination.page, $scope.sortParams).then (data) ->
+      $rootScope.$broadcast "topbar.loading", false
+      for tvShow in data.data
+        $scope.tvShows.push tvShow
+
+      $scope.tvShowGroups = kodiRemote.array.inGroupsOf $scope.tvShows, 2      
+
+      $scope.Navbar = new NavbarFactory
+      $scope.Navbar.addLink "/tvshows", "TV Shows (#{data.total})"
+      $scope.Navbar.addTitle "Rating"
+      $scope.paginationAfterLoad TvShows.perPage, data.total
+      return
 ]

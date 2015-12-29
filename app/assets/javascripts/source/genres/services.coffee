@@ -29,11 +29,11 @@ app.service "Genres", [ "Request", (Request) ->
           order: "ascending"
       return Request.fetch "VideoLibrary.GetGenres", allResultHandler, params
 
-    get: (type, genre) ->
+    get: (type, genre, sortDirection) ->
       params =
         sort:
           method: "title"
-          order: "ascending"
+          order: sortDirection
         filter:
             field: "genre"
             operator: "is"

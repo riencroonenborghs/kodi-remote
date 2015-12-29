@@ -141,4 +141,39 @@
     }
   ]);
 
+  app.controller("MoviesRatingController", [
+    "$scope", "$rootScope", "NavbarFactory", "Movies", function($scope, $rootScope, NavbarFactory, Movies) {
+      var sortParams;
+      $scope.movies = [];
+      $scope.movieGroups = [];
+      $scope.beforeSortLoad = function() {
+        $scope.movies = [];
+        return $scope.pagination.page = 1;
+      };
+      sortParams = {
+        by: "rating",
+        direction: "descending"
+      };
+      $rootScope.$broadcast("topbar.loading", true);
+      return $scope.load = function() {
+        $scope.loading = true;
+        return Movies.all($scope.pagination.page, sortParams).then(function(data) {
+          var i, len, movie, ref;
+          $rootScope.$broadcast("topbar.loading", false);
+          $scope.loading = false;
+          ref = data.data;
+          for (i = 0, len = ref.length; i < len; i++) {
+            movie = ref[i];
+            $scope.movies.push(movie);
+          }
+          $scope.movieGroups = kodiRemote.array.inGroupsOf($scope.movies, 2);
+          $scope.Navbar = new NavbarFactory;
+          $scope.Navbar.addLink("/movies", "Movies (" + data.total + ")");
+          $scope.Navbar.addTitle("Rating");
+          $scope.paginationAfterLoad(Movies.perPage, data.total);
+        });
+      };
+    }
+  ]);
+
 }).call(this);

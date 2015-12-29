@@ -26,6 +26,9 @@
     }).when("/tvshows/genres", {
       templateUrl: "app/views/genres/index.html",
       controller: "TvShowGenresController"
+    }).when("/tvshows/rating", {
+      templateUrl: "app/views/tvshows/rating.html",
+      controller: "TvShowsRatingController"
     }).when("/tvshows/:id/seasons", {
       templateUrl: "app/views/tvshows/seasons/index.html",
       controller: "SeasonsController"
@@ -44,6 +47,9 @@
     }).when("/movies/genres", {
       templateUrl: "app/views/genres/index.html",
       controller: "MovieGenresController"
+    }).when("/movies/rating", {
+      templateUrl: "app/views/movies/rating.html",
+      controller: "MoviesRatingController"
     }).when("/movies/recently-added", {
       templateUrl: "app/views/movies/recently-added.html",
       controller: "RecentlyAddedMoviesController"
