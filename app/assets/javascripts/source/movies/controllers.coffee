@@ -67,8 +67,8 @@ app.controller "MovieGenresController", [ "$scope", "$rootScope", "NavbarFactory
     $scope.Navbar.addTitle "Genres (#{data.total})"  
 ]
 
-app.controller "MovieController", [ "$scope", "$rootScope", "$routeParams", "Movies", "NavbarFactory", 
-($scope, $rootScope, $routeParams, Movies, NavbarFactory) ->
+app.controller "MovieController", [ "$scope", "$rootScope", "$routeParams", "Movies", "NavbarFactory", "Files",
+($scope, $rootScope, $routeParams, Movies, NavbarFactory, Files) ->
   movieId = parseInt $routeParams.id
 
   $scope.movie = null
@@ -80,6 +80,10 @@ app.controller "MovieController", [ "$scope", "$rootScope", "$routeParams", "Mov
     $scope.Navbar = new NavbarFactory
     $scope.Navbar.addLink "/movies", "Movies"
     $scope.Navbar.addTitle $scope.movie.title
+
+    console.debug "asd"
+    Files.prepareDownload($scope.movie.file).then (fileData) ->
+      console.debug fileData
 ]
 
 app.controller "MovieYearsController", [ "$scope", "$rootScope", "Movies", "NavbarFactory", ($scope, $rootScope, Movies, NavbarFactory) ->
@@ -90,7 +94,7 @@ app.controller "MovieYearsController", [ "$scope", "$rootScope", "Movies", "Navb
     $rootScope.$broadcast "topbar.loading", false
     $scope.Navbar = new NavbarFactory
     $scope.Navbar.addLink "/movies", "Movies"
-    $scope.Navbar.addTitle "By Year"
+    $scope.Navbar.addTitle "years"
     years = for movie in data.data
       movie.year
     $scope.years = $.unique(years).sort().reverse()
@@ -112,7 +116,6 @@ app.controller "MovieYearController", [ "$scope", "$rootScope", "$routeParams", 
   $scope.load = ->
     $scope.loading = true
     Movies.year(year, $scope.pagination.page).then (data) ->
-      console.debug data
       $rootScope.$broadcast "topbar.loading", false
       $scope.loading = false
       for movie in data.data

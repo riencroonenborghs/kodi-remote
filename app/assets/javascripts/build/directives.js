@@ -103,6 +103,7 @@
               direction: {
                 icons: ["sort_ascending", "sort_descending"],
                 methods: ["ascending", "descending"],
+                labels: ["Ascending", "Descending"],
                 current: 0
               }
             };

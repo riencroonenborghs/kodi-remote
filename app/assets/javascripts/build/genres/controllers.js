@@ -31,7 +31,6 @@
       $scope.movieGroups = [];
       $rootScope.$broadcast("topbar.loading", true);
       return Genres.get("movies", genre).then(function(data) {
-        console.debug(data);
         $rootScope.$broadcast("topbar.loading", false);
         $scope.movies = data.data;
         $scope.movieGroups = kodiRemote.array.inGroupsOf($scope.movies, 2);

@@ -4,18 +4,32 @@
 
   <div layout="row" ng-if="!loading">
     <navbar model="Navbar"></navbar>
-    <div flex></div>  
-    <div>
-      <md-button aria-label="Sort by genre" class="md-icon-button sort-button" ng-click="sortByGenre('tvshows')">
-        <ng-md-icon icon="mood" size="24" style="fill: rgb(33,150,243);"></ng-md-icon>
+    <div flex></div>
+    <md-menu md-position-mode="target-right target">
+      <md-button aria-label="Menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+        <ng-md-icon icon="more_vert" size="24" style="fill: rgb(33,150,243);"></ng-md-icon>
       </md-button>
-      <md-button aria-label="Sort by recently added" class="md-icon-button sort-button" ng-click="sortByRecentlyAdded('episodes')">
-        <ng-md-icon icon="my_library_add" size="24" style="fill: rgb(33,150,243);"></ng-md-icon>                
-      </md-button>
-      <md-button aria-label="Sorting" class="md-icon-button sort-button" ng-click="toggleSortDirection()" ng-if="showSortDirection">
-        <ng-md-icon icon="{{sort.direction.icons[sort.direction.current]}}" size="24" style="fill: rgb(33,150,243);"></ng-md-icon>
-      </md-button>
-    </div>
+      <md-menu-content width="4">
+        <md-menu-item>
+          <md-button aria-label="Sort by genre" class="navbar-menu-button" ng-click="sortByGenre('tvshows')">
+            <ng-md-icon icon="mood" style="fill: rgb(33,150,243);"></ng-md-icon>
+            Genres
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>  
+          <md-button aria-label="Sort by recently added" class="navbar-menu-button" ng-click="sortByRecentlyAdded('episodes')">
+            <ng-md-icon icon="my_library_add" style="fill: rgb(33,150,243);"></ng-md-icon>                
+            Recently Added
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button aria-label="Sorting" class="navbar-menu-button" ng-click="toggleSortDirection()" ng-if="showSortDirection">
+            <ng-md-icon icon="{{sort.direction.icons[sort.direction.current]}}" style="fill: rgb(33,150,243);"></ng-md-icon>
+            Sort {{sort.direction.labels[sort.direction.current]}}
+          </md-button>
+        </md-menu-item>    
+      </md-menu-content>
+    </md-menu>
   </div>
 
   <ng-include src="'app/views/tvshows/_tvshows.html'"></ng-include>

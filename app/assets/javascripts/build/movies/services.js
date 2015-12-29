@@ -7,7 +7,7 @@
   app.service("Movies", [
     "Request", function(Request) {
       var allResultHandler, getResultHandler, properties, service, yearsResultHandler;
-      properties = ["title", "genre", "year", "rating", "director", "tagline", "plot", "plotoutline", "playcount", "writer", "studio", "mpaa", "cast", "imdbnumber", "runtime", "thumbnail", "resume"];
+      properties = ["title", "genre", "year", "rating", "director", "tagline", "plot", "plotoutline", "playcount", "writer", "studio", "mpaa", "cast", "imdbnumber", "runtime", "thumbnail", "resume", "file"];
       allResultHandler = function(result) {
         var i, len, movie, ref;
         ref = result.movies || [];

@@ -40,7 +40,6 @@
         },
         addMovie: function(movieId) {
           var params;
-          console.debug("addMovie " + movieId);
           params = [
             this.playlistId, {
               movieid: movieId

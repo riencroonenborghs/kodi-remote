@@ -7,7 +7,6 @@ app.controller "AppController", [ "$scope", "$rootScope", "$interval", "$timeout
 
   $scope.loading = true
   $scope.$on "topbar.loading", (event, value) ->
-    console.debug "topbar.loading #{value}"
     $scope.loading = value
 
   # visits

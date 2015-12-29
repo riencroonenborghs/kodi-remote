@@ -5,13 +5,26 @@
 
   <div class="md-padding">
     <h3>{{movie.tagline}}</h3>
-    <div>
+
+    <div style="padding-bottom: 16px;">
       <span class="genre pointer" ng-repeat="genre in movie.genre" ng-click="visitGenre('movies', genre); $event.stopPropagation();">{{genre}}</span>
-      {{movie.runtime | secondsToDateTime | date:'HH:mm:ss'}}
     </div>
+
     <div layout="row">
-      <p class="plot" flex>{{movie.plot}}</p>
-      <rating flex="25" size="big" rating="movie.rating"></rating>
+      <div flex="40">
+        <img src="{{movie.thumbnail}}" class="video-avatar" ng-if="movie.thumbnail" />
+        <empty-avatar ng-if="!movie.thumbnail"></empty-avatar>
+      </div>
+      <div class="plot" flex>
+        <div>{{movie.plot}}</div>
+        <span ng-if="movie.runtime">Runtime: {{movie.runtime | secondsToDateTime | date:'HH:mm:ss'}}</span>
+      </div>
+      <div flex="25">
+        <rating size="big" rating="movie.rating"></rating>  
+        <a href="{{movie.file}}">
+          <ng-md-icon icon="file_download" size="48" style="fill: rgb(33,150,243);"></ng-md-icon>
+        </a>
+      </div>
     </div>    
   </div>
 
@@ -19,13 +32,6 @@
     <md-tab label="Overview">
 
       <md-list>
-        <md-list-item>
-          <div class="md-list-item-text">
-            <h4>Plot</h4>
-            <p>{{movie.plot}}</p>
-          </div>
-        </md-list-item>
-        
         <md-list-item>
           <div class="md-list-item-text">
             <h4>Director</h4>

@@ -27,7 +27,6 @@ app.controller "MovieGenreController", [ "$scope", "$rootScope", "$routeParams",
 
   $rootScope.$broadcast "topbar.loading", true
   Genres.get("movies", genre).then (data) ->
-    console.debug data
     $rootScope.$broadcast "topbar.loading", false
     $scope.movies = data.data
     $scope.movieGroups = kodiRemote.array.inGroupsOf $scope.movies, 2

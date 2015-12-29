@@ -9,7 +9,6 @@
       var checkServer, initApp, loadSettings, loadSettingsInterval;
       $scope.loading = true;
       $scope.$on("topbar.loading", function(event, value) {
-        console.debug("topbar.loading " + value);
         return $scope.loading = value;
       });
       $scope.visit = function(path) {

@@ -67,6 +67,7 @@ app.directive "sortable", [->
       direction:
         icons: ["sort_ascending", "sort_descending"]
         methods: ["ascending", "descending"]
+        labels: ["Ascending", "Descending"]
         current: 0
 
     $scope.sortByGenre = (type) -> $scope.visitGenres(type)

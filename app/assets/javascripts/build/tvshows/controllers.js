@@ -151,7 +151,7 @@
         $scope.episodeGroups = kodiRemote.array.inGroupsOf($scope.episodes, 2);
         $scope.Navbar = new NavbarFactory;
         $scope.Navbar.addLink("/tvshows", "TV Shows");
-        return $scope.Navbar.addTitle("Recently Added Episodes (" + data.total + ")");
+        return $scope.Navbar.addTitle("Recently Added (" + data.total + ")");
       });
     }
   ]);

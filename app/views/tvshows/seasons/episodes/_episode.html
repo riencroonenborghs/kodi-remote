@@ -1,0 +1,10 @@
+<video-buttons video="episode" visible="visible"></video-buttons>
+
+<h2 class="center">
+  <watched-it model="episode"></watched-it>        
+  {{episode.title}}        
+</h2>
+<h5 class="center">
+  Episode {{episode.episode}} -
+  {{episode.runtime | secondsToDateTime | date:'HH:mm:ss'}}
+</h5>

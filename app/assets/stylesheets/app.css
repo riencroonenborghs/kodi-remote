@@ -12,6 +12,11 @@ html, body { width: 500px; }
 /*.episode-avatar { min-width: 40px; min-height: 40px; }*/
 
 /*----- icon buttons -----*/
+.topbar-button svg { position: relative; top: 4px; }
+.topbar-menu-button svg { position: relative; top: 6px; }
+.navbar-menu-button svg { position: relative; top: 6px; }
+.navbar-menu-button { color: rgb(33,150,243); }
+
 .play-button svg,
 .stop-button svg,
 .rew-button svg,
@@ -93,7 +98,6 @@ md-list-item:not(:last-child) { padding-bottom: 8px !important; border-bottom: 1
 .rating.big svg { top: 4px; }
 .plot { text-align: justify; padding-right: 16px; }
 
-
 .hoverable-video-avatar { position: relative; }
 .hoverable-video-avatar .buttons { position: absolute; top: 8px; left: 32px; -z-index: 10; }
 
@@ -103,6 +107,8 @@ md-list-item:not(:last-child) { padding-bottom: 8px !important; border-bottom: 1
 
 
 md-toast { background-color: rgba(33,150,243,1); }
+
+/*----- playlists  -----*/
 
 .playlist { margin-bottom: 16px; }
 .playlist-item { padding-top: 8px; }

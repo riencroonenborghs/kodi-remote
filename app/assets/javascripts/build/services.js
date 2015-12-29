@@ -98,4 +98,20 @@
     }
   ]);
 
+  app.service("Files", [
+    "Request", function(Request) {
+      var prepareDownloadResultHandler, service;
+      prepareDownloadResultHandler = function(result) {
+        return result;
+      };
+      return service = {
+        prepareDownload: function(file) {
+          var params;
+          params = [file];
+          return Request.fetch("Files.PrepareDownload", prepareDownloadResultHandler, params);
+        }
+      };
+    }
+  ]);
+
 }).call(this);

@@ -132,5 +132,5 @@ app.controller "RecentlyAddedEpisodesController", [ "$scope", "$rootScope", "$ro
     $scope.episodeGroups = kodiRemote.array.inGroupsOf $scope.episodes, 2
     $scope.Navbar = new NavbarFactory
     $scope.Navbar.addLink "/tvshows", "TV Shows"
-    $scope.Navbar.addTitle "Recently Added Episodes (#{data.total})"
+    $scope.Navbar.addTitle "Recently Added (#{data.total})"
 ]

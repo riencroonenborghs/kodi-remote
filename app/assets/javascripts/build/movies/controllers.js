@@ -68,7 +68,7 @@
   ]);
 
   app.controller("MovieController", [
-    "$scope", "$rootScope", "$routeParams", "Movies", "NavbarFactory", function($scope, $rootScope, $routeParams, Movies, NavbarFactory) {
+    "$scope", "$rootScope", "$routeParams", "Movies", "NavbarFactory", "Files", function($scope, $rootScope, $routeParams, Movies, NavbarFactory, Files) {
       var movieId;
       movieId = parseInt($routeParams.id);
       $scope.movie = null;
@@ -78,7 +78,11 @@
         $scope.movie = movieData.data;
         $scope.Navbar = new NavbarFactory;
         $scope.Navbar.addLink("/movies", "Movies");
-        return $scope.Navbar.addTitle($scope.movie.title);
+        $scope.Navbar.addTitle($scope.movie.title);
+        console.debug("asd");
+        return Files.prepareDownload($scope.movie.file).then(function(fileData) {
+          return console.debug(fileData);
+        });
       });
     }
   ]);
@@ -92,7 +96,7 @@
         $rootScope.$broadcast("topbar.loading", false);
         $scope.Navbar = new NavbarFactory;
         $scope.Navbar.addLink("/movies", "Movies");
-        $scope.Navbar.addTitle("By Year");
+        $scope.Navbar.addTitle("years");
         years = (function() {
           var i, len, ref, results;
           ref = data.data;
@@ -120,7 +124,6 @@
         $scope.loading = true;
         return Movies.year(year, $scope.pagination.page).then(function(data) {
           var i, len, movie, ref;
-          console.debug(data);
           $rootScope.$broadcast("topbar.loading", false);
           $scope.loading = false;
           ref = data.data;

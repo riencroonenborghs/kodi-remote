@@ -24,7 +24,6 @@ app.service "Playlist", [ "Request", (Request) ->
       return Request.fetch "Playlist.Add", emptyHandler, params
 
     addMovie: (movieId) -> 
-      console.debug "addMovie #{movieId}"
       params = [@playlistId, {movieid: movieId}]
       return Request.fetch "Playlist.Add", emptyHandler, params
       

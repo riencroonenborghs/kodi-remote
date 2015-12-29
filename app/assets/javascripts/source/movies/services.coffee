@@ -1,7 +1,7 @@
 app = angular.module "kodiRemote.movies.services", []
 
 app.service "Movies", [ "Request", (Request) ->
-  properties = ["title", "genre", "year", "rating", "director", "tagline", "plot", "plotoutline", "playcount", "writer", "studio", "mpaa", "cast", "imdbnumber", "runtime", "thumbnail", "resume"]
+  properties = ["title", "genre", "year", "rating", "director", "tagline", "plot", "plotoutline", "playcount", "writer", "studio", "mpaa", "cast", "imdbnumber", "runtime", "thumbnail", "resume", "file"]
 
   allResultHandler = (result) -> 
     for movie in (result.movies || [])

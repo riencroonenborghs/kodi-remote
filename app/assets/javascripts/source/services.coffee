@@ -78,3 +78,12 @@ app.service "SearchService", [ "TvShows", "Movies", (TvShows, Movies) ->
 
   service
 ]
+
+app.service "Files", [ "Request", (Request) ->
+  prepareDownloadResultHandler = (result) -> return result
+
+  service =
+    prepareDownload: (file) ->
+      params = [file]
+      return Request.fetch "Files.PrepareDownload", prepareDownloadResultHandler, params
+]

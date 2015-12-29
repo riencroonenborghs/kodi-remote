@@ -2,14 +2,16 @@
 
 <navbar model="Navbar"></navbar>
 
-<div class="md-padding">
-  <div>
+<div class="md-padding" layout="row">
+  <div flex="40">
+    <img src="{{episode.thumbnail}}" class="video-avatar" ng-if="episode.thumbnail" />
+    <empty-avatar ng-if="!episode.thumbnail"></empty-avatar>
+  </div>
+  <div class="plot" flex>
+    <div>{{episode.plot}}</div>
     <span ng-if="episode.runtime">Runtime: {{episode.runtime | secondsToDateTime | date:'HH:mm:ss'}}</span>
   </div>
-  <div layout="row">
-    <p class="plot" flex>{{episode.plot}}</p>
-    <rating flex="25" size="big" rating="episode.rating"></rating>
-  </div>  
+  <rating flex="25" size="big" rating="episode.rating"></rating>  
 </div>
 
 <md-tabs md-dynamic-height md-border-bottom>
@@ -50,11 +52,5 @@
 
   <md-tab label="Cast">
     <cast-members video="episode"></cast-members>
-  </md-tab>
-
-  <md-tab label="Images">
-    <mg-content class="md-padding">
-      <div class="center"><img src="{{episode.thumbnail}}" /></div>
-    </mg-content>
   </md-tab>
 </md-tabs>
