@@ -39,18 +39,31 @@
     "$scope", "$rootScope", "$routeParams", "Genres", "NavbarFactory", function($scope, $rootScope, $routeParams, Genres, NavbarFactory) {
       var genre;
       genre = $routeParams.genre;
+      $scope.genreType = "movies";
       $scope.movies = [];
       $scope.movieGroups = [];
-      $rootScope.$broadcast("topbar.loading", true);
-      return Genres.get("movies", genre).then(function(data) {
-        $rootScope.$broadcast("topbar.loading", false);
-        $scope.movies = data.data;
-        $scope.movieGroups = kodiRemote.array.inGroupsOf($scope.movies, 2);
-        $scope.Navbar = new NavbarFactory;
-        $scope.Navbar.addLink("/movies", "Movies");
-        $scope.Navbar.addLink("/movies/genres", "Genres");
-        return $scope.Navbar.addTitle(genre + " (" + data.total + ")");
-      });
+      $scope.showRating = true;
+      $scope.showYear = true;
+      $scope.showRecentlyAdded = true;
+      $scope.showSortDirection = true;
+      $scope.beforeSortLoad = function() {
+        return $scope.tvShows = [];
+      };
+      $scope.load = function() {
+        var sortDirection;
+        sortDirection = $scope.sort ? $scope.sort.direction.methods[$scope.sort.direction.current] : "ascending";
+        $rootScope.$broadcast("topbar.loading", true);
+        return Genres.get("movies", genre, sortDirection).then(function(data) {
+          $rootScope.$broadcast("topbar.loading", false);
+          $scope.movies = data.data;
+          $scope.movieGroups = kodiRemote.array.inGroupsOf($scope.movies, 2);
+          $scope.Navbar = new NavbarFactory;
+          $scope.Navbar.addLink("/movies", "Movies");
+          $scope.Navbar.addLink("/movies/genres", "Genres");
+          return $scope.Navbar.addTitle(genre + " (" + data.total + ")");
+        });
+      };
+      return $scope.load();
     }
   ]);
 

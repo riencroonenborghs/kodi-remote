@@ -58,9 +58,12 @@ app.service "Movies", [ "Request", (Request) ->
         properties: ["year"]
       return Request.fetch "VideoLibrary.GetMovies", yearsResultHandler, params
 
-    year: (year, pageParams = 1) -> 
+    year: (year, pageParams = 1, sortParams = {by: "label", direction: "ascending"}) -> 
       params =
         properties: properties
+        sort:
+          method: sortParams.by
+          order: sortParams.direction
         filter:
           field: "year"
           operator: "is"

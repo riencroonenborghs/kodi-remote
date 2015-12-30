@@ -94,13 +94,23 @@
           };
           return Request.fetch("VideoLibrary.GetMovies", yearsResultHandler, params);
         },
-        year: function(year, pageParams) {
+        year: function(year, pageParams, sortParams) {
           var params;
           if (pageParams == null) {
             pageParams = 1;
           }
+          if (sortParams == null) {
+            sortParams = {
+              by: "label",
+              direction: "ascending"
+            };
+          }
           params = {
             properties: properties,
+            sort: {
+              method: sortParams.by,
+              order: sortParams.direction
+            },
             filter: {
               field: "year",
               operator: "is",

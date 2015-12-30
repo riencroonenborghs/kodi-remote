@@ -41,7 +41,7 @@ app.directive "autoScrollPaginate", [ "$compile", ($compile) ->
 
     $(document).off "scroll", scrollHandler
     $(document).on "scroll", scrollHandler
-    scope.$watch "morePages", ->
+    scope.$watch "pagination.more", ->
       button.show() if scope.pagination.more
       button.hide() unless scope.pagination.more
     return

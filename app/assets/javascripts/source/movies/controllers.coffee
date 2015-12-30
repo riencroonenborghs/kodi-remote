@@ -8,6 +8,10 @@ app.controller "MoviesController", [ "$scope", "$rootScope", "NavbarFactory", "M
   # sortable directive
   # - set $scope.sortParams before load
   # - call $scope.beforeSortLoad  before load
+  $scope.showGenre = true
+  $scope.showRating = true
+  $scope.showYear = true
+  $scope.showRecentlyAdded = true
   $scope.showSortDirection = true
 
   $scope.beforeSortLoad = ->
@@ -40,6 +44,10 @@ app.controller "RecentlyAddedMoviesController", [ "$scope", "$rootScope", "Navba
   $scope.movies = []
   $scope.movieGroups = []
 
+  $scope.showGenre = true
+  $scope.showRating = true
+  $scope.showYear = true
+
   $rootScope.$broadcast "topbar.loading", true
   Movies.recentlyAdded().then (data) ->
     $rootScope.$broadcast "topbar.loading", false
@@ -53,7 +61,11 @@ app.controller "RecentlyAddedMoviesController", [ "$scope", "$rootScope", "Navba
 
 
 app.controller "MovieGenresController", [ "$scope", "$rootScope", "NavbarFactory", "Genres", ($scope, $rootScope,NavbarFactory, Genres) ->  
-  $scope.type = "movies"
+  $scope.showRating = true
+  $scope.showYear = true
+  $scope.showRecentlyAdded = true
+
+  $scope.genreType = "movies"
   $scope.genres = []
   $scope.genreGroups = []
 
@@ -87,6 +99,11 @@ app.controller "MovieController", [ "$scope", "$rootScope", "$routeParams", "Mov
 ]
 
 app.controller "MovieYearsController", [ "$scope", "$rootScope", "Movies", "NavbarFactory", ($scope, $rootScope, Movies, NavbarFactory) ->
+
+  $scope.showGenre = true
+  $scope.showRating = true
+  $scope.showRecentlyAdded = true
+  
   $scope.years = []
 
   $rootScope.$broadcast "topbar.loading", true
@@ -107,20 +124,33 @@ app.controller "MovieYearController", [ "$scope", "$rootScope", "$routeParams", 
   $scope.movies = []
   $scope.movieGroups = []
 
+  # sortable directive
+  # - set $scope.sortParams before load
+  # - call $scope.beforeSortLoad  before load
+  $scope.showGenre = true
+  $scope.showRating = true
+  $scope.showRecentlyAdded = true
+  $scope.showSortDirection = true
+
+  $scope.beforeSortLoad = ->
+    $scope.movies = []
+    $scope.pagination.page = 1
+
   # autoScrollPaginate directive
   # - sets $scope.pagination hash
   # - uses $scope.paginationAfterLoad to calculate $scope.pagination.more
   # - uses $scope.loading
 
-  $rootScope.$broadcast "topbar.loading", true
   $scope.load = ->
+    $rootScope.$broadcast "topbar.loading", true
     $scope.loading = true
-    Movies.year(year, $scope.pagination.page).then (data) ->
+    Movies.year(year, $scope.pagination.page, $scope.sortParams).then (data) ->
       $rootScope.$broadcast "topbar.loading", false
       $scope.loading = false
       for movie in data.data
         $scope.movies.push movie
       $scope.movieGroups = kodiRemote.array.inGroupsOf $scope.movies, 2
+      $scope.paginationAfterLoad Movies.perPage, data.total
       $scope.Navbar = new NavbarFactory
       $scope.Navbar.addLink "/movies", "Movies"
       $scope.Navbar.addLink "/movies/years", "By Year"
@@ -131,24 +161,33 @@ app.controller "MoviesRatingController", [ "$scope", "$rootScope", "NavbarFactor
 ($scope, $rootScope, NavbarFactory, Movies) ->  
   $scope.movies = []
   $scope.movieGroups = []
-
+  
+  # sortable directive
+  # - set $scope.sortParams before load
+  # - call $scope.beforeSortLoad  before load
+  $scope.showRating = true
+  $scope.showYear = true
+  $scope.showRecentlyAdded = true
+  $scope.showSortDirection = true
   $scope.beforeSortLoad = ->
     $scope.movies = []
     $scope.pagination.page = 1
-
-  sortParams = 
-    by: "rating"
-    direction: "descending"
 
   # autoScrollPaginate directive
   # - sets $scope.pagination hash
   # - uses $scope.paginationAfterLoad to calculate $scope.pagination.more
   # - uses $scope.loading
 
-  $rootScope.$broadcast "topbar.loading", true
   $scope.load = ->
+    $rootScope.$broadcast "topbar.loading", true
+
+    $scope.sortParams =
+      by: "rating"
+      direction: "ascending"
+    $scope.sortParams.direction = $scope.sort.direction.methods[$scope.sort.direction.current] if $scope.sort
+
     $scope.loading = true
-    Movies.all($scope.pagination.page, sortParams).then (data) ->
+    Movies.all($scope.pagination.page, $scope.sortParams).then (data) ->
       $rootScope.$broadcast "topbar.loading", false
       $scope.loading = false
       for movie in data.data

@@ -1,0 +1,37 @@
+<md-menu md-position-mode="target-right target" style="position: relative; top: 4px;">
+  <md-button aria-label="Menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+    <ng-md-icon icon="more_vert" size="24" style="fill: rgb(33,150,243);"></ng-md-icon>
+  </md-button>
+  <md-menu-content width="4">
+    <md-menu-item ng-if="showGenre">
+      <md-button aria-label="Sort by genre" class="navbar-menu-button" ng-click="sortByGenre('movies')">
+        <ng-md-icon icon="mood" style="fill: rgb(33,150,243);"></ng-md-icon>
+        Genres
+      </md-button>
+    </md-menu-item>
+    <md-menu-item ng-if="showYear">
+      <md-button aria-label="Sort by year" class="navbar-menu-button" ng-click="sortByYear()">
+        <ng-md-icon icon="event" style="fill: rgb(33,150,243);"></ng-md-icon>
+        Years
+      </md-button>
+    </md-menu-item>
+    <md-menu-item ng-if="showRating">
+      <md-button aria-label="Sort by rating" class="navbar-menu-button" ng-click="sortByRating('movies')">
+        <ng-md-icon icon="star_outline" style="fill: rgb(33,150,243);"></ng-md-icon>
+        Rating
+      </md-button>
+    </md-menu-item>
+    <md-menu-item ng-if="showRecentlyAdded">  
+      <md-button aria-label="Sort by recently added" class="navbar-menu-button" ng-click="sortByRecentlyAdded('movies')">
+        <ng-md-icon icon="my_library_add" style="fill: rgb(33,150,243);"></ng-md-icon>                
+        Recently Added
+      </md-button>
+    </md-menu-item>
+    <md-menu-item ng-if="showSortDirection">
+      <md-button aria-label="Sorting" class="navbar-menu-button" ng-click="toggleSortDirection()" ng-if="showSortDirection">
+        <ng-md-icon icon="{{sort.direction.icons[sort.direction.current]}}" style="fill: rgb(33,150,243);"></ng-md-icon>
+        Sort {{sort.direction.labels[sort.direction.current]}}
+      </md-button>
+    </md-menu-item>    
+  </md-menu-content>
+</md-menu>

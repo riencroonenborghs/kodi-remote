@@ -8,6 +8,10 @@
     "$scope", "$rootScope", "NavbarFactory", "Movies", function($scope, $rootScope, NavbarFactory, Movies) {
       $scope.movies = [];
       $scope.movieGroups = [];
+      $scope.showGenre = true;
+      $scope.showRating = true;
+      $scope.showYear = true;
+      $scope.showRecentlyAdded = true;
       $scope.showSortDirection = true;
       $scope.beforeSortLoad = function() {
         $scope.movies = [];
@@ -38,6 +42,9 @@
     "$scope", "$rootScope", "NavbarFactory", "Movies", function($scope, $rootScope, NavbarFactory, Movies) {
       $scope.movies = [];
       $scope.movieGroups = [];
+      $scope.showGenre = true;
+      $scope.showRating = true;
+      $scope.showYear = true;
       $rootScope.$broadcast("topbar.loading", true);
       return Movies.recentlyAdded().then(function(data) {
         $rootScope.$broadcast("topbar.loading", false);
@@ -52,7 +59,10 @@
 
   app.controller("MovieGenresController", [
     "$scope", "$rootScope", "NavbarFactory", "Genres", function($scope, $rootScope, NavbarFactory, Genres) {
-      $scope.type = "movies";
+      $scope.showRating = true;
+      $scope.showYear = true;
+      $scope.showRecentlyAdded = true;
+      $scope.genreType = "movies";
       $scope.genres = [];
       $scope.genreGroups = [];
       $rootScope.$broadcast("topbar.loading", true);
@@ -89,6 +99,9 @@
 
   app.controller("MovieYearsController", [
     "$scope", "$rootScope", "Movies", "NavbarFactory", function($scope, $rootScope, Movies, NavbarFactory) {
+      $scope.showGenre = true;
+      $scope.showRating = true;
+      $scope.showRecentlyAdded = true;
       $scope.years = [];
       $rootScope.$broadcast("topbar.loading", true);
       return Movies.years().then(function(data) {
@@ -119,10 +132,18 @@
       year = parseInt($routeParams.year);
       $scope.movies = [];
       $scope.movieGroups = [];
-      $rootScope.$broadcast("topbar.loading", true);
+      $scope.showGenre = true;
+      $scope.showRating = true;
+      $scope.showRecentlyAdded = true;
+      $scope.showSortDirection = true;
+      $scope.beforeSortLoad = function() {
+        $scope.movies = [];
+        return $scope.pagination.page = 1;
+      };
       return $scope.load = function() {
+        $rootScope.$broadcast("topbar.loading", true);
         $scope.loading = true;
-        return Movies.year(year, $scope.pagination.page).then(function(data) {
+        return Movies.year(year, $scope.pagination.page, $scope.sortParams).then(function(data) {
           var i, len, movie, ref;
           $rootScope.$broadcast("topbar.loading", false);
           $scope.loading = false;
@@ -132,6 +153,7 @@
             $scope.movies.push(movie);
           }
           $scope.movieGroups = kodiRemote.array.inGroupsOf($scope.movies, 2);
+          $scope.paginationAfterLoad(Movies.perPage, data.total);
           $scope.Navbar = new NavbarFactory;
           $scope.Navbar.addLink("/movies", "Movies");
           $scope.Navbar.addLink("/movies/years", "By Year");
@@ -143,21 +165,27 @@
 
   app.controller("MoviesRatingController", [
     "$scope", "$rootScope", "NavbarFactory", "Movies", function($scope, $rootScope, NavbarFactory, Movies) {
-      var sortParams;
       $scope.movies = [];
       $scope.movieGroups = [];
+      $scope.showRating = true;
+      $scope.showYear = true;
+      $scope.showRecentlyAdded = true;
+      $scope.showSortDirection = true;
       $scope.beforeSortLoad = function() {
         $scope.movies = [];
         return $scope.pagination.page = 1;
       };
-      sortParams = {
-        by: "rating",
-        direction: "descending"
-      };
-      $rootScope.$broadcast("topbar.loading", true);
       return $scope.load = function() {
+        $rootScope.$broadcast("topbar.loading", true);
+        $scope.sortParams = {
+          by: "rating",
+          direction: "ascending"
+        };
+        if ($scope.sort) {
+          $scope.sortParams.direction = $scope.sort.direction.methods[$scope.sort.direction.current];
+        }
         $scope.loading = true;
-        return Movies.all($scope.pagination.page, sortParams).then(function(data) {
+        return Movies.all($scope.pagination.page, $scope.sortParams).then(function(data) {
           var i, len, movie, ref;
           $rootScope.$broadcast("topbar.loading", false);
           $scope.loading = false;

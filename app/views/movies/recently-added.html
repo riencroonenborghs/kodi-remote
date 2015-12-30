@@ -1,5 +1,11 @@
 <loading-screen loading="loading"></loading-screen>
 
-<navbar ng-if="!loading" model="Navbar"></navbar>
+<div sortable>
+  <div layout="row" ng-if="!loading">
+    <navbar model="Navbar"></navbar>
+    <div flex></div>
+    <ng-include src="'app/views/movies/_menu.html'"></ng-include>
+  </div>
+</div>
 
 <ng-include src="'app/views/movies/_movies.html'"></ng-include>

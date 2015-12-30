@@ -64,7 +64,7 @@
           };
           $(document).off("scroll", scrollHandler);
           $(document).on("scroll", scrollHandler);
-          scope.$watch("morePages", function() {
+          scope.$watch("pagination.more", function() {
             if (scope.pagination.more) {
               button.show();
             }

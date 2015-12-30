@@ -4,7 +4,7 @@
   <div layout="row" ng-if="!loading">
     <navbar model="Navbar"></navbar>
     <div flex></div>
-    <ng-include ng-if="genreType == 'tvshows'" src="'app/views/tvshows/_menu.html'"></ng-include>
+    <ng-include src="'app/views/tvshows/_menu.html'"></ng-include>
   </div>
 
   <ng-include src="'app/views/tvshows/_tvshows.html'"></ng-include>
