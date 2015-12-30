@@ -11,7 +11,10 @@
     <div>{{episode.plot}}</div>
     <span ng-if="episode.runtime">Runtime: {{episode.runtime | secondsToDateTime | date:'HH:mm:ss'}}</span>
   </div>
-  <rating flex="25" size="big" rating="episode.rating"></rating>  
+  <div flex="25">
+    <rating size="big" rating="episode.rating"></rating>  
+    <a class="md-button md-raised" href="{{filePath}}">Link</a>
+  </div>
 </div>
 
 <md-tabs md-dynamic-height md-border-bottom>

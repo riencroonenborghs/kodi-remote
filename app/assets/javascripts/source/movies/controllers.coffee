@@ -93,9 +93,8 @@ app.controller "MovieController", [ "$scope", "$rootScope", "$routeParams", "Mov
     $scope.Navbar.addLink "/movies", "Movies"
     $scope.Navbar.addTitle $scope.movie.title
 
-    console.debug "asd"
-    Files.prepareDownload($scope.movie.file).then (fileData) ->
-      console.debug fileData
+    Files.prepareDownload($scope.movie.file).then (fileData) ->      
+      $scope.filePath = "#{fileData.data.protocol}://#{kodiRemote.settings.server}:#{kodiRemote.settings.port}/#{fileData.data.details.path}"
 ]
 
 app.controller "MovieYearsController", [ "$scope", "$rootScope", "Movies", "NavbarFactory", ($scope, $rootScope, Movies, NavbarFactory) ->

@@ -79,7 +79,7 @@ app.service "Seasons", [ "Request", "Episodes", (Request, Episodes) ->
 ]
 
 app.service "Episodes", [ "Request", (Request) ->
-  properties = ["title", "plot", "rating", "writer", "firstaired", "playcount", "runtime", "director", "season", "episode", "cast", "thumbnail", "resume", "showtitle", "tvshowid"]
+  properties = ["title", "plot", "rating", "writer", "firstaired", "playcount", "runtime", "director", "season", "episode", "cast", "thumbnail", "resume", "showtitle", "tvshowid", "file"]
   
   resultHandler = (result) -> 
     for episode in (result.episodes || [])

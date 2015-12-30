@@ -89,9 +89,8 @@
         $scope.Navbar = new NavbarFactory;
         $scope.Navbar.addLink("/movies", "Movies");
         $scope.Navbar.addTitle($scope.movie.title);
-        console.debug("asd");
         return Files.prepareDownload($scope.movie.file).then(function(fileData) {
-          return console.debug(fileData);
+          return $scope.filePath = fileData.data.protocol + "://" + kodiRemote.settings.server + ":" + kodiRemote.settings.port + "/" + fileData.data.details.path;
         });
       });
     }

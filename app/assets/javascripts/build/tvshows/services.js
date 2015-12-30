@@ -139,7 +139,7 @@
   app.service("Episodes", [
     "Request", function(Request) {
       var getResultHandler, properties, resultHandler, service;
-      properties = ["title", "plot", "rating", "writer", "firstaired", "playcount", "runtime", "director", "season", "episode", "cast", "thumbnail", "resume", "showtitle", "tvshowid"];
+      properties = ["title", "plot", "rating", "writer", "firstaired", "playcount", "runtime", "director", "season", "episode", "cast", "thumbnail", "resume", "showtitle", "tvshowid", "file"];
       resultHandler = function(result) {
         var episode, i, len, ref;
         ref = result.episodes || [];

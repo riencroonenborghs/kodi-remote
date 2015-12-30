@@ -108,8 +108,8 @@ app.controller "EpisodesController", [ "$scope", "$rootScope", "$routeParams", "
             $scope.episodeGroups = kodiRemote.array.inGroupsOf $scope.episodes, 2
 ]
 
-app.controller "EpisodeController", [ "$scope", "$rootScope", "$routeParams", "Episodes", "NavbarFactory",
-($scope, $rootScope, $routeParams, Episodes, NavbarFactory) ->
+app.controller "EpisodeController", [ "$scope", "$rootScope", "$routeParams", "Episodes", "NavbarFactory", "Files",
+($scope, $rootScope, $routeParams, Episodes, NavbarFactory, Files) ->
   episodeId = parseInt $routeParams.id
 
   $scope.episode = null  
@@ -123,6 +123,9 @@ app.controller "EpisodeController", [ "$scope", "$rootScope", "$routeParams", "E
     $scope.Navbar.addLink "/tvshows/#{$scope.episode.tvshowid}/seasons", $scope.episode.showtitle
     $scope.Navbar.addLink "/tvshows/#{$scope.episode.tvshowid}/seasons/#{$scope.episode.season}/episodes", "Season #{$scope.episode.season}"
     $scope.Navbar.addTitle "Episode #{$scope.episode.episode}: #{$scope.episode.title}"
+
+    Files.prepareDownload($scope.episode.file).then (fileData) ->   
+      $scope.filePath = "#{fileData.data.protocol}://#{kodiRemote.settings.server}:#{kodiRemote.settings.port}/#{fileData.data.details.path}"
 ]
 
 app.controller "RecentlyAddedEpisodesController", [ "$scope", "$rootScope", "$routeParams", "NavbarFactory", "Episodes",

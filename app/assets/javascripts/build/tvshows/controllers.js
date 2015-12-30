@@ -128,7 +128,7 @@
   ]);
 
   app.controller("EpisodeController", [
-    "$scope", "$rootScope", "$routeParams", "Episodes", "NavbarFactory", function($scope, $rootScope, $routeParams, Episodes, NavbarFactory) {
+    "$scope", "$rootScope", "$routeParams", "Episodes", "NavbarFactory", "Files", function($scope, $rootScope, $routeParams, Episodes, NavbarFactory, Files) {
       var episodeId;
       episodeId = parseInt($routeParams.id);
       $scope.episode = null;
@@ -140,7 +140,10 @@
         $scope.Navbar.addLink("/tvshows", "TV Shows");
         $scope.Navbar.addLink("/tvshows/" + $scope.episode.tvshowid + "/seasons", $scope.episode.showtitle);
         $scope.Navbar.addLink("/tvshows/" + $scope.episode.tvshowid + "/seasons/" + $scope.episode.season + "/episodes", "Season " + $scope.episode.season);
-        return $scope.Navbar.addTitle("Episode " + $scope.episode.episode + ": " + $scope.episode.title);
+        $scope.Navbar.addTitle("Episode " + $scope.episode.episode + ": " + $scope.episode.title);
+        return Files.prepareDownload($scope.episode.file).then(function(fileData) {
+          return $scope.filePath = fileData.data.protocol + "://" + kodiRemote.settings.server + ":" + kodiRemote.settings.port + "/" + fileData.data.details.path;
+        });
       });
     }
   ]);
