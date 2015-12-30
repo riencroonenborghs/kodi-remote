@@ -12,6 +12,13 @@
       <input type="number" ng-model="model.server.port" placeholder="80" />
     </md-input-container>
   </div>
+  <div>
+    <label>Requests</label>
+    <md-radio-group ng-model="model.server.requestType" layout="row">
+      <md-radio-button value="http" class="md-primary">HTTP</md-radio-button>
+      <md-radio-button value="websocket" class="md-primary">Websocket</md-radio-button>
+    </md-radio-group>
+  </div>
 </md-content>
 
 <md-content class="md-padding" layout="row">

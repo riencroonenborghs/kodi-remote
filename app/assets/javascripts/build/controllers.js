@@ -105,7 +105,7 @@
       };
       checkServer = function() {
         $scope.hasServer = false;
-        if (!(kodiRemote.settings.server !== null && kodiRemote.settings.port !== null)) {
+        if (!(kodiRemote.settings.server !== null && kodiRemote.settings.port !== null && kodiRemote.settings.requestType)) {
           return;
         }
         return Player.activePlayers().then(function(data) {
@@ -120,6 +120,7 @@
             parsedData = JSON.parse(data.kodiRemote);
             kodiRemote.settings.server = parsedData.server;
             kodiRemote.settings.port = parsedData.port;
+            kodiRemote.settings.requestType = parsedData.requestType;
             checkServer();
             return $timeout((function() {
               if ($scope.hasServer) {

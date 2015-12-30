@@ -81,7 +81,7 @@ app.controller "AppController", [ "$scope", "$rootScope", "$interval", "$timeout
   # if found init the app and cancel check
   checkServer = ->
     $scope.hasServer = false
-    unless kodiRemote.settings.server != null && kodiRemote.settings.port != null
+    unless kodiRemote.settings.server != null && kodiRemote.settings.port != null && kodiRemote.settings.requestType
       return
     Player.activePlayers().then (data) ->
       $scope.hasServer = true
@@ -91,8 +91,9 @@ app.controller "AppController", [ "$scope", "$rootScope", "$interval", "$timeout
     chrome.storage.local.get "kodiRemote", (data) ->
       if data.kodiRemote
         parsedData = JSON.parse data.kodiRemote
-        kodiRemote.settings.server  = parsedData.server
-        kodiRemote.settings.port    = parsedData.port
+        kodiRemote.settings.server      = parsedData.server
+        kodiRemote.settings.port        = parsedData.port
+        kodiRemote.settings.requestType = parsedData.requestType
         # it's set, no check if we can access the server
         # if so, init the app and go to tv shows
         checkServer()        

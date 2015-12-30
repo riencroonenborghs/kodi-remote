@@ -5,20 +5,19 @@
   app = angular.module("kodiRemote.services", []);
 
   app.service("Request", [
-    "$websocket", "$q", function($websocket, $q) {
+    "$http", "$q", "$websocket", function($http, $q, $websocket) {
       var service;
       service = {
         fetch: function(method, handler, params) {
-          var deferred, errorHandler, messagehandler, payload, w;
+          var deferred, errorHandler, httpSuccessHandler, payload, successHandler, websocketObject, websocketSuccessHandler;
           deferred = $q.defer();
           errorHandler = function(response) {
             console.error("wsRequest ERROR - " + (new Date()));
             console.error(response);
             return console.error("wsRequest ERROR ---------------");
           };
-          messagehandler = function(response) {
-            var data, parsedResponse, total;
-            parsedResponse = JSON.parse(response.data);
+          successHandler = function(parsedResponse) {
+            var data, total;
             if (parsedResponse.result) {
               data = handler(parsedResponse.result);
               if (parsedResponse.result === "OK") {
@@ -41,10 +40,20 @@
             id: 1,
             params: params
           };
-          w = $websocket("ws://" + kodiRemote.settings.server + ":" + kodiRemote.settings.port + "/jsonrpc");
-          w.onError(errorHandler);
-          w.onMessage(messagehandler);
-          w.send(payload);
+          if (kodiRemote.settings.requestType === "http") {
+            httpSuccessHandler = function(response) {
+              return successHandler(response.data);
+            };
+            $http.post("http://" + kodiRemote.settings.server + ":" + kodiRemote.settings.port + "/jsonrpc", payload).then(httpSuccessHandler, errorHandler);
+          } else {
+            websocketSuccessHandler = function(response) {
+              return successHandler(JSON.parse(response.data));
+            };
+            websocketObject = $websocket("ws://" + kodiRemote.settings.server + ":" + kodiRemote.settings.port + "/jsonrpc");
+            websocketObject.onError(errorHandler);
+            websocketObject.onMessage(websocketSuccessHandler);
+            websocketObject.send(payload);
+          }
           return deferred.promise;
         }
       };

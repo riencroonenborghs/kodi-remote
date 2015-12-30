@@ -13,7 +13,8 @@
 
   kodiRemote.settings = {
     server: null,
-    port: null
+    port: null,
+    requestType: null
   };
 
   app.config(function($routeProvider, $locationProvider) {

@@ -35,6 +35,7 @@ app.config ($mdThemingProvider) ->
 kodiRemote.settings =
   server: null
   port: null
+  requestType: null
 
 app.config ($routeProvider, $locationProvider) ->
   $routeProvider

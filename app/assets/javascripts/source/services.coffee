@@ -1,19 +1,16 @@
 app = angular.module "kodiRemote.services", []
 
-app.service "Request", [ "$websocket", "$q", ($websocket, $q) ->
+app.service "Request", [ "$http", "$q", "$websocket", ($http, $q, $websocket) ->
   service =
-    # websocket: $websocket("ws://#{kodiRemote.settings.server}:#{kodiRemote.settings.port}/jsonrpc")
     fetch: (method, handler, params) ->
       deferred = $q.defer()
 
       errorHandler = (response) ->
         console.error "wsRequest ERROR - #{new Date()}"
         console.error response
-        console.error "wsRequest ERROR ---------------"        
+        console.error "wsRequest ERROR ---------------"
 
-      messagehandler = (response) ->
-        parsedResponse  = JSON.parse response.data
-        
+      successHandler = (parsedResponse) ->
         if parsedResponse.result
           data = handler parsedResponse.result
           if parsedResponse.result == "OK"
@@ -24,15 +21,16 @@ app.service "Request", [ "$websocket", "$q", ($websocket, $q) ->
         return
 
       payload = {jsonrpc: "2.0", method: method, id: 1, params: params}
-      
-      # @websocket.onError errorHandler
-      # @websocket.onMessage messagehandler
-      # @websocket.send payload
 
-      w = $websocket("ws://#{kodiRemote.settings.server}:#{kodiRemote.settings.port}/jsonrpc")
-      w.onError errorHandler
-      w.onMessage messagehandler
-      w.send payload
+      if kodiRemote.settings.requestType == "http"
+        httpSuccessHandler = (response) -> successHandler response.data
+        $http.post("http://#{kodiRemote.settings.server}:#{kodiRemote.settings.port}/jsonrpc", payload).then(httpSuccessHandler, errorHandler)
+      else
+        websocketSuccessHandler = (response) -> successHandler JSON.parse(response.data)
+        websocketObject = $websocket("ws://#{kodiRemote.settings.server}:#{kodiRemote.settings.port}/jsonrpc")
+        websocketObject.onError errorHandler
+        websocketObject.onMessage websocketSuccessHandler
+        websocketObject.send payload
 
       deferred.promise
 
