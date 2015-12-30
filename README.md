@@ -24,7 +24,7 @@ The extension uses websockets. See [Enabling JSON-RPC](http://kodi.wiki/view/JSO
 # Functions
 
 - browse, search, scan and clean libraries
-- play, stop, pause, fast forward, rewind, seek within a video
+- play, stop, pause, fast forward, rewind, seek within a video, download
 - toggle subtitles and audio streams
 - update server settings
 - remote control with up, down, left, right, back, select, info, home, scan and clean buttons
