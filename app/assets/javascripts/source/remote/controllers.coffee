@@ -73,4 +73,5 @@ app.controller "RemoteController", [ "$scope", "Remote", ($scope, Remote) ->
   $scope.refresh = -> Remote.scanLibrary()
   $scope.info = -> Remote.info()
   $scope.clean = -> Remote.clean()
+  $scope.contextMenu = -> Remote.contextMenu()
 ]

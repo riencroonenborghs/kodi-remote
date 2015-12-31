@@ -23,7 +23,9 @@ app = angular.module "kodiRemote", [
   "kodiRemote.playlist.controllers",
   "kodiRemote.playlist.services",
   "kodiRemote.genres.controllers",
-  "kodiRemote.genres.services"  
+  "kodiRemote.genres.services",
+  "kodiRemote.music.controllers",
+  "kodiRemote.music.services" 
 ]
 
 app.config ($mdThemingProvider) ->
@@ -36,6 +38,22 @@ kodiRemote.settings =
   server: null
   port: null
   requestType: null
+
+kodiRemote.parseImage = (image) ->
+  return "" unless image
+  image = decodeURIComponent image.replace("image://", "")
+  return if image.endsWith("/") then image.slice(0, -1) else image
+
+kodiRemote.imageUrl = (image) -> 
+  "http://#{kodiRemote.settings.server}:#{kodiRemote.settings.port}/image/#{encodeURIComponent image}"
+
+kodiRemote.array =
+  inGroupsOf: (_list, number) ->
+    list = _list.slice(0)
+    newList = []
+    while list.length > 0
+      newList.push list.splice(0, number)
+    return newList
 
 app.config ($routeProvider, $locationProvider) ->
   $routeProvider
@@ -94,9 +112,9 @@ app.config ($routeProvider, $locationProvider) ->
     .when "/music/albums",
       templateUrl: "app/views/music/albums.html"
       controller: "AlbumsController"
-    .when "/music/albums/:id/songs",
-      templateUrl: "app/views/music/songs.html"
-      controller: "SongsController"
+    .when "/music/albums/:id",
+      templateUrl: "app/views/music/albums/index.html"
+      controller: "AlbumController"
 
     .when "/genres/tvshows/:genre",
       templateUrl: "app/views/genres/show-tvshows.html"

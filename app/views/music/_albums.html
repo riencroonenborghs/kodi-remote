@@ -1,0 +1,18 @@
+<div class="md-padding" layout="column">
+  <div ng-repeat="albumGroup in albumGroups" layout="row">
+    <div flex="50" ng-repeat="album in albumGroup" layout="column" class="video pointer" ng-click="visitAlbum(album.albumid)">
+      <img src="{{album.thumbnail}}" class="video-avatar" ng-if="album.thumbnail" />
+      <empty-avatar ng-if="!album.thumbnail"></empty-avatar>
+
+      <h3 class="center">
+        {{album.artist.join(', ')}}
+      </h3>
+      <h2 class="center">
+        {{album.title}}
+      </h2>
+      <h5 class="center">
+        {{album.year}}
+      </h5>
+    </div>
+  </div>
+</div>

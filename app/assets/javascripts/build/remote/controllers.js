@@ -112,8 +112,11 @@
       $scope.info = function() {
         return Remote.info();
       };
-      return $scope.clean = function() {
+      $scope.clean = function() {
         return Remote.clean();
+      };
+      return $scope.contextMenu = function() {
+        return Remote.contextMenu();
       };
     }
   ]);

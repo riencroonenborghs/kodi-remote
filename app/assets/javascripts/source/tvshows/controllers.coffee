@@ -1,13 +1,5 @@
 app = angular.module "kodiRemote.tvshows.controllers", []
 
-kodiRemote.array =
-  inGroupsOf: (_list, number) ->
-    list = _list.slice(0)
-    newList = []
-    while list.length > 0
-      newList.push list.splice(0, number)
-    return newList
-
 app.controller "TvShowsController", [ "$scope", "$rootScope", "NavbarFactory", "TvShows", ($scope, $rootScope, NavbarFactory, TvShows) ->  
   $scope.tvShows = []  
   $scope.tvShowGroups = []
@@ -33,9 +25,7 @@ app.controller "TvShowsController", [ "$scope", "$rootScope", "NavbarFactory", "
       $rootScope.$broadcast "topbar.loading", false
       for tvShow in data.data
         $scope.tvShows.push tvShow
-
       $scope.tvShowGroups = kodiRemote.array.inGroupsOf $scope.tvShows, 2      
-
       $scope.Navbar = new NavbarFactory
       $scope.Navbar.addTitle "TV Shows (#{data.total})"
       $scope.paginationAfterLoad TvShows.perPage, data.total

@@ -1,34 +1,11 @@
+<loading-screen loading="loading"></loading-screen>
+
 <div auto-scroll-paginate sortable>
-  <div layout="row">
+  <div layout="row" ng-if="!loading">
     <navbar model="Navbar"></navbar>
-    <div flex></div>    
-    <md-button flex="15" aria-label="Sorting" class="md-icon-button sort-button" ng-click="toggleSortBy()">            
-      {{sort.by.labels[sort.by.current]}}
-    </md-button>    
-    <md-button flex="5" aria-label="Sorting" class="md-icon-button sort-button" ng-click="toggleSortDirection()">
-      <ng-md-icon icon="{{sort.direction.icons[sort.direction.current]}}" size="16" style="fill: rgb(33,150,243);"></ng-md-icon>
-    </md-button>
+    <div flex></div>
+    
   </div>
 
-  <md-list class="md-padding">
-    {{album.fanart}}
-    <md-list-item ng-repeat="album in albums" class="md-2-line pointer">
-      <circle-avatar label="album.label"></circle-avatar>
-      <div class="md-list-item-text" ng-click="visitMovie(album.albumid)">
-        <h3>                
-          <watched-it model="album"></watched-it>       
-          {{album.title}} 
-          <span ng-if="album.year">({{album.year}})</span>
-          <show-rating rating="album.rating" ng-if="album.rating"></show-rating>   
-          <h4>{{album.artist.join(", ")}}</h4>
-        </h3>        
-        <div class="second-line">                    
-          <span class="genre" ng-repeat="genre in album.genre">{{genre}}</span>
-        </div>
-        <p class="third-line">
-          {{album.plot}}
-        </p>        
-      </div>
-    </md-list-item>
-  </md-list>
+  <ng-include src="'app/views/music/_albums.html'"></ng-include>
 </div>  

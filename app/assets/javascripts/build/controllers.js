@@ -31,8 +31,6 @@
         return $scope.visit(type + "/genres");
       };
       $scope.visitGenre = function(type, genre) {
-        console.debug("visitGenre");
-        console.debug("/genres/" + type + "/" + genre);
         return $scope.visit("/genres/" + type + "/" + genre);
       };
       $scope.visitRecentlyAdded = function(type) {
@@ -46,6 +44,9 @@
       };
       $scope.visitRating = function(type) {
         return $scope.visit(type + "/rating");
+      };
+      $scope.visitAlbum = function(albumId) {
+        return $scope.visit("/music/albums/" + albumId);
       };
       initApp = function() {
         var whatsPlaying;

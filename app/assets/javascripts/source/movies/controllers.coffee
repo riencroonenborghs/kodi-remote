@@ -23,8 +23,8 @@ app.controller "MoviesController", [ "$scope", "$rootScope", "NavbarFactory", "M
   # - uses $scope.paginationAfterLoad to calculate $scope.pagination.more
   # - uses $scope.loading
 
-  $rootScope.$broadcast "topbar.loading", true
   $scope.load = ->
+    $rootScope.$broadcast "topbar.loading", true
     $scope.loading = true
     Movies.all($scope.pagination.page, $scope.sortParams).then (data) ->
       $rootScope.$broadcast "topbar.loading", false

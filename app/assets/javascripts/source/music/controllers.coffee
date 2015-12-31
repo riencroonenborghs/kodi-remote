@@ -1,7 +1,9 @@
 app = angular.module "kodiRemote.music.controllers", []
 
-app.controller "AlbumsController", [ "$scope", "NavbarFactory", "Albums", ($scope, NavbarFactory, Albums) ->  
-  $scope.albums = []  
+app.controller "AlbumsController", [ "$scope", "$rootScope", "NavbarFactory", "Albums", 
+($scope, $rootScope, NavbarFactory, Albums) ->  
+  $scope.albums = []
+  $scope.albumGroups = []
 
   # sortable directive
   # - set $scope.sortParams before load
@@ -17,11 +19,14 @@ app.controller "AlbumsController", [ "$scope", "NavbarFactory", "Albums", ($scop
   # - uses $scope.loading
 
   $scope.load = ->
+    $rootScope.$broadcast "topbar.loading", true
     $scope.loading = true
-    Albums.all($scope.pagination.page, $scope.sortParams).then (data) ->      
+    Albums.all($scope.pagination.page, $scope.sortParams).then (data) ->    
+      $rootScope.$broadcast "topbar.loading", false
       $scope.loading = false
       for album in data.data
         $scope.albums.push album
+      $scope.albumGroups = kodiRemote.array.inGroupsOf $scope.albums, 2      
       $scope.Navbar = new NavbarFactory
       $scope.Navbar.addTitle "Albums (#{data.total})"
       $scope.paginationAfterLoad Albums.perPage, data.total

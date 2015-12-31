@@ -4,9 +4,10 @@ app.service "Albums", [ "Request", "Songs", (Request, Songs) ->
   properties = ["title", "description", "artist", "genre", "mood", "style", "albumlabel", "rating", "year", "thumbnail", "playcount", "genreid", "artistid", "fanart"]
   
   allResultHandler = (result) ->
-    for show in (result.albums || [])
-      show.type = "album"
-      show.songs = -> Songs.all @.albumid
+    for album in (result.albums || [])
+      album.type = "album"
+      album.songs = -> Songs.all @.albumid
+      album.thumbnail = kodiRemote.imageUrl album.thumbnail
     return result.albums || []
 
   getResultHandler = (result) ->
@@ -15,9 +16,9 @@ app.service "Albums", [ "Request", "Songs", (Request, Songs) ->
     return result.albumdetails
 
   service = 
-    perPage: 5
+    perPage: 10
 
-    all: (pageParams = 1, sortParams = {by: "label", direction: "ascending"}) ->
+    all: (pageParams = 1, sortParams = {by: "artist", direction: "ascending"}) ->
       params =
         properties: properties
         sort:
@@ -58,33 +59,3 @@ app.service "Songs", [ "Request", (Request) ->
     
   service
 ]
-
-# app.service "Episodes", [ "Request", (Request) ->
-#   properties    = ["title", "plot", "rating", "writer", "firstaired", "playcount", "runtime", "director", "season", "episode", "cast", "thumbnail", "resume", "showtitle", "tvshowid"]
-  
-#   resultHandler = (result) -> 
-#     for episode in (result.episodes || [])
-#       episode.type = "episode"
-#     return result.episodes || []
-
-#   getResultHandler = (result) -> 
-#     result.episodedetails.type = "episode"
-#     result.episodedetails
-
-#   service = 
-#     all: (tvShowId, season) -> 
-#       params =
-#         tvshowid: tvShowId
-#         season: season
-#         properties: properties
-#       return Request.fetch "VideoLibrary.GetEpisodes", resultHandler, params
-
-#     get: (episodeId) ->
-#       params =
-#         episodeid: episodeId
-#         properties: properties
-               
-#       return Request.fetch "VideoLibrary.GetEpisodeDetails", getResultHandler, params
-    
-#   service
-# ]

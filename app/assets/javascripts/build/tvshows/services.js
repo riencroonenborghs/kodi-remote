@@ -4,18 +4,6 @@
 
   app = angular.module("kodiRemote.tvshows.services", []);
 
-  kodiRemote.parseImage = function(image) {
-    if (!image) {
-      return "";
-    }
-    image = decodeURIComponent(image.replace("image://", ""));
-    if (image.endsWith("/")) {
-      return image.slice(0, -1);
-    } else {
-      return image;
-    }
-  };
-
   app.service("TvShows", [
     "Request", "Seasons", function(Request, Seasons) {
       var allResultHandler, getResultHandler, properties, service;

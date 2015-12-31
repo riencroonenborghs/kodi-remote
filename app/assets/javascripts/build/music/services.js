@@ -9,14 +9,15 @@
       var allResultHandler, getResultHandler, properties, service;
       properties = ["title", "description", "artist", "genre", "mood", "style", "albumlabel", "rating", "year", "thumbnail", "playcount", "genreid", "artistid", "fanart"];
       allResultHandler = function(result) {
-        var i, len, ref, show;
+        var album, i, len, ref;
         ref = result.albums || [];
         for (i = 0, len = ref.length; i < len; i++) {
-          show = ref[i];
-          show.type = "album";
-          show.songs = function() {
+          album = ref[i];
+          album.type = "album";
+          album.songs = function() {
             return Songs.all(this.albumid);
           };
+          album.thumbnail = kodiRemote.imageUrl(album.thumbnail);
         }
         return result.albums || [];
       };
@@ -28,7 +29,7 @@
         return result.albumdetails;
       };
       service = {
-        perPage: 5,
+        perPage: 10,
         all: function(pageParams, sortParams) {
           var params;
           if (pageParams == null) {
@@ -36,7 +37,7 @@
           }
           if (sortParams == null) {
             sortParams = {
-              by: "label",
+              by: "artist",
               direction: "ascending"
             };
           }

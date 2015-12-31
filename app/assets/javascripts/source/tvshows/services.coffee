@@ -1,10 +1,5 @@
 app = angular.module "kodiRemote.tvshows.services", []
 
-kodiRemote.parseImage = (image) ->
-  return "" unless image
-  image = decodeURIComponent image.replace("image://", "")
-  return if image.endsWith("/") then image.slice(0, -1) else image
-
 app.service "TvShows", [ "Request", "Seasons", (Request, Seasons) ->
   properties = ["title", "genre", "year", "rating", "plot", "studio", "mpaa", "cast", "playcount", "episode", "imdbnumber", "premiered", "thumbnail", "season", "watchedepisodes"]
   

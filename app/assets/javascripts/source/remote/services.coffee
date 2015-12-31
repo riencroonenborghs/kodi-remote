@@ -88,6 +88,9 @@ app.service "Remote", [ "Request", (Request) ->
 
     clean: -> 
       return Request.fetch "VideoLibrary.Clean", emptyHandler, {}
+
+    contextMenu: -> 
+      return Request.fetch "Input.ContextMenu", emptyHandler, {}
       
   service
 ]

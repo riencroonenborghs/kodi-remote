@@ -19,7 +19,7 @@ The extension comes pre-built, but you can easily build it yourself. See `build.
 
 ## Kodi Settings
 
-The extension uses websockets. See [Enabling JSON-RPC](http://kodi.wiki/view/JSON-RPC_API#Enabling_JSON-RPC) how to enable it.
+The extension uses websockets or HTTP connections. See [Enabling JSON-RPC](http://kodi.wiki/view/JSON-RPC_API#Enabling_JSON-RPC) how to enable it.
 
 # Functions
 

@@ -17,8 +17,8 @@
         $scope.movies = [];
         return $scope.pagination.page = 1;
       };
-      $rootScope.$broadcast("topbar.loading", true);
       return $scope.load = function() {
+        $rootScope.$broadcast("topbar.loading", true);
         $scope.loading = true;
         return Movies.all($scope.pagination.page, $scope.sortParams).then(function(data) {
           var i, len, movie, ref;

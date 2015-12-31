@@ -5,22 +5,26 @@
   app = angular.module("kodiRemote.music.controllers", []);
 
   app.controller("AlbumsController", [
-    "$scope", "NavbarFactory", "Albums", function($scope, NavbarFactory, Albums) {
+    "$scope", "$rootScope", "NavbarFactory", "Albums", function($scope, $rootScope, NavbarFactory, Albums) {
       $scope.albums = [];
+      $scope.albumGroups = [];
       $scope.beforeSortLoad = function() {
         $scope.albums = [];
         return $scope.pagination.page = 1;
       };
       return $scope.load = function() {
+        $rootScope.$broadcast("topbar.loading", true);
         $scope.loading = true;
         return Albums.all($scope.pagination.page, $scope.sortParams).then(function(data) {
           var album, i, len, ref;
+          $rootScope.$broadcast("topbar.loading", false);
           $scope.loading = false;
           ref = data.data;
           for (i = 0, len = ref.length; i < len; i++) {
             album = ref[i];
             $scope.albums.push(album);
           }
+          $scope.albumGroups = kodiRemote.array.inGroupsOf($scope.albums, 2);
           $scope.Navbar = new NavbarFactory;
           $scope.Navbar.addTitle("Albums (" + data.total + ")");
           $scope.paginationAfterLoad(Albums.perPage, data.total);

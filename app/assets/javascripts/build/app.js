@@ -5,7 +5,7 @@
 
   kodiRemote = window.kodiRemote || (window.kodiRemote = {});
 
-  app = angular.module("kodiRemote", ["ngAria", "ngAnimate", "ngMaterial", "ngMdIcons", "ngRoute", "ngWebSocket", "kodiRemote.controllers", "kodiRemote.services", "kodiRemote.directives", "kodiRemote.factories", "kodiRemote.tvshows.controllers", "kodiRemote.tvshows.services", "kodiRemote.movies.controllers", "kodiRemote.movies.services", "kodiRemote.settings.controllers", "kodiRemote.remote.controllers", "kodiRemote.remote.services", "kodiRemote.playlist.controllers", "kodiRemote.playlist.services", "kodiRemote.genres.controllers", "kodiRemote.genres.services"]);
+  app = angular.module("kodiRemote", ["ngAria", "ngAnimate", "ngMaterial", "ngMdIcons", "ngRoute", "ngWebSocket", "kodiRemote.controllers", "kodiRemote.services", "kodiRemote.directives", "kodiRemote.factories", "kodiRemote.tvshows.controllers", "kodiRemote.tvshows.services", "kodiRemote.movies.controllers", "kodiRemote.movies.services", "kodiRemote.settings.controllers", "kodiRemote.remote.controllers", "kodiRemote.remote.services", "kodiRemote.playlist.controllers", "kodiRemote.playlist.services", "kodiRemote.genres.controllers", "kodiRemote.genres.services", "kodiRemote.music.controllers", "kodiRemote.music.services"]);
 
   app.config(function($mdThemingProvider) {
     return $mdThemingProvider.theme("default").primaryPalette("blue").accentPalette("green");
@@ -15,6 +15,34 @@
     server: null,
     port: null,
     requestType: null
+  };
+
+  kodiRemote.parseImage = function(image) {
+    if (!image) {
+      return "";
+    }
+    image = decodeURIComponent(image.replace("image://", ""));
+    if (image.endsWith("/")) {
+      return image.slice(0, -1);
+    } else {
+      return image;
+    }
+  };
+
+  kodiRemote.imageUrl = function(image) {
+    return "http://" + kodiRemote.settings.server + ":" + kodiRemote.settings.port + "/image/" + (encodeURIComponent(image));
+  };
+
+  kodiRemote.array = {
+    inGroupsOf: function(_list, number) {
+      var list, newList;
+      list = _list.slice(0);
+      newList = [];
+      while (list.length > 0) {
+        newList.push(list.splice(0, number));
+      }
+      return newList;
+    }
   };
 
   app.config(function($routeProvider, $locationProvider) {
@@ -69,9 +97,9 @@
     }).when("/music/albums", {
       templateUrl: "app/views/music/albums.html",
       controller: "AlbumsController"
-    }).when("/music/albums/:id/songs", {
-      templateUrl: "app/views/music/songs.html",
-      controller: "SongsController"
+    }).when("/music/albums/:id", {
+      templateUrl: "app/views/music/albums/index.html",
+      controller: "AlbumController"
     }).when("/genres/tvshows/:genre", {
       templateUrl: "app/views/genres/show-tvshows.html",
       controller: "TvShowGenreController"

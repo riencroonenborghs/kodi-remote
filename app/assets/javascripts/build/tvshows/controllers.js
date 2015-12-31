@@ -4,18 +4,6 @@
 
   app = angular.module("kodiRemote.tvshows.controllers", []);
 
-  kodiRemote.array = {
-    inGroupsOf: function(_list, number) {
-      var list, newList;
-      list = _list.slice(0);
-      newList = [];
-      while (list.length > 0) {
-        newList.push(list.splice(0, number));
-      }
-      return newList;
-    }
-  };
-
   app.controller("TvShowsController", [
     "$scope", "$rootScope", "NavbarFactory", "TvShows", function($scope, $rootScope, NavbarFactory, TvShows) {
       $scope.tvShows = [];

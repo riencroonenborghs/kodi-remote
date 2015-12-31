@@ -115,6 +115,9 @@
         },
         clean: function() {
           return Request.fetch("VideoLibrary.Clean", emptyHandler, {});
+        },
+        contextMenu: function() {
+          return Request.fetch("Input.ContextMenu", emptyHandler, {});
         }
       };
       return service;
