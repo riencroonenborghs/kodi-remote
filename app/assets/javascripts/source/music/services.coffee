@@ -7,7 +7,7 @@ app.service "Albums", [ "Request", "Songs", (Request, Songs) ->
     for album in (result.albums || [])
       album.type = "album"
       album.songs = -> Songs.all @.albumid
-      album.thumbnail = kodiRemote.imageUrl album.thumbnail
+      album.thumbnail = kodiRemote.imageObject album.thumbnail
     return result.albums || []
 
   getResultHandler = (result) ->

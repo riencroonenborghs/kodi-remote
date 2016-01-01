@@ -17,20 +17,12 @@
     requestType: null
   };
 
-  kodiRemote.parseImage = function(image) {
-    if (!image) {
-      return "";
-    }
-    image = decodeURIComponent(image.replace("image://", ""));
-    if (image.endsWith("/")) {
-      return image.slice(0, -1);
-    } else {
-      return image;
-    }
-  };
-
-  kodiRemote.imageUrl = function(image) {
-    return "http://" + kodiRemote.settings.server + ":" + kodiRemote.settings.port + "/image/" + (encodeURIComponent(image));
+  kodiRemote.imageObject = function(image) {
+    return {
+      url: "http://" + kodiRemote.settings.server + ":" + kodiRemote.settings.port + "/image/" + (encodeURIComponent(image)),
+      original: image,
+      isSet: image !== void 0
+    };
   };
 
   kodiRemote.array = {

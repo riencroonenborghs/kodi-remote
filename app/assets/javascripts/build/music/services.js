@@ -17,7 +17,7 @@
           album.songs = function() {
             return Songs.all(this.albumid);
           };
-          album.thumbnail = kodiRemote.imageUrl(album.thumbnail);
+          album.thumbnail = kodiRemote.imageObject(album.thumbnail);
         }
         return result.albums || [];
       };

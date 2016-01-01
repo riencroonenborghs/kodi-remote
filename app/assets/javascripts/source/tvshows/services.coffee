@@ -6,17 +6,17 @@ app.service "TvShows", [ "Request", "Seasons", (Request, Seasons) ->
   allResultHandler = (result) ->
     for show in (result.tvshows || [])
       show.type = "tvShow"
-      show.thumbnail = kodiRemote.parseImage show.thumbnail
+      show.thumbnail = kodiRemote.imageObject show.thumbnail
       for castMember in show.cast
-        castMember.thumbnail = kodiRemote.parseImage castMember.thumbnail
+        castMember.thumbnail = kodiRemote.imageObject castMember.thumbnail
       show.seasons = -> Seasons.all @.tvshowid
     return result.tvshows || []
 
   getResultHandler = (result) ->
     result.tvshowdetails.type = "tvShow"
-    result.tvshowdetails.thumbnail = kodiRemote.parseImage result.tvshowdetails.thumbnail
+    result.tvshowdetails.thumbnail = kodiRemote.imageObject result.tvshowdetails.thumbnail
     for castMember in result.tvshowdetails.cast
-      castMember.thumbnail = kodiRemote.parseImage castMember.thumbnail
+      castMember.thumbnail = kodiRemote.imageObject castMember.thumbnail
     result.tvshowdetails.seasons = -> Seasons.all @.tvshowid
     return result.tvshowdetails
 
@@ -59,7 +59,7 @@ app.service "Seasons", [ "Request", "Episodes", (Request, Episodes) ->
   resultHandler = (result) ->
     for season in (result.seasons || [])
       season.type = "season"
-      season.thumbnail = kodiRemote.parseImage season.thumbnail
+      season.thumbnail = kodiRemote.imageObject season.thumbnail
       season.episodes = -> Episodes.all @.tvshowid, @.season
     return result.seasons || []
 
@@ -79,14 +79,14 @@ app.service "Episodes", [ "Request", (Request) ->
   resultHandler = (result) -> 
     for episode in (result.episodes || [])
       episode.type = "episode"
-      episode.thumbnail = kodiRemote.parseImage episode.thumbnail
+      episode.thumbnail = kodiRemote.imageObject episode.thumbnail
     return result.episodes || []
 
   getResultHandler = (result) -> 
     result.episodedetails.type = "episode"
-    result.episodedetails.thumbnail = kodiRemote.parseImage result.episodedetails.thumbnail
+    result.episodedetails.thumbnail = kodiRemote.imageObject result.episodedetails.thumbnail
     for castMember in result.episodedetails.cast
-      castMember.thumbnail = kodiRemote.parseImage castMember.thumbnail
+      castMember.thumbnail = kodiRemote.imageObject castMember.thumbnail
     result.episodedetails
 
   service = 

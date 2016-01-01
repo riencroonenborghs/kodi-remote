@@ -13,7 +13,7 @@
         ref = result.items || [];
         for (i = 0, len = ref.length; i < len; i++) {
           item = ref[i];
-          item.thumbnail = kodiRemote.parseImage(item.thumbnail);
+          item.thumbnail = kodiRemote.imageObject(item.thumbnail);
         }
         return result.items || [];
       };

@@ -12,8 +12,8 @@
 
     <div layout="row">
       <div flex="40">
-        <img src="{{movie.thumbnail}}" class="video-avatar" ng-if="movie.thumbnail" />
-        <empty-avatar ng-if="!movie.thumbnail"></empty-avatar>
+        <img src="{{movie.thumbnail.url}}" class="video-avatar" ng-if="movie.thumbnail.isSet" />
+        <empty-avatar ng-if="!movie.thumbnail.isSet"></empty-avatar>
       </div>
       <div class="plot" flex>
         <div>{{movie.plot}}</div>

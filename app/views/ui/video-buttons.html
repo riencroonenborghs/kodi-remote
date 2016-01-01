@@ -14,6 +14,6 @@
     </md-button>
     <ng-md-icon class="okay-icon play-button" ng-if="addedToPlaylist" icon="thumb_up" style="fill: rgba(0,200,0,0.75);"></ng-md-icon>
   </div>
-  <img src="{{video.thumbnail}}" class="video-avatar" ng-if="video.thumbnail" />
-  <empty-avatar ng-if="!video.thumbnail"></empty-avatar>
+  <img src="{{video.thumbnail.url}}" class="video-avatar" ng-if="video.thumbnail.isSet" />
+  <empty-avatar ng-if="!video.thumbnail.isSet"></empty-avatar>
 </div>

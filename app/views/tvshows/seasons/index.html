@@ -15,8 +15,8 @@
 <div class="md-padding" layout="column">
   <div ng-repeat="seasonGroup in seasonGroups" layout="row">
     <div flex="50" ng-repeat="season in seasonGroup" layout="column" class="video pointer" ng-click="visitEpisodes(tvShow.tvshowid, season.seasonid)">
-      <img src="{{season.thumbnail}}" class="video-avatar" ng-if="season.thumbnail" />
-      <empty-avatar ng-if="!season.thumbnail"></empty-avatar>
+      <img src="{{season.thumbnail.url}}" class="video-avatar" ng-if="season.thumbnail.isSet" />
+      <empty-avatar ng-if="!season.thumbnail.isSet"></empty-avatar>
 
       <h2 class="center">
         <watched-it model="season"></watched-it>

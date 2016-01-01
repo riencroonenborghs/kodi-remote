@@ -18,11 +18,11 @@
         for (i = 0, len = ref.length; i < len; i++) {
           show = ref[i];
           show.type = "tvShow";
-          show.thumbnail = kodiRemote.parseImage(show.thumbnail);
+          show.thumbnail = kodiRemote.imageObject(show.thumbnail);
           ref1 = show.cast;
           for (j = 0, len1 = ref1.length; j < len1; j++) {
             castMember = ref1[j];
-            castMember.thumbnail = kodiRemote.parseImage(castMember.thumbnail);
+            castMember.thumbnail = kodiRemote.imageObject(castMember.thumbnail);
           }
           show.seasons = function() {
             return Seasons.all(this.tvshowid);

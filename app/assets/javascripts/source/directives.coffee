@@ -162,12 +162,12 @@ app.directive "circleAvatar", [->
 app.directive "emptyAvatar", [->
   restrict: "E"
   replace: true
-  template: "<div class='empty-avatar video-avatar'>&nbsp;</div>"
+  template: "<div class='empty-avatar video-avatar'></div>"
 ]
 app.directive "emptyCast", [->
   restrict: "E"
   replace: true
-  template: "<div class='empty-cast'>&nbsp;</div>"
+  template: "<div class='empty-cast'></div>"
 ]
 
 # ---------- video details ----------

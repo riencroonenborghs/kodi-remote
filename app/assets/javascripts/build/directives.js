@@ -258,7 +258,7 @@
       return {
         restrict: "E",
         replace: true,
-        template: "<div class='empty-avatar video-avatar'>&nbsp;</div>"
+        template: "<div class='empty-avatar video-avatar'></div>"
       };
     }
   ]);
@@ -268,7 +268,7 @@
       return {
         restrict: "E",
         replace: true,
-        template: "<div class='empty-cast'>&nbsp;</div>"
+        template: "<div class='empty-cast'></div>"
       };
     }
   ]);

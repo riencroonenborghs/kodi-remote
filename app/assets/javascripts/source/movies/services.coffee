@@ -6,14 +6,14 @@ app.service "Movies", [ "Request", (Request) ->
   allResultHandler = (result) -> 
     for movie in (result.movies || [])
       movie.type = "movie"
-      movie.thumbnail = kodiRemote.parseImage movie.thumbnail
+      movie.thumbnail = kodiRemote.imageObject movie.thumbnail
     return result.movies || []
 
   getResultHandler = (result) -> 
     result.moviedetails.type = "movie"
-    result.moviedetails.thumbnail = kodiRemote.parseImage result.moviedetails.thumbnail
+    result.moviedetails.thumbnail = kodiRemote.imageObject result.moviedetails.thumbnail
     for castMember in result.moviedetails.cast
-      castMember.thumbnail = kodiRemote.parseImage castMember.thumbnail
+      castMember.thumbnail = kodiRemote.imageObject castMember.thumbnail
     result.moviedetails
 
   yearsResultHandler = (result) -> return result.movies || []

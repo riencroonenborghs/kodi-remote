@@ -14,11 +14,11 @@
         for (i = 0, len = ref.length; i < len; i++) {
           show = ref[i];
           show.type = "tvShow";
-          show.thumbnail = kodiRemote.parseImage(show.thumbnail);
+          show.thumbnail = kodiRemote.imageObject(show.thumbnail);
           ref1 = show.cast;
           for (j = 0, len1 = ref1.length; j < len1; j++) {
             castMember = ref1[j];
-            castMember.thumbnail = kodiRemote.parseImage(castMember.thumbnail);
+            castMember.thumbnail = kodiRemote.imageObject(castMember.thumbnail);
           }
           show.seasons = function() {
             return Seasons.all(this.tvshowid);
@@ -29,11 +29,11 @@
       getResultHandler = function(result) {
         var castMember, i, len, ref;
         result.tvshowdetails.type = "tvShow";
-        result.tvshowdetails.thumbnail = kodiRemote.parseImage(result.tvshowdetails.thumbnail);
+        result.tvshowdetails.thumbnail = kodiRemote.imageObject(result.tvshowdetails.thumbnail);
         ref = result.tvshowdetails.cast;
         for (i = 0, len = ref.length; i < len; i++) {
           castMember = ref[i];
-          castMember.thumbnail = kodiRemote.parseImage(castMember.thumbnail);
+          castMember.thumbnail = kodiRemote.imageObject(castMember.thumbnail);
         }
         result.tvshowdetails.seasons = function() {
           return Seasons.all(this.tvshowid);
@@ -103,7 +103,7 @@
         for (i = 0, len = ref.length; i < len; i++) {
           season = ref[i];
           season.type = "season";
-          season.thumbnail = kodiRemote.parseImage(season.thumbnail);
+          season.thumbnail = kodiRemote.imageObject(season.thumbnail);
           season.episodes = function() {
             return Episodes.all(this.tvshowid, this.season);
           };
@@ -134,18 +134,18 @@
         for (i = 0, len = ref.length; i < len; i++) {
           episode = ref[i];
           episode.type = "episode";
-          episode.thumbnail = kodiRemote.parseImage(episode.thumbnail);
+          episode.thumbnail = kodiRemote.imageObject(episode.thumbnail);
         }
         return result.episodes || [];
       };
       getResultHandler = function(result) {
         var castMember, i, len, ref;
         result.episodedetails.type = "episode";
-        result.episodedetails.thumbnail = kodiRemote.parseImage(result.episodedetails.thumbnail);
+        result.episodedetails.thumbnail = kodiRemote.imageObject(result.episodedetails.thumbnail);
         ref = result.episodedetails.cast;
         for (i = 0, len = ref.length; i < len; i++) {
           castMember = ref[i];
-          castMember.thumbnail = kodiRemote.parseImage(castMember.thumbnail);
+          castMember.thumbnail = kodiRemote.imageObject(castMember.thumbnail);
         }
         return result.episodedetails;
       };

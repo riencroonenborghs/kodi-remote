@@ -9,9 +9,9 @@ app.service "Genres", [ "Request", (Request) ->
   getResultHandler = (type, result) ->
     for show in (result[type] || [])
       show.type = "tvShow"
-      show.thumbnail = kodiRemote.parseImage show.thumbnail
+      show.thumbnail = kodiRemote.imageObject show.thumbnail
       for castMember in show.cast
-        castMember.thumbnail = kodiRemote.parseImage castMember.thumbnail
+        castMember.thumbnail = kodiRemote.imageObject castMember.thumbnail
       show.seasons = -> Seasons.all @.tvshowid
     return result[type] || []
   getTvShowsResultHandler = (result) ->

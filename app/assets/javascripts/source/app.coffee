@@ -39,13 +39,10 @@ kodiRemote.settings =
   port: null
   requestType: null
 
-kodiRemote.parseImage = (image) ->
-  return "" unless image
-  image = decodeURIComponent image.replace("image://", "")
-  return if image.endsWith("/") then image.slice(0, -1) else image
-
-kodiRemote.imageUrl = (image) -> 
-  "http://#{kodiRemote.settings.server}:#{kodiRemote.settings.port}/image/#{encodeURIComponent image}"
+kodiRemote.imageObject = (image) ->
+  url: "http://#{kodiRemote.settings.server}:#{kodiRemote.settings.port}/image/#{encodeURIComponent image}"
+  original: image
+  isSet: image != undefined
 
 kodiRemote.array =
   inGroupsOf: (_list, number) ->

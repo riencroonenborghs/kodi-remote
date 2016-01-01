@@ -5,7 +5,7 @@ app.service "Playlist", [ "Request", (Request) ->
 
   itemsHandler = (result) -> 
     for item in (result.items || [])
-      item.thumbnail = kodiRemote.parseImage item.thumbnail
+      item.thumbnail = kodiRemote.imageObject item.thumbnail
     return result.items || []
 
   service = 

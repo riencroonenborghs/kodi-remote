@@ -14,18 +14,18 @@
         for (i = 0, len = ref.length; i < len; i++) {
           movie = ref[i];
           movie.type = "movie";
-          movie.thumbnail = kodiRemote.parseImage(movie.thumbnail);
+          movie.thumbnail = kodiRemote.imageObject(movie.thumbnail);
         }
         return result.movies || [];
       };
       getResultHandler = function(result) {
         var castMember, i, len, ref;
         result.moviedetails.type = "movie";
-        result.moviedetails.thumbnail = kodiRemote.parseImage(result.moviedetails.thumbnail);
+        result.moviedetails.thumbnail = kodiRemote.imageObject(result.moviedetails.thumbnail);
         ref = result.moviedetails.cast;
         for (i = 0, len = ref.length; i < len; i++) {
           castMember = ref[i];
-          castMember.thumbnail = kodiRemote.parseImage(castMember.thumbnail);
+          castMember.thumbnail = kodiRemote.imageObject(castMember.thumbnail);
         }
         return result.moviedetails;
       };

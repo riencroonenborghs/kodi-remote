@@ -101,8 +101,10 @@ md-list-item:not(:last-child) { padding-bottom: 8px !important; border-bottom: 1
 .hoverable-video-avatar { position: relative; }
 .hoverable-video-avatar .buttons { position: absolute; top: 8px; left: 32px; -z-index: 10; }
 
-.empty-cast { width: 75px; height: 100px; background: rgba(33,150,243,0.2); }
+.empty-cast { width: 75px; height: 112px; background: rgba(33,150,243,0.2); }
 .cast { padding-bottom: 16px; }
+.cast h3, .cast h4 { padding: 0; margin: 0; }
+.cast h3 { padding-top: 8px; }
 .cast .image img { width: 75px; }
 
 
