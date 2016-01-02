@@ -1,0 +1,21 @@
+<div class="md-padding" layout="column">
+  <div ng-repeat="albumGroup in albumGroups" layout="row">
+    <div flex="50" ng-repeat="album in albumGroup" layout="column" class="video pointer" ng-click="visitAlbum(album.albumid)">
+      <img src="{{album.thumbnail.url}}" class="video-avatar" ng-if="album.thumbnail.isSet" />
+      <empty-avatar ng-if="!album.thumbnail.isSet" class="music-avatar"></empty-avatar>
+
+      <h2 class="center">
+        {{album.title}}
+      </h2>
+      <h3 class="center">
+        {{album.artist.join(', ')}}
+      </h3>
+      <h5 class="center">
+        <span ng-if="album.year">{{album.year}}</span>
+        <ng-md-icon icon="star" size="8" style="fill: rgba(33,150,243,0.5);"></ng-md-icon>
+        {{album.rating | number : 1}}
+      </h5>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+<loading-screen loading="loading"></loading-screen>
+
+<div auto-scroll-paginate sortable>
+  <div layout="row" ng-if="!loading">
+    <navbar model="Navbar"></navbar>
+    <div flex></div>
+    <ng-include src="'app/views/music/_menu.html'"></ng-include>
+  </div>
+
+  <ng-include src="'app/views/music/_artists.html'"></ng-include>
+</div>  

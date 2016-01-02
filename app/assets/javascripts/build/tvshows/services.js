@@ -126,7 +126,7 @@
 
   app.service("Episodes", [
     "Request", function(Request) {
-      var getResultHandler, properties, resultHandler, service;
+      var emptyResultHandler, getResultHandler, properties, resultHandler, service;
       properties = ["title", "plot", "rating", "writer", "firstaired", "playcount", "runtime", "director", "season", "episode", "cast", "thumbnail", "resume", "showtitle", "tvshowid", "file"];
       resultHandler = function(result) {
         var episode, i, len, ref;
@@ -148,6 +148,9 @@
           castMember.thumbnail = kodiRemote.imageObject(castMember.thumbnail);
         }
         return result.episodedetails;
+      };
+      emptyResultHandler = function(result) {
+        return result;
       };
       service = {
         all: function(tvShowId, season) {
@@ -173,6 +176,11 @@
             properties: properties
           };
           return Request.fetch("VideoLibrary.GetEpisodeDetails", getResultHandler, params);
+        },
+        markAsWatched: function(episode) {
+          var params;
+          params = [episode.episodeid, episode.title, 1];
+          return Request.fetch("VideoLibrary.SetEpisodeDetails", emptyResultHandler, params);
         }
       };
       return service;

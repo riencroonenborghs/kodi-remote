@@ -4,8 +4,53 @@
 
   app = angular.module("kodiRemote.music.services", []);
 
+  app.service("Artists", [
+    "Request", function(Request) {
+      var allResultHandler, properties, service;
+      properties = ["description", "genre", "thumbnail"];
+      allResultHandler = function(result) {
+        var artist, i, len, ref;
+        ref = result.artists || [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          artist = ref[i];
+          artist.type = "artist";
+          artist.thumbnail = kodiRemote.imageObject(artist.thumbnail);
+        }
+        return result.artists || [];
+      };
+      service = {
+        perPage: 10,
+        all: function(pageParams, sortParams) {
+          var params;
+          if (pageParams == null) {
+            pageParams = 1;
+          }
+          if (sortParams == null) {
+            sortParams = {
+              by: "label",
+              direction: "ascending"
+            };
+          }
+          params = {
+            properties: properties,
+            sort: {
+              method: sortParams.by,
+              order: sortParams.direction
+            },
+            limits: {
+              start: (pageParams - 1) * this.perPage,
+              end: pageParams * this.perPage
+            }
+          };
+          return Request.fetch("AudioLibrary.GetArtists", allResultHandler, params);
+        }
+      };
+      return service;
+    }
+  ]);
+
   app.service("Albums", [
-    "Request", "Songs", function(Request, Songs) {
+    "Request", function(Request) {
       var allResultHandler, getResultHandler, properties, service;
       properties = ["title", "description", "artist", "genre", "mood", "style", "albumlabel", "rating", "year", "thumbnail", "playcount", "genreid", "artistid", "fanart"];
       allResultHandler = function(result) {
@@ -14,18 +59,13 @@
         for (i = 0, len = ref.length; i < len; i++) {
           album = ref[i];
           album.type = "album";
-          album.songs = function() {
-            return Songs.all(this.albumid);
-          };
           album.thumbnail = kodiRemote.imageObject(album.thumbnail);
         }
         return result.albums || [];
       };
       getResultHandler = function(result) {
         result.albumdetails.type = "album";
-        result.albumdetails.songs = function() {
-          return Songs.all(this.albumid);
-        };
+        result.albumdetails.thumbnail = kodiRemote.imageObject(result.albumdetails.thumbnail);
         return result.albumdetails;
       };
       service = {
@@ -37,7 +77,7 @@
           }
           if (sortParams == null) {
             sortParams = {
-              by: "artist",
+              by: "label",
               direction: "ascending"
             };
           }
@@ -70,22 +110,27 @@
   app.service("Songs", [
     "Request", function(Request) {
       var properties, resultHandler, service;
-      properties = ["title", "description", "artist", "genre", "mood", "style", "albumlabel", "rating", "year", "thumbnail", "playcount", "genreid", "artistid", "fanart"];
+      properties = ["title", "artist", "genre", "year", "rating", "album", "track", "duration", "playcount", "thumbnail", "file"];
       resultHandler = function(result) {
-        var i, len, ref, season;
+        var i, len, ref, song;
         ref = result.songs || [];
         for (i = 0, len = ref.length; i < len; i++) {
-          season = ref[i];
-          season.type = "song";
+          song = ref[i];
+          song.type = "song";
+          song.thumbnail = kodiRemote.imageObject(song.thumbnail);
         }
         return result.songs || [];
       };
       service = {
-        all: function(albumId) {
+        all: function(albumTitle) {
           var params;
           params = {
-            albumid: albumId,
-            properties: properties
+            properties: properties,
+            filter: {
+              field: "album",
+              operator: "is",
+              value: albumTitle
+            }
           };
           return Request.fetch("AudioLibrary.GetSongs", resultHandler, params);
         }

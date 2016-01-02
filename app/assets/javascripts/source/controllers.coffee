@@ -23,6 +23,8 @@ app.controller "AppController", [ "$scope", "$rootScope", "$interval", "$timeout
   $scope.visitYears           = -> $scope.visit "/movies/years"
   $scope.visitYear            = (year) -> $scope.visit "/movies/years/#{year}"
   $scope.visitRating          = (type) -> $scope.visit "#{type}/rating"
+  $scope.visitAlbums          = -> $scope.visit "/music/albums"
+  $scope.visitArtists         = -> $scope.visit "/music/artists"
   $scope.visitAlbum           = (albumId) -> $scope.visit "/music/albums/#{albumId}"
 
   # init the app

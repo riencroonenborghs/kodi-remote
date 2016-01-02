@@ -42,7 +42,7 @@ kodiRemote.settings =
 kodiRemote.imageObject = (image) ->
   url: "http://#{kodiRemote.settings.server}:#{kodiRemote.settings.port}/image/#{encodeURIComponent image}"
   original: image
-  isSet: image != undefined
+  isSet: image != undefined && image != null && image != ""
 
 kodiRemote.array =
   inGroupsOf: (_list, number) ->
@@ -106,12 +106,24 @@ app.config ($routeProvider, $locationProvider) ->
       templateUrl: "app/views/remote/index.html"
       controller: "RemoteController"
 
+    .when "/music/artists",
+      templateUrl: "app/views/music/artists.html"
+      controller: "ArtistsController"
     .when "/music/albums",
-      templateUrl: "app/views/music/albums.html"
+      templateUrl: "app/views/music/albums/index.html"
       controller: "AlbumsController"
     .when "/music/albums/:id",
-      templateUrl: "app/views/music/albums/index.html"
+      templateUrl: "app/views/music/albums/show.html"
       controller: "AlbumController"
+    .when "/music/genres",
+      templateUrl: "app/views/genres/index.html"
+      controller: "MusicGenresController"
+    .when "/music/rating",
+      templateUrl: "app/views/music/rating.html"
+      controller: "MusicRatingController"
+    # .when "/music/albums/:id",
+    #   templateUrl: "app/views/music/albums/index.html"
+    #   controller: "AlbumController"
 
     .when "/genres/tvshows/:genre",
       templateUrl: "app/views/genres/show-tvshows.html"

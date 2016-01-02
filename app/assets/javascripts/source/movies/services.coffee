@@ -18,6 +18,8 @@ app.service "Movies", [ "Request", (Request) ->
 
   yearsResultHandler = (result) -> return result.movies || []
 
+  emptyResultHandler = (result) -> return result
+
   service = 
     perPage: 10
 
@@ -72,6 +74,10 @@ app.service "Movies", [ "Request", (Request) ->
             start: (pageParams - 1) * @perPage
             end: pageParams * @perPage
       return Request.fetch "VideoLibrary.GetMovies", allResultHandler, params
+
+    markAsWatched: (movie) ->
+      params = [movie.movieid, movie.title, 1]
+      return Request.fetch "VideoLibrary.SetMovieDetails", emptyResultHandler, params
     
   service
 ]

@@ -21,13 +21,16 @@ app.service "Genres", [ "Request", (Request) ->
 
   service =
     all: (type) ->
-      params =
-        type: type
+      params =        
         properties: ["title"]
         sort:
           method: "title"
           order: "ascending"
-      return Request.fetch "VideoLibrary.GetGenres", allResultHandler, params
+      if type != "music"
+        params.type = type
+        return Request.fetch "VideoLibrary.GetGenres", allResultHandler, params
+      else
+        return Request.fetch "AudioLibrary.GetGenres", allResultHandler, params
 
     get: (type, genre, sortDirection) ->
       params =
@@ -46,6 +49,7 @@ app.service "Genres", [ "Request", (Request) ->
         when "movies"
           params.properties = movieProperties
           return Request.fetch "VideoLibrary.GetMovies", getMoviesResultHandler, params
+
 
   service
 ]

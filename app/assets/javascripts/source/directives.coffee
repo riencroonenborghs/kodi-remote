@@ -70,6 +70,8 @@ app.directive "sortable", [->
         labels: ["Ascending", "Descending"]
         current: 0
 
+    $scope.sortByArtists        = -> $scope.visitArtists()
+    $scope.sortByAlbums         = -> $scope.visitAlbums()
     $scope.sortByGenre          = (type) -> $scope.visitGenres(type)
     $scope.sortByRecentlyAdded  = (type) -> $scope.visitRecentlyAdded(type)
     $scope.sortByYear           = -> $scope.visitYears()
@@ -92,7 +94,7 @@ app.directive "videoButtons", [->
     video: "="
     visible: "="
   templateUrl: "app/views/ui/video-buttons.html"
-  controller: [ "$scope", "$rootScope", "Player", "Playlist", ($scope, $rootScope, Player, Playlist) ->
+  controller: [ "$scope", "$rootScope", "Player", "Playlist", "Episodes", "Movies", ($scope, $rootScope, Player, Playlist, Episodes, Movies) ->
 
     $scope.play = -> 
       if $scope.video.type == "movie"
@@ -101,13 +103,20 @@ app.directive "videoButtons", [->
         Player.playEpisode $scope.video.episodeid
 
     $scope.addedToPlaylist = false
-    $scope.addToPlaylist =  (event) ->
+    $scope.addToPlaylist = (event) ->
       if $scope.video.type == "episode"
         Playlist.addEpisode $scope.video.episodeid
         $scope.addedToPlaylist = true
       if $scope.video.type == "movie"
         Playlist.addMovie $scope.video.movieid
         $scope.addedToPlaylist = true
+
+    $scope.markAsWatched = -> 
+      if $scope.video.type == "episode"
+        Episodes.markAsWatched($scope.video)        
+      if $scope.video.type == "movie"
+        Movies.markAsWatched($scope.video)        
+      $scope.video.playcount = 1
   ]
 ]
 app.directive "videoButtonsEvents", [->
@@ -202,7 +211,8 @@ app.directive "watchedIt", [->
     model: "="
   templateUrl: "app/views/ui/watched-it.html"
   controller: [ "$scope", ($scope) ->
-    $scope.title      = if $scope.model.playcount == 1 then "Watched it" else "Haven't watched it"
-    $scope.iconColor  = if $scope.model.playcount == 1 then "rgba(33,150,243,1)" else "rgba(33,150,243,0.2)"
+    $scope.$watch "model.playcount", (c,o) ->
+      $scope.title      = if $scope.model.playcount == 1 then "Watched it" else "Haven't watched it"
+      $scope.iconColor  = if $scope.model.playcount == 1 then "rgba(33,150,243,1)" else "rgba(33,150,243,0.2)"
   ]
 ]

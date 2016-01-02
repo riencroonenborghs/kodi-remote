@@ -89,6 +89,8 @@ app.service "Episodes", [ "Request", (Request) ->
       castMember.thumbnail = kodiRemote.imageObject castMember.thumbnail
     result.episodedetails
 
+  emptyResultHandler = (result) -> return result
+
   service = 
     all: (tvShowId, season) -> 
       params =
@@ -107,6 +109,10 @@ app.service "Episodes", [ "Request", (Request) ->
         episodeid: episodeId
         properties: properties   
       return Request.fetch "VideoLibrary.GetEpisodeDetails", getResultHandler, params
+
+    markAsWatched: (episode) ->
+      params = [episode.episodeid, episode.title, 1]
+      return Request.fetch "VideoLibrary.SetEpisodeDetails", emptyResultHandler, params
       
   service
 ]

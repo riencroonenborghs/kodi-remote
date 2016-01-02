@@ -1,0 +1,12 @@
+<div class="md-padding" layout="column">
+  <div ng-repeat="artistGroup in artistGroups" layout="row">
+    <div flex="50" ng-repeat="artist in artistGroup" layout="column" class="video pointer" ng-click="visitAlbum(artist.artistid)">
+      <img src="{{artist.thumbnail.url}}" class="video-avatar" ng-if="artist.thumbnail.isSet" />
+      <empty-avatar ng-if="!artist.thumbnail.isSet" class="music-avatar"></empty-avatar>
+
+      <h3 class="center">
+        {{artist.artist}}
+      </h3>
+    </div>
+  </div>
+</div>

@@ -6,7 +6,7 @@
 
   app.service("Movies", [
     "Request", function(Request) {
-      var allResultHandler, getResultHandler, properties, service, yearsResultHandler;
+      var allResultHandler, emptyResultHandler, getResultHandler, properties, service, yearsResultHandler;
       properties = ["title", "genre", "year", "rating", "director", "tagline", "plot", "plotoutline", "playcount", "writer", "studio", "mpaa", "cast", "imdbnumber", "runtime", "thumbnail", "resume", "file"];
       allResultHandler = function(result) {
         var i, len, movie, ref;
@@ -31,6 +31,9 @@
       };
       yearsResultHandler = function(result) {
         return result.movies || [];
+      };
+      emptyResultHandler = function(result) {
+        return result;
       };
       service = {
         perPage: 10,
@@ -122,6 +125,11 @@
             }
           };
           return Request.fetch("VideoLibrary.GetMovies", allResultHandler, params);
+        },
+        markAsWatched: function(movie) {
+          var params;
+          params = [movie.movieid, movie.title, 1];
+          return Request.fetch("VideoLibrary.SetMovieDetails", emptyResultHandler, params);
         }
       };
       return service;

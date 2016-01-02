@@ -38,6 +38,25 @@
     }
   ]);
 
+  app.controller("MovieController", [
+    "$scope", "$rootScope", "$routeParams", "Movies", "NavbarFactory", "Files", function($scope, $rootScope, $routeParams, Movies, NavbarFactory, Files) {
+      var movieId;
+      movieId = parseInt($routeParams.id);
+      $scope.movie = null;
+      $rootScope.$broadcast("topbar.loading", true);
+      return Movies.get(movieId).then(function(movieData) {
+        $rootScope.$broadcast("topbar.loading", false);
+        $scope.movie = movieData.data;
+        $scope.Navbar = new NavbarFactory;
+        $scope.Navbar.addLink("/movies", "Movies");
+        $scope.Navbar.addTitle($scope.movie.title);
+        return Files.prepareDownload($scope.movie.file).then(function(fileData) {
+          return $scope.filePath = fileData.data.protocol + "://" + kodiRemote.settings.server + ":" + kodiRemote.settings.port + "/" + fileData.data.details.path;
+        });
+      });
+    }
+  ]);
+
   app.controller("RecentlyAddedMoviesController", [
     "$scope", "$rootScope", "NavbarFactory", "Movies", function($scope, $rootScope, NavbarFactory, Movies) {
       $scope.movies = [];
@@ -73,25 +92,6 @@
         $scope.Navbar = new NavbarFactory;
         $scope.Navbar.addLink("/movies", "Movies");
         return $scope.Navbar.addTitle("Genres (" + data.total + ")");
-      });
-    }
-  ]);
-
-  app.controller("MovieController", [
-    "$scope", "$rootScope", "$routeParams", "Movies", "NavbarFactory", "Files", function($scope, $rootScope, $routeParams, Movies, NavbarFactory, Files) {
-      var movieId;
-      movieId = parseInt($routeParams.id);
-      $scope.movie = null;
-      $rootScope.$broadcast("topbar.loading", true);
-      return Movies.get(movieId).then(function(movieData) {
-        $rootScope.$broadcast("topbar.loading", false);
-        $scope.movie = movieData.data;
-        $scope.Navbar = new NavbarFactory;
-        $scope.Navbar.addLink("/movies", "Movies");
-        $scope.Navbar.addTitle($scope.movie.title);
-        return Files.prepareDownload($scope.movie.file).then(function(fileData) {
-          return $scope.filePath = fileData.data.protocol + "://" + kodiRemote.settings.server + ":" + kodiRemote.settings.port + "/" + fileData.data.details.path;
-        });
       });
     }
   ]);

@@ -107,6 +107,12 @@
                 current: 0
               }
             };
+            $scope.sortByArtists = function() {
+              return $scope.visitArtists();
+            };
+            $scope.sortByAlbums = function() {
+              return $scope.visitAlbums();
+            };
             $scope.sortByGenre = function(type) {
               return $scope.visitGenres(type);
             };
@@ -147,7 +153,7 @@
         },
         templateUrl: "app/views/ui/video-buttons.html",
         controller: [
-          "$scope", "$rootScope", "Player", "Playlist", function($scope, $rootScope, Player, Playlist) {
+          "$scope", "$rootScope", "Player", "Playlist", "Episodes", "Movies", function($scope, $rootScope, Player, Playlist, Episodes, Movies) {
             $scope.play = function() {
               if ($scope.video.type === "movie") {
                 Player.playMovie($scope.video.movieid);
@@ -157,7 +163,7 @@
               }
             };
             $scope.addedToPlaylist = false;
-            return $scope.addToPlaylist = function(event) {
+            $scope.addToPlaylist = function(event) {
               if ($scope.video.type === "episode") {
                 Playlist.addEpisode($scope.video.episodeid);
                 $scope.addedToPlaylist = true;
@@ -166,6 +172,15 @@
                 Playlist.addMovie($scope.video.movieid);
                 return $scope.addedToPlaylist = true;
               }
+            };
+            return $scope.markAsWatched = function() {
+              if ($scope.video.type === "episode") {
+                Episodes.markAsWatched($scope.video);
+              }
+              if ($scope.video.type === "movie") {
+                Movies.markAsWatched($scope.video);
+              }
+              return $scope.video.playcount = 1;
             };
           }
         ]
@@ -321,8 +336,10 @@
         templateUrl: "app/views/ui/watched-it.html",
         controller: [
           "$scope", function($scope) {
-            $scope.title = $scope.model.playcount === 1 ? "Watched it" : "Haven't watched it";
-            return $scope.iconColor = $scope.model.playcount === 1 ? "rgba(33,150,243,1)" : "rgba(33,150,243,0.2)";
+            return $scope.$watch("model.playcount", function(c, o) {
+              $scope.title = $scope.model.playcount === 1 ? "Watched it" : "Haven't watched it";
+              return $scope.iconColor = $scope.model.playcount === 1 ? "rgba(33,150,243,1)" : "rgba(33,150,243,0.2)";
+            });
           }
         ]
       };

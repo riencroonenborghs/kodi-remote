@@ -1,0 +1,16 @@
+<loading-screen loading="loading"></loading-screen>
+
+<navbar model="Navbar"></navbar>
+
+<md-list>
+  <md-list-item ng-repeat="song in album.songs" class="md-3-line">
+    <img src="{{album.thumbnail.url}}" class="md-avatar" ng-if="album.thumbnail.isSet" />
+    <empty-avatar ng-if="!album.thumbnail.isSet" class="md-avatar"></empty-avatar>
+
+    <div class="md-list-item-text">
+      <h2>{{song.title}}</h2>
+      <h3>Track {{song.track}}</h3>
+      <p>Runtime: {{song.duration | secondsToDateTime | date:'HH:mm:ss'}}</p>
+    </div>
+  </md-list-item>
+</md-list>

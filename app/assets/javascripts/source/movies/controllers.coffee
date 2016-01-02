@@ -1,5 +1,7 @@
 app = angular.module "kodiRemote.movies.controllers", []
 
+# ----- movies -----
+
 app.controller "MoviesController", [ "$scope", "$rootScope", "NavbarFactory", "Movies",
 ($scope, $rootScope, NavbarFactory, Movies) ->  
   $scope.movies = []
@@ -31,13 +33,32 @@ app.controller "MoviesController", [ "$scope", "$rootScope", "NavbarFactory", "M
       $scope.loading = false
       for movie in data.data
         $scope.movies.push movie
-
       $scope.movieGroups = kodiRemote.array.inGroupsOf $scope.movies, 2
       $scope.Navbar = new NavbarFactory
       $scope.Navbar.addTitle "Movies (#{data.total})"
       $scope.paginationAfterLoad Movies.perPage, data.total
       return
 ]
+
+app.controller "MovieController", [ "$scope", "$rootScope", "$routeParams", "Movies", "NavbarFactory", "Files",
+($scope, $rootScope, $routeParams, Movies, NavbarFactory, Files) ->
+  movieId = parseInt $routeParams.id
+
+  $scope.movie = null
+
+  $rootScope.$broadcast "topbar.loading", true
+  Movies.get(movieId).then (movieData) ->
+    $rootScope.$broadcast "topbar.loading", false
+    $scope.movie = movieData.data
+    $scope.Navbar = new NavbarFactory
+    $scope.Navbar.addLink "/movies", "Movies"
+    $scope.Navbar.addTitle $scope.movie.title
+
+    Files.prepareDownload($scope.movie.file).then (fileData) ->      
+      $scope.filePath = "#{fileData.data.protocol}://#{kodiRemote.settings.server}:#{kodiRemote.settings.port}/#{fileData.data.details.path}"
+]
+
+# ----- recently added -----
 
 app.controller "RecentlyAddedMoviesController", [ "$scope", "$rootScope", "NavbarFactory", "Movies",
 ($scope, $rootScope, NavbarFactory, Movies) ->  
@@ -59,6 +80,7 @@ app.controller "RecentlyAddedMoviesController", [ "$scope", "$rootScope", "Navba
     return
 ]
 
+# ----- genres -----
 
 app.controller "MovieGenresController", [ "$scope", "$rootScope", "NavbarFactory", "Genres", ($scope, $rootScope,NavbarFactory, Genres) ->  
   $scope.showRating = true
@@ -79,23 +101,7 @@ app.controller "MovieGenresController", [ "$scope", "$rootScope", "NavbarFactory
     $scope.Navbar.addTitle "Genres (#{data.total})"  
 ]
 
-app.controller "MovieController", [ "$scope", "$rootScope", "$routeParams", "Movies", "NavbarFactory", "Files",
-($scope, $rootScope, $routeParams, Movies, NavbarFactory, Files) ->
-  movieId = parseInt $routeParams.id
-
-  $scope.movie = null
-
-  $rootScope.$broadcast "topbar.loading", true
-  Movies.get(movieId).then (movieData) ->
-    $rootScope.$broadcast "topbar.loading", false
-    $scope.movie = movieData.data
-    $scope.Navbar = new NavbarFactory
-    $scope.Navbar.addLink "/movies", "Movies"
-    $scope.Navbar.addTitle $scope.movie.title
-
-    Files.prepareDownload($scope.movie.file).then (fileData) ->      
-      $scope.filePath = "#{fileData.data.protocol}://#{kodiRemote.settings.server}:#{kodiRemote.settings.port}/#{fileData.data.details.path}"
-]
+# ----- years -----
 
 app.controller "MovieYearsController", [ "$scope", "$rootScope", "Movies", "NavbarFactory", ($scope, $rootScope, Movies, NavbarFactory) ->
 
@@ -155,6 +161,8 @@ app.controller "MovieYearController", [ "$scope", "$rootScope", "$routeParams", 
       $scope.Navbar.addLink "/movies/years", "By Year"
       $scope.Navbar.addTitle "#{year} (#{data.total})"
 ]
+
+# ----- rating -----
 
 app.controller "MoviesRatingController", [ "$scope", "$rootScope", "NavbarFactory", "Movies",
 ($scope, $rootScope, NavbarFactory, Movies) ->  

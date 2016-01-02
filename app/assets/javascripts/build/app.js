@@ -21,7 +21,7 @@
     return {
       url: "http://" + kodiRemote.settings.server + ":" + kodiRemote.settings.port + "/image/" + (encodeURIComponent(image)),
       original: image,
-      isSet: image !== void 0
+      isSet: image !== void 0 && image !== null && image !== ""
     };
   };
 
@@ -86,12 +86,21 @@
     }).when("/remote", {
       templateUrl: "app/views/remote/index.html",
       controller: "RemoteController"
+    }).when("/music/artists", {
+      templateUrl: "app/views/music/artists.html",
+      controller: "ArtistsController"
     }).when("/music/albums", {
-      templateUrl: "app/views/music/albums.html",
+      templateUrl: "app/views/music/albums/index.html",
       controller: "AlbumsController"
     }).when("/music/albums/:id", {
-      templateUrl: "app/views/music/albums/index.html",
+      templateUrl: "app/views/music/albums/show.html",
       controller: "AlbumController"
+    }).when("/music/genres", {
+      templateUrl: "app/views/genres/index.html",
+      controller: "MusicGenresController"
+    }).when("/music/rating", {
+      templateUrl: "app/views/music/rating.html",
+      controller: "MusicRatingController"
     }).when("/genres/tvshows/:genre", {
       templateUrl: "app/views/genres/show-tvshows.html",
       controller: "TvShowGenreController"

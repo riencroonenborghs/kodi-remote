@@ -45,6 +45,12 @@
       $scope.visitRating = function(type) {
         return $scope.visit(type + "/rating");
       };
+      $scope.visitAlbums = function() {
+        return $scope.visit("/music/albums");
+      };
+      $scope.visitArtists = function() {
+        return $scope.visit("/music/artists");
+      };
       $scope.visitAlbum = function(albumId) {
         return $scope.visit("/music/albums/" + albumId);
       };

@@ -40,14 +40,18 @@
         all: function(type) {
           var params;
           params = {
-            type: type,
             properties: ["title"],
             sort: {
               method: "title",
               order: "ascending"
             }
           };
-          return Request.fetch("VideoLibrary.GetGenres", allResultHandler, params);
+          if (type !== "music") {
+            params.type = type;
+            return Request.fetch("VideoLibrary.GetGenres", allResultHandler, params);
+          } else {
+            return Request.fetch("AudioLibrary.GetGenres", allResultHandler, params);
+          }
         },
         get: function(type, genre, sortDirection) {
           var params;
