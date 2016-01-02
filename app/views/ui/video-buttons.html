@@ -24,6 +24,11 @@
       <ng-md-icon icon="play_arrow" style="fill: white;"></ng-md-icon>    
     </md-button>
   </div>
-  <img src="{{video.thumbnail.url}}" class="video-avatar" ng-if="video.thumbnail.isSet" />
+
+  <div class="image" layout="column">
+    <span flex></span>
+    <img src="{{video.thumbnail.url}}" ng-if="video.thumbnail.isSet" />
+    <span flex></span>
+  </div>
   <empty-avatar ng-if="!video.thumbnail.isSet"></empty-avatar>
 </div>
