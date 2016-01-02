@@ -2,6 +2,7 @@
   <div ng-repeat="movieGroup in movieGroups" layout="row">    
     <div flex="50" ng-repeat="movie in movieGroup" layout="column" class="video pointer" ng-click="visitMovie(movie.movieid)" ng-mouseover="showPlayButton($event)" ng-mouseout="hidePlayButton($event)" video-buttons-events>
       <video-buttons video="movie" visible="visible"></video-buttons>
+      <md-slider ng-if="movie.resume.position > 0" min="0" max="100" ng-model="movie.resume.percentage" aria-label="percentage watched" class="md-primary video-position"></md-slider>
 
       <h2 class="center">
         <watched-it model="movie"></watched-it>

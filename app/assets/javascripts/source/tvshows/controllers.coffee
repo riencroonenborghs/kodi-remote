@@ -95,6 +95,8 @@ app.controller "EpisodesController", [ "$scope", "$rootScope", "$routeParams", "
           season.episodes().then (episodeData) ->
             $rootScope.$broadcast "topbar.loading", false
             $scope.episodes = episodeData.data
+            for episode in $scope.episodes
+              episode.resume.percentage = if episode.resume.position == 0 then 0 else ((episode.resume.position/episode.resume.total)*100)
             $scope.episodeGroups = kodiRemote.array.inGroupsOf $scope.episodes, 2
 ]
 

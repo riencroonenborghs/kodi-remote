@@ -1,4 +1,5 @@
 <video-buttons video="episode" visible="visible"></video-buttons>
+<md-slider ng-if="episode.resume.position > 0" min="0" max="100" ng-model="episode.resume.percentage" aria-label="percentage watched" class="md-primary video-position"></md-slider>
 
 <h2 class="center">
   <watched-it model="episode"></watched-it>        

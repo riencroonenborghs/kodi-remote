@@ -32,6 +32,7 @@ app.controller "MoviesController", [ "$scope", "$rootScope", "NavbarFactory", "M
       $rootScope.$broadcast "topbar.loading", false
       $scope.loading = false
       for movie in data.data
+        movie.resume.percentage = if movie.resume.position == 0 then 0 else ((movie.resume.position/movie.resume.total)*100)
         $scope.movies.push movie
       $scope.movieGroups = kodiRemote.array.inGroupsOf $scope.movies, 2
       $scope.Navbar = new NavbarFactory

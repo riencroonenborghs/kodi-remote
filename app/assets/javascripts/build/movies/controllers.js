@@ -27,6 +27,7 @@
           ref = data.data;
           for (i = 0, len = ref.length; i < len; i++) {
             movie = ref[i];
+            movie.resume.percentage = movie.resume.position === 0 ? 0 : (movie.resume.position / movie.resume.total) * 100;
             $scope.movies.push(movie);
           }
           $scope.movieGroups = kodiRemote.array.inGroupsOf($scope.movies, 2);
