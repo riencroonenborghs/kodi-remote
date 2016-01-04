@@ -52,6 +52,10 @@ kodiRemote.array =
       newList.push list.splice(0, number)
     return newList
 
+kodiRemote.video =
+  resumePercentage: (video) -> 
+    video.resume.percentage = if video.resume.position == 0 then 0 else ((video.resume.position/video.resume.total)*100)
+
 app.config ($routeProvider, $locationProvider) ->
   $routeProvider
     .when "/settings",

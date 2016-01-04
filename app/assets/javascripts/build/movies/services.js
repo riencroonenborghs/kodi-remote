@@ -15,6 +15,7 @@
           movie = ref[i];
           movie.type = "movie";
           movie.thumbnail = kodiRemote.imageObject(movie.thumbnail);
+          kodiRemote.video.resumePercentage(movie);
         }
         return result.movies || [];
       };
@@ -22,6 +23,7 @@
         var castMember, i, len, ref;
         result.moviedetails.type = "movie";
         result.moviedetails.thumbnail = kodiRemote.imageObject(result.moviedetails.thumbnail);
+        kodiRemote.video.resumePercentage(result.moviedetails);
         ref = result.moviedetails.cast;
         for (i = 0, len = ref.length; i < len; i++) {
           castMember = ref[i];

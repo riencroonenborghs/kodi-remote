@@ -7,11 +7,13 @@ app.service "Movies", [ "Request", (Request) ->
     for movie in (result.movies || [])
       movie.type = "movie"
       movie.thumbnail = kodiRemote.imageObject movie.thumbnail
+      kodiRemote.video.resumePercentage movie
     return result.movies || []
 
   getResultHandler = (result) -> 
     result.moviedetails.type = "movie"
     result.moviedetails.thumbnail = kodiRemote.imageObject result.moviedetails.thumbnail
+    kodiRemote.video.resumePercentage result.moviedetails
     for castMember in result.moviedetails.cast
       castMember.thumbnail = kodiRemote.imageObject castMember.thumbnail
     result.moviedetails

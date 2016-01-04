@@ -37,6 +37,12 @@
     }
   };
 
+  kodiRemote.video = {
+    resumePercentage: function(video) {
+      return video.resume.percentage = video.resume.position === 0 ? 0 : (video.resume.position / video.resume.total) * 100;
+    }
+  };
+
   app.config(function($routeProvider, $locationProvider) {
     $routeProvider.when("/settings", {
       templateUrl: "app/views/settings/index.html",

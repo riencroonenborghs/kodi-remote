@@ -101,14 +101,8 @@
               $scope.Navbar.addLink("/tvshows/" + tvShowId + "/seasons", $scope.tvShow.title);
               $scope.Navbar.addTitle("Season " + season.season);
               results.push(season.episodes().then(function(episodeData) {
-                var episode, j, len1, ref1;
                 $rootScope.$broadcast("topbar.loading", false);
                 $scope.episodes = episodeData.data;
-                ref1 = $scope.episodes;
-                for (j = 0, len1 = ref1.length; j < len1; j++) {
-                  episode = ref1[j];
-                  episode.resume.percentage = episode.resume.position === 0 ? 0 : (episode.resume.position / episode.resume.total) * 100;
-                }
                 return $scope.episodeGroups = kodiRemote.array.inGroupsOf($scope.episodes, 2);
               }));
             } else {

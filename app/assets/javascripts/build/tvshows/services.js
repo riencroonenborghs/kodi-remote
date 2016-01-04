@@ -135,6 +135,7 @@
           episode = ref[i];
           episode.type = "episode";
           episode.thumbnail = kodiRemote.imageObject(episode.thumbnail);
+          kodiRemote.video.resumePercentage(episode);
         }
         return result.episodes || [];
       };
@@ -142,6 +143,7 @@
         var castMember, i, len, ref;
         result.episodedetails.type = "episode";
         result.episodedetails.thumbnail = kodiRemote.imageObject(result.episodedetails.thumbnail);
+        kodiRemote.video.resumePercentage(result.episodedetails);
         ref = result.episodedetails.cast;
         for (i = 0, len = ref.length; i < len; i++) {
           castMember = ref[i];

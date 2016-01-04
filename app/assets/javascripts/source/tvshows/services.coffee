@@ -80,11 +80,13 @@ app.service "Episodes", [ "Request", (Request) ->
     for episode in (result.episodes || [])
       episode.type = "episode"
       episode.thumbnail = kodiRemote.imageObject episode.thumbnail
+      kodiRemote.video.resumePercentage episode
     return result.episodes || []
 
   getResultHandler = (result) -> 
     result.episodedetails.type = "episode"
     result.episodedetails.thumbnail = kodiRemote.imageObject result.episodedetails.thumbnail
+    kodiRemote.video.resumePercentage result.episodedetails
     for castMember in result.episodedetails.cast
       castMember.thumbnail = kodiRemote.imageObject castMember.thumbnail
     result.episodedetails
