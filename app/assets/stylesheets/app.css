@@ -72,7 +72,8 @@ md-list-item:not(:last-child) { padding-bottom: 8px !important; border-bottom: 1
 /*----- video -----*/
 .video { margin-bottom: 24px; }
 
-.video-avatar { width: 175px; }
+.video-avatar { max-height: 300px; }
+.video-avatar.episode { max-width: 150px; }
 .video .video-avatar { margin-left: auto; margin-right: auto; }
 .empty-avatar { width: 175px; height: 253px; background: rgba(33,150,243,0.2); }
 .empty-avatar.music-avatar { height: 175px; }
@@ -103,7 +104,7 @@ md-list-item:not(:last-child) { padding-bottom: 8px !important; border-bottom: 1
 .hoverable-video-avatar { position: relative; }
 .hoverable-video-avatar .buttons { position: absolute; top: 8px; left: 32px; -z-index: 10; height: 90%; }
 .hoverable-video-avatar .image { width: 175px; height: 260px; margin: auto; background: rgba(33,150,243,0.2); }
-.hoverable-video-avatar .image img { width: 175px; max-height: 260px; }
+.hoverable-video-avatar .image img { max-height: 100px; }
 
 .empty-cast { width: 75px; height: 112px; background: rgba(33,150,243,0.2); }
 .cast { padding-bottom: 16px; }

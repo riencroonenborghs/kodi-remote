@@ -4,7 +4,7 @@
 
 <div class="md-padding" layout="row">
   <div flex="40">
-    <img src="{{episode.thumbnail.url}}" class="video-avatar" ng-if="episode.thumbnail.isSet" />
+    <img src="{{episode.thumbnail.url}}" class="video-avatar episode" ng-if="episode.thumbnail.isSet" />
     <empty-avatar ng-if="!episode.thumbnail.isSet"></empty-avatar>
   </div>
   <div class="plot" flex>

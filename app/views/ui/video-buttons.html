@@ -25,9 +25,9 @@
     </md-button>
   </div>
 
-  <div class="image" layout="column">
+  <div class="image" layout="column" ng-if="video.thumbnail.isSet">
     <span flex></span>
-    <img src="{{video.thumbnail.url}}" ng-if="video.thumbnail.isSet" />
+    <img src="{{video.thumbnail.url}}" />
     <span flex></span>
   </div>
   <empty-avatar ng-if="!video.thumbnail.isSet"></empty-avatar>
