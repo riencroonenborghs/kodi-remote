@@ -9,7 +9,14 @@ app.controller "SettingsController", [ "$scope", "$location", ($scope, $location
 
   $scope.save = ->
     chrome.storage.local.clear()
-    data = JSON.stringify {server: $scope.model.server.ipAddress, port: $scope.model.server.port, requestType: $scope.model.server.requestType}
+    hash =
+      server: $scope.model.server.ipAddress
+      port: $scope.model.server.port
+      requestType: $scope.model.server.requestType
+      liked:
+        tvShows: kodiRemote.settings.liked.tvShows
+        movies: kodiRemote.settings.liked.movies
+    data = JSON.stringify hash
     
     chrome.storage.local.set {kodiRemote: data}
     kodiRemote.settings.server      = $scope.model.server.ipAddress

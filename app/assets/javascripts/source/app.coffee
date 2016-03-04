@@ -25,7 +25,9 @@ app = angular.module "kodiRemote", [
   "kodiRemote.genres.controllers",
   "kodiRemote.genres.services",
   "kodiRemote.music.controllers",
-  "kodiRemote.music.services" 
+  "kodiRemote.music.services",
+  "kodiRemote.liked.controllers",
+  "kodiRemote.liked.services"
 ]
 
 app.config ($mdThemingProvider) ->
@@ -38,6 +40,9 @@ kodiRemote.settings =
   server: null
   port: null
   requestType: null
+  liked:
+    tvShows: []
+    movies: []
 
 kodiRemote.imageObject = (image) ->
   url: "http://#{kodiRemote.settings.server}:#{kodiRemote.settings.port}/image/#{encodeURIComponent image}"
@@ -125,9 +130,6 @@ app.config ($routeProvider, $locationProvider) ->
     .when "/music/rating",
       templateUrl: "app/views/music/rating.html"
       controller: "MusicRatingController"
-    # .when "/music/albums/:id",
-    #   templateUrl: "app/views/music/albums/index.html"
-    #   controller: "AlbumController"
 
     .when "/genres/tvshows/:genre",
       templateUrl: "app/views/genres/show-tvshows.html"
@@ -135,6 +137,10 @@ app.config ($routeProvider, $locationProvider) ->
     .when "/genres/movies/:genre",
       templateUrl: "app/views/genres/show-movies.html"
       controller: "MovieGenreController"
+
+    .when "/liked",
+      templateUrl: "app/views/liked/index.html"
+      controller: "LikedController"
 
     .otherwise "/tvshows",
       templateUrl: "app/views/tvshows/index.html"

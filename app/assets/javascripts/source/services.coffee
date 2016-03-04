@@ -60,8 +60,12 @@ app.service "SearchService", [ "TvShows", "Movies", (TvShows, Movies) ->
       @tvShows    = []
       @movies     = []
 
-      TvShows.where.title(query).then (tvShowsData) =>
-        @tvShows          = tvShowsData.data
+      TvShows.where.title(query).then (tvShowsData) =>        
+        for tvShow in tvShowsData.data
+          tvShow.liked = false
+          if tvShow.tvshowid in kodiRemote.settings.liked.tvShows
+            tvShow.liked = true
+          @tvShows.push tvShow
         @tvShowGroups     = kodiRemote.array.inGroupsOf @tvShows, 2
         searchingTvShows  = false
         @searching        = searchingTvShows && searchingMovies

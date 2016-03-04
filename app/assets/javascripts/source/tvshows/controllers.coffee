@@ -1,6 +1,7 @@
 app = angular.module "kodiRemote.tvshows.controllers", []
 
-app.controller "TvShowsController", [ "$scope", "$rootScope", "NavbarFactory", "TvShows", ($scope, $rootScope, NavbarFactory, TvShows) ->  
+app.controller "TvShowsController", [ "$scope", "$rootScope", "NavbarFactory", "TvShows",
+($scope, $rootScope, NavbarFactory, TvShows) ->  
   $scope.tvShows = []  
   $scope.tvShowGroups = []
 
@@ -24,6 +25,9 @@ app.controller "TvShowsController", [ "$scope", "$rootScope", "NavbarFactory", "
     TvShows.all($scope.pagination.page, $scope.sortParams).then (data) ->
       $rootScope.$broadcast "topbar.loading", false
       for tvShow in data.data
+        tvShow.liked = false
+        if tvShow.tvshowid in kodiRemote.settings.liked.tvShows
+          tvShow.liked = true
         $scope.tvShows.push tvShow
       $scope.tvShowGroups = kodiRemote.array.inGroupsOf $scope.tvShows, 2      
       $scope.Navbar = new NavbarFactory

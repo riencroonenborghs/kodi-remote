@@ -1,9 +1,12 @@
 app = angular.module "kodiRemote.controllers", []
 
-app.controller "AppController", [ "$scope", "$rootScope", "$interval", "$timeout", "$location", "$mdSidenav", "$mdToast", "SearchService","Player",
-($scope, $rootScope, $interval, $timeout, $location, $mdSidenav, $mdToast, SearchService, Player) ->
+app.controller "AppController", [ "$scope", "$rootScope", "$interval", "$timeout", "$location", "$mdSidenav", "$mdToast", "SearchService","Player", "Liked",
+($scope, $rootScope, $interval, $timeout, $location, $mdSidenav, $mdToast, SearchService, Player, Liked) ->
 
   # chrome.storage.local.clear()
+
+  $scope.toggleLikedTvShows = (tvShow) -> 
+    Liked.toggleTvShow tvShow
 
   $scope.loading = true
   $scope.$on "topbar.loading", (event, value) ->
@@ -87,13 +90,17 @@ app.controller "AppController", [ "$scope", "$rootScope", "$interval", "$timeout
       $scope.hasServer = true
   checkServer()
 
-  loadSettings = ->
+  loadFromChromeStorage = ->
     chrome.storage.local.get "kodiRemote", (data) ->
+      console.debug data
       if data.kodiRemote
         parsedData = JSON.parse data.kodiRemote
         kodiRemote.settings.server      = parsedData.server
         kodiRemote.settings.port        = parsedData.port
         kodiRemote.settings.requestType = parsedData.requestType
+        if parsedData.liked
+          kodiRemote.settings.liked.tvShows = parsedData.liked.tvShows
+          kodiRemote.settings.liked.movies  = parsedData.liked.movies
         # it's set, no check if we can access the server
         # if so, init the app and go to tv shows
         checkServer()        
@@ -104,14 +111,14 @@ app.controller "AppController", [ "$scope", "$rootScope", "$interval", "$timeout
             $location.path "/tvshows"
         ), 500
 
-  loadSettingsInterval = $interval loadSettings, 1000
-  loadSettings()
+  loadSettingsInterval = $interval loadFromChromeStorage, 1000
+  loadFromChromeStorage()
   
   if $scope.hasServer
     initApp()
   else
     $location.path "/settings"
-    return      
+    return
 ]
 
 app.controller "MessageController", [ "$scope", "message", ($scope, message) ->

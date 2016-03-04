@@ -25,7 +25,7 @@
     </md-button>
   </div>
 
-  <div class="image" layout="column" ng-if="video.thumbnail.isSet">
+  <div class="image {{video.type}}" layout="column" ng-if="video.thumbnail.isSet">
     <span flex></span>
     <img src="{{video.thumbnail.url}}" />
     <span flex></span>

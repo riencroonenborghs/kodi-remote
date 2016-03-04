@@ -28,7 +28,8 @@ html, body { width: 500px; }
 .music-button svg,
 .search-button svg,
 .save-button svg,
-.ffw-button svg { position: relative; top: 8px; }
+.ffw-button svg,
+.like-button svg { position: relative; top: 8px; }
 .sort-button { text-transform: none !important; color: rgb(33,150,243); }
 .close-button svg { position: relative; top: 6px; }
 .sort-button svg { position: relative; top: 2px; }
@@ -105,6 +106,7 @@ md-list-item:not(:last-child) { padding-bottom: 8px !important; border-bottom: 1
 .hoverable-video-avatar .buttons { position: absolute; top: 8px; left: 32px; -z-index: 10; height: 90%; }
 .hoverable-video-avatar .image { width: 175px; height: 260px; margin: auto; background: rgba(33,150,243,0.2); }
 .hoverable-video-avatar .image img { max-height: 100px; }
+.hoverable-video-avatar .image.movie img { max-height: none; height: 100% !important; }
 
 .empty-cast { width: 75px; height: 112px; background: rgba(33,150,243,0.2); }
 .cast { padding-bottom: 16px; }
@@ -127,3 +129,10 @@ md-toast { background-color: rgba(33,150,243,1); }
 .playlist-item .text h3,
 .playlist-item .text h4 { padding: 0; margin: 0; }
 .playlist-item:not(:last-child) { border-bottom: 1px solid rgba(33, 150, 243, 0.12); }
+
+
+/* like */
+.tvshow-wrapper { position: relative; }
+.tvshow-wrapper button { position: absolute; top: 16px; left: 12px; }
+button.like-button { background-color: rgba(33,150,243,0.5) !important; }
+button.like-button.liked { background-color: rgba(33,243,78,0.5) !important; }

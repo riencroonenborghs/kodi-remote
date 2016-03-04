@@ -4,24 +4,27 @@
   <navbar model="Navbar"></navbar>
 
   <div class="md-padding">
-    <h3>{{movie.tagline}}</h3>
-
-    <div style="padding-bottom: 16px;">
-      <span class="genre pointer" ng-repeat="genre in movie.genre" ng-click="visitGenre('movies', genre); $event.stopPropagation();">{{genre}}</span>
+    <div layout="row">
+      <div layout="column" flex="75">
+        <h3>{{movie.tagline}}</h3>
+        <div style="padding-bottom: 16px;">
+          <span class="genre pointer" ng-repeat="genre in movie.genre" ng-click="visitGenre('movies', genre); $event.stopPropagation();">{{genre}}</span>
+        </div>
+      </div>
+      <div flex="25">
+        <rating size="big" rating="movie.rating"></rating>  
+        <a class="md-button md-raised" href="{{filePath}}">Link</a>
+      </div>
     </div>
 
     <div layout="row">
-      <div flex="40">
+      <div flex="50">
         <img src="{{movie.thumbnail.url}}" class="video-avatar" ng-if="movie.thumbnail.isSet" />
         <empty-avatar ng-if="!movie.thumbnail.isSet"></empty-avatar>
       </div>
       <div class="plot" flex>
         <div>{{movie.plot}}</div>
         <span ng-if="movie.runtime">Runtime: {{movie.runtime | secondsToDateTime | date:'HH:mm:ss'}}</span>
-      </div>
-      <div flex="25">
-        <rating size="big" rating="movie.rating"></rating>  
-        <a class="md-button md-raised" href="{{filePath}}">Link</a>
       </div>
     </div>    
   </div>
