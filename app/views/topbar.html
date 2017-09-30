@@ -12,12 +12,15 @@
         <input type="text" id="search-query" ng-model="search.query" ng-model-options="{debounce: 500}" ng-change="performSearch()" />
       </md-input-container>
 
-      <div flex=20 layout="row">
+      <div flex=30 layout="row">
         <md-button class="md-icon-button topbar-button" aria-label="TV Shows" ng-click="visit('/tvshows')">
           <ng-md-icon icon="tv" size="20" style="fill: white;"></ng-md-icon>
         </md-button>
         <md-button class="md-icon-button topbar-button" aria-label="Movies" ng-click="visit('/movies')">
           <ng-md-icon icon="movie" size="20" style="fill: white;"></ng-md-icon>
+        </md-button>
+        <md-button class="md-icon-button topbar-button" aria-label="Movies" ng-click="visit('/tv')">
+          <ng-md-icon icon="live_tv" size="20" style="fill: white;"></ng-md-icon>
         </md-button>
         <!-- <md-button flex class="md-icon-button topbar-button" aria-label="Liked" ng-click="visit('/liked')">
           <ng-md-icon icon="thumb_up" size="20" style="fill: white;"></ng-md-icon>

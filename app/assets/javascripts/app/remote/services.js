@@ -55,22 +55,33 @@ app.service("Player", [
       playEpisode: function(episodeId) {
         return this.stop().then((function(_this) {
           return function() {
-            return Playlist.clear().then(function() {
-              return Playlist.addEpisode(episodeId).then(function() {
-                return _this.open(1, 0);
-              });
-            });
+            return Request.fetch("Player.Open", emptyHandler, [
+              {
+                episodeid: episodeId
+              }
+            ]);
           };
         })(this));
       },
       playMovie: function(movieId) {
         return this.stop().then((function(_this) {
           return function() {
-            return Playlist.clear().then(function() {
-              return Playlist.addMovie(movieId).then(function() {
-                return _this.open(1, 0);
-              });
-            });
+            return Request.fetch("Player.Open", emptyHandler, [
+              {
+                movieid: movieId
+              }
+            ]);
+          };
+        })(this));
+      },
+      switchToChannel: function(channelId) {
+        return this.stop().then((function(_this) {
+          return function() {
+            return Request.fetch("Player.Open", emptyHandler, [
+              {
+                channelid: channelId
+              }
+            ]);
           };
         })(this));
       }

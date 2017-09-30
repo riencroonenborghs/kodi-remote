@@ -3,7 +3,7 @@ var app, kodiRemote,
 
 kodiRemote = window.kodiRemote || (window.kodiRemote = {});
 
-app = angular.module("kodiRemote", ["ngAria", "ngAnimate", "ngMaterial", "ngMdIcons", "ngRoute", "ngWebSocket", "kodiRemote.controllers", "kodiRemote.services", "kodiRemote.directives", "kodiRemote.factories", "kodiRemote.tvshows.controllers", "kodiRemote.tvshows.services", "kodiRemote.movies.controllers", "kodiRemote.movies.services", "kodiRemote.settings.controllers", "kodiRemote.remote.controllers", "kodiRemote.remote.services", "kodiRemote.playlist.controllers", "kodiRemote.playlist.services", "kodiRemote.genres.controllers", "kodiRemote.genres.services", "kodiRemote.music.controllers", "kodiRemote.music.services", "kodiRemote.liked.controllers", "kodiRemote.liked.services"]);
+app = angular.module("kodiRemote", ["ngAria", "ngAnimate", "ngMaterial", "ngMdIcons", "ngRoute", "ngWebSocket", "kodiRemote.controllers", "kodiRemote.services", "kodiRemote.directives", "kodiRemote.factories", "kodiRemote.tvshows.controllers", "kodiRemote.tvshows.services", "kodiRemote.movies.controllers", "kodiRemote.movies.services", "kodiRemote.settings.controllers", "kodiRemote.remote.controllers", "kodiRemote.remote.services", "kodiRemote.playlist.controllers", "kodiRemote.playlist.services", "kodiRemote.genres.controllers", "kodiRemote.genres.services", "kodiRemote.music.controllers", "kodiRemote.music.services", "kodiRemote.liked.controllers", "kodiRemote.liked.services", "kodiRemote.tv.controllers", "kodiRemote.tv.services"]);
 
 app.config(function($mdThemingProvider) {
   return $mdThemingProvider.theme("default").primaryPalette("blue").accentPalette("green");
@@ -94,30 +94,15 @@ app.config(function($routeProvider, $locationProvider) {
   }).when("/remote", {
     templateUrl: "app/views/remote/index.html",
     controller: "RemoteController"
-  }).when("/music/artists", {
-    templateUrl: "app/views/music/artists.html",
-    controller: "ArtistsController"
-  }).when("/music/albums", {
-    templateUrl: "app/views/music/albums/index.html",
-    controller: "AlbumsController"
-  }).when("/music/albums/:id", {
-    templateUrl: "app/views/music/albums/show.html",
-    controller: "AlbumController"
-  }).when("/music/genres", {
-    templateUrl: "app/views/genres/index.html",
-    controller: "MusicGenresController"
-  }).when("/music/rating", {
-    templateUrl: "app/views/music/rating.html",
-    controller: "MusicRatingController"
   }).when("/genres/tvshows/:genre", {
     templateUrl: "app/views/genres/show-tvshows.html",
     controller: "TvShowGenreController"
   }).when("/genres/movies/:genre", {
     templateUrl: "app/views/genres/show-movies.html",
     controller: "MovieGenreController"
-  }).when("/liked", {
-    templateUrl: "app/views/liked/index.html",
-    controller: "LikedController"
+  }).when("/tv", {
+    templateUrl: "app/views/tv/index.html",
+    controller: "TVController"
   }).otherwise("/tvshows", {
     templateUrl: "app/views/tvshows/index.html",
     controller: "TvShowsController"

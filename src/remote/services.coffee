@@ -43,15 +43,15 @@ app.service "Player", [ "$rootScope", "Request", "Playlist", ($rootScope, Reques
 
     playEpisode: (episodeId) ->
       @stop().then =>
-        Playlist.clear().then =>
-          Playlist.addEpisode(episodeId).then =>
-            @open(1, 0)
+        return Request.fetch "Player.Open", emptyHandler, [{episodeid: episodeId}]
 
     playMovie: (movieId) ->
       @stop().then =>
-        Playlist.clear().then =>
-          Playlist.addMovie(movieId).then =>
-            @open(1, 0)  
+        return Request.fetch "Player.Open", emptyHandler, [{movieid: movieId}]
+
+    switchToChannel: (channelId) ->
+      @stop().then =>
+        return Request.fetch "Player.Open", emptyHandler, [{channelid: channelId}]
   service
 ]
 

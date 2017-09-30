@@ -27,7 +27,9 @@ app = angular.module "kodiRemote", [
   "kodiRemote.music.controllers",
   "kodiRemote.music.services",
   "kodiRemote.liked.controllers",
-  "kodiRemote.liked.services"
+  "kodiRemote.liked.services",
+  "kodiRemote.tv.controllers",
+  "kodiRemote.tv.services"
 ]
 
 app.config ($mdThemingProvider) ->
@@ -115,21 +117,21 @@ app.config ($routeProvider, $locationProvider) ->
       templateUrl: "app/views/remote/index.html"
       controller: "RemoteController"
 
-    .when "/music/artists",
-      templateUrl: "app/views/music/artists.html"
-      controller: "ArtistsController"
-    .when "/music/albums",
-      templateUrl: "app/views/music/albums/index.html"
-      controller: "AlbumsController"
-    .when "/music/albums/:id",
-      templateUrl: "app/views/music/albums/show.html"
-      controller: "AlbumController"
-    .when "/music/genres",
-      templateUrl: "app/views/genres/index.html"
-      controller: "MusicGenresController"
-    .when "/music/rating",
-      templateUrl: "app/views/music/rating.html"
-      controller: "MusicRatingController"
+    # .when "/music/artists",
+    #   templateUrl: "app/views/music/artists.html"
+    #   controller: "ArtistsController"
+    # .when "/music/albums",
+    #   templateUrl: "app/views/music/albums/index.html"
+    #   controller: "AlbumsController"
+    # .when "/music/albums/:id",
+    #   templateUrl: "app/views/music/albums/show.html"
+    #   controller: "AlbumController"
+    # .when "/music/genres",
+    #   templateUrl: "app/views/genres/index.html"
+    #   controller: "MusicGenresController"
+    # .when "/music/rating",
+    #   templateUrl: "app/views/music/rating.html"
+    #   controller: "MusicRatingController"
 
     .when "/genres/tvshows/:genre",
       templateUrl: "app/views/genres/show-tvshows.html"
@@ -138,9 +140,13 @@ app.config ($routeProvider, $locationProvider) ->
       templateUrl: "app/views/genres/show-movies.html"
       controller: "MovieGenreController"
 
-    .when "/liked",
-      templateUrl: "app/views/liked/index.html"
-      controller: "LikedController"
+    # .when "/liked",
+    #   templateUrl: "app/views/liked/index.html"
+    #   controller: "LikedController"
+
+    .when "/tv",
+      templateUrl: "app/views/tv/index.html"
+      controller: "TVController"
 
     .otherwise "/tvshows",
       templateUrl: "app/views/tvshows/index.html"

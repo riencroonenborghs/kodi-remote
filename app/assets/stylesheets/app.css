@@ -1,5 +1,6 @@
 html, body { width: 500px; }
 .pointer, a:hover { cursor: pointer; }
+.broadcast-plot { cursor: help; }
 
 .content { padding: 20px; }   
 .error { color: red; }

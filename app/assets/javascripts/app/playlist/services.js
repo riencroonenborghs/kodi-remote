@@ -45,6 +45,15 @@ app.service("Playlist", [
         ];
         return Request.fetch("Playlist.Add", emptyHandler, params);
       },
+      addChannel: function(channelId) {
+        var params;
+        params = [
+          this.playlistId, {
+            channelid: channelId
+          }
+        ];
+        return Request.fetch("Playlist.Add", emptyHandler, params);
+      },
       items: function() {
         var params, properties;
         properties = ["title", "showtitle", "playcount", "season", "episode", "thumbnail", "tvshowid", "uniqueid", "art"];

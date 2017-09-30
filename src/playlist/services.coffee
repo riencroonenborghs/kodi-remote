@@ -26,6 +26,10 @@ app.service "Playlist", [ "Request", (Request) ->
     addMovie: (movieId) -> 
       params = [@playlistId, {movieid: movieId}]
       return Request.fetch "Playlist.Add", emptyHandler, params
+
+    addChannel: (channelId) -> 
+      params = [@playlistId, {channelid: channelId}]
+      return Request.fetch "Playlist.Add", emptyHandler, params
       
     items: ->
       properties = ["title", "showtitle", "playcount", "season", "episode", "thumbnail", "tvshowid", "uniqueid", "art"]
