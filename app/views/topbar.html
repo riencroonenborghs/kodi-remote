@@ -2,7 +2,7 @@
 <md-content id="topbar">
   <md-toolbar>
     <div class="md-toolbar-tools">
-      <img flex="10" src="app/assets/images/app.png" style="height: 32px; padding-right: 5px;" />      
+      <img flex="8" src="app/assets/images/app.png" style="height: 32px; padding-right: 5px;" />      
       
       <div flex id="title" ng-if="!showSearch">
         Kodi Remote
@@ -12,47 +12,47 @@
         <input type="text" id="search-query" ng-model="search.query" ng-model-options="{debounce: 500}" ng-change="performSearch()" />
       </md-input-container>
 
-      <div flex="35" layout="row">
-        <md-button flex class="md-icon-button topbar-button" aria-label="TV Shows" ng-click="visit('/tvshows')">
-          <ng-md-icon icon="tv" size="24" style="fill: white;"></ng-md-icon>
+      <div flex=20 layout="row">
+        <md-button class="md-icon-button topbar-button" aria-label="TV Shows" ng-click="visit('/tvshows')">
+          <ng-md-icon icon="tv" size="20" style="fill: white;"></ng-md-icon>
         </md-button>
-        <md-button flex class="md-icon-button topbar-button" aria-label="Movies" ng-click="visit('/movies')">
-          <ng-md-icon icon="movie" size="24" style="fill: white;"></ng-md-icon>
+        <md-button class="md-icon-button topbar-button" aria-label="Movies" ng-click="visit('/movies')">
+          <ng-md-icon icon="movie" size="20" style="fill: white;"></ng-md-icon>
         </md-button>
-        <md-button flex class="md-icon-button topbar-button" aria-label="Liked" ng-click="visit('/liked')">
-          <ng-md-icon icon="thumb_up" size="24" style="fill: white;"></ng-md-icon>
-        </md-button>        
-        <md-button flex class="md-icon-button topbar-button" aria-label="Music" ng-click="visit('/music/albums')">
-          <ng-md-icon icon="my_library_music" size="24" style="fill: white;"></ng-md-icon>
-        </md-button>
+        <!-- <md-button flex class="md-icon-button topbar-button" aria-label="Liked" ng-click="visit('/liked')">
+          <ng-md-icon icon="thumb_up" size="20" style="fill: white;"></ng-md-icon>
+        </md-button>         -->
+        <!-- <md-button flex class="md-icon-button topbar-button" aria-label="Music" ng-click="visit('/music/albums')">
+          <ng-md-icon icon="my_library_music" size="20" style="fill: white;"></ng-md-icon>
+        </md-button> -->
       </div>
 
       <md-menu md-position-mode="target-right target" >
         <md-button aria-label="Menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
-          <ng-md-icon icon="more_vert" size="24" style="fill: white;"></ng-md-icon>
+          <ng-md-icon icon="more_vert" size="20" style="fill: white;"></ng-md-icon>
         </md-button>
         <md-menu-content width="4">
           <md-menu-item>
             <md-button class="topbar-menu-button" aria-label="Search" ng-click="toggleSearch()">
-              <ng-md-icon icon="search"></ng-md-icon>
+              <ng-md-icon size="20" icon="search"></ng-md-icon>
               Search
             </md-button>
           </md-menu-item>
           <md-menu-item>
             <md-button class="topbar-menu-button" aria-label="Remote Control" ng-click="visit('/remote')">
-              <ng-md-icon icon="settings_remote"></ng-md-icon>                
+              <ng-md-icon size="20" icon="settings_remote"></ng-md-icon>                
               Remote Control
             </md-button>
           </md-menu-item>
-          <md-menu-item>
+          <!-- <md-menu-item>
             <md-button class="topbar-menu-button" aria-label="Settings" ng-click="openPlaylist()">
-              <ng-md-icon icon="list"></ng-md-icon>
+              <ng-md-icon size="20" icon="list"></ng-md-icon>
               Playlist
             </md-button>
-          </md-menu-item>
+          </md-menu-item> -->
           <md-menu-item>
             <md-button class="topbar-menu-button" aria-label="Settings" ng-click="visit('/settings')">
-              <ng-md-icon icon="settings"></ng-md-icon>
+              <ng-md-icon size="20" icon="settings"></ng-md-icon>
               Settings
             </md-button>
           </md-menu-item>          

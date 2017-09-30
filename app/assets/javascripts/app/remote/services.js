@@ -17,7 +17,7 @@ app.service("Player", [
         var params;
         params = {
           playerid: playerId,
-          properties: ["title", "showtitle", "year", "runtime", "season", "episode", "streamdetails"]
+          properties: ["title", "showtitle", "year", "runtime", "season", "episode", "streamdetails", "albumartist", "track", "album", "albumlabel", "duration"]
         };
         return Request.fetch("Player.GetItem", returnHandler, params);
       },

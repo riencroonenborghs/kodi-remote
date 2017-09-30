@@ -13,7 +13,6 @@ app.controller("SettingsController", [
     };
     return $scope.save = function() {
       var data, hash;
-      chrome.storage.local.clear();
       hash = {
         server: $scope.model.server.ipAddress,
         port: $scope.model.server.port,

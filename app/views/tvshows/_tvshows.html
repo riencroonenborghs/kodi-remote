@@ -1,11 +1,11 @@
 <div class="md-padding" layout="column">
   <div ng-repeat="tvShowGroup in tvShowGroups" layout="row">
-    <div flex="50" ng-repeat="tvShow in tvShowGroup" layout="column" class="video pointer" ng-click="visitSeasons(tvShow.tvshowid)">
+    <div flex="50" ng-repeat="tvShow in tvShowGroup" layout="column" layout-align="space-around center" class="video pointer" ng-click="visitSeasons(tvShow.tvshowid)">
 
       <div class="tvshow-wrapper">
-        <md-button class="md-primary md-raised like-button md-icon-button md-fab-mini" ng-click="toggleLikedTvShows(tvShow); $event.stopPropagation();" ng-class="{liked: tvShow.liked}" aria-label="Like it">
+        <!-- <md-button class="md-primary md-raised like-button md-icon-button md-fab-mini" ng-click="toggleLikedTvShows(tvShow); $event.stopPropagation();" ng-class="{liked: tvShow.liked}" aria-label="Like it">
           <ng-md-icon icon="thumb_up" style="fill: white;"></ng-md-icon>
-        </md-button>
+        </md-button> -->
 
         <div class="tvshow-image">
           <img src="{{tvShow.thumbnail.url}}" class="video-avatar" ng-if="tvShow.thumbnail.isSet" />
@@ -14,13 +14,13 @@
       </div>
       
 
-      <h2 class="center">
+      <h2 class="center movie-title">
         <watched-it model="tvShow"></watched-it>
         {{tvShow.title}}
       </h2>
-      <h5 class="center">
+      <h5 class="year-rating">
         {{tvShow.year}}
-        <ng-md-icon icon="star" size="8" style="fill: rgba(33,150,243,0.5);"></ng-md-icon>
+        <ng-md-icon icon="star" size="14" style="fill: rgba(33,150,243,0.5);"></ng-md-icon>
         {{tvShow.rating | number : 1}}
       </h5>
     </div>

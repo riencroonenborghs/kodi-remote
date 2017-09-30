@@ -8,7 +8,9 @@
     <ng-md-icon size="32" class="pointer" icon="home" ng-click="home()"></ng-md-icon>
   </div>
 
-  <div layout="column" flex="66">
+  <div flex=15></div>
+
+  <div layout="column" flex=66>
     <div layout="row">
       <div flex="33" class="cell">
         <ng-md-icon size="48" class="pointer" icon="arrow_back" ng-click="back()"></ng-md-icon>
@@ -24,8 +26,9 @@
       <div flex="33" class="cell">
         <ng-md-icon size="96" class="pointer" icon="chevron_left" ng-click="left()"></ng-md-icon>
       </div>
-      <div flex="33" class="cell">
-        <ng-md-icon size="48" class="pointer" icon="keyboard_return" ng-click="enter()"></ng-md-icon>
+      <div flex="33" class="cell enter">
+        <!-- <ng-md-icon size="48" class="pointer" icon="keyboard_return" ng-click="enter()"></ng-md-icon> -->
+        <md-button ng-click="enter()" class="pointer">OK</md-button>
       </div>
       <div flex="33" class="cell">
         <ng-md-icon size="96" class="pointer" icon="chevron_right" ng-click="right()"></ng-md-icon>

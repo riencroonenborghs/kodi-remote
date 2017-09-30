@@ -18,11 +18,10 @@ app.controller "PlayingNowRemoteController", [ "$scope", "$interval", "Player", 
     available: []
     valid: ["on", "next", "off"]
     current: 0  
-  $scope.switchSubtitle = -> 
-    subtitle = $scope.subtitles.valid[$scope.subtitles.current]
-    Player.setSubtitle $scope.playerId, subtitle
-    $scope.subtitles.current += 1
-    $scope.subtitles.current = 0 if $scope.subtitles.current == $scope.subtitles.valid.length
+  $scope.openMenu = ($mdOpenMenu, ev) -> $mdOpenMenu ev
+  $scope.disableSubtitles = -> Player.setSubtitle $scope.playerId, "off"
+  $scope.enableSubtitles = -> Player.setSubtitle $scope.playerId, "on"
+  $scope.nextSubtitles = -> Player.setSubtitle $scope.playerId, "next"
 
   $scope.audioStreams =
     valid: ["next", "previous"]
@@ -39,7 +38,7 @@ app.controller "PlayingNowRemoteController", [ "$scope", "$interval", "Player", 
   $scope.timeRemaining = 0
   getProperties = ->
     if $scope.playing
-      Player.properties($scope.playerId).then (data) ->              
+      Player.properties($scope.playerId).then (data) ->   
         $scope.percentage             = data.data.percentage
         $scope.timeElapsed            = data.data.time
         $scope.subtitles.available    = data.data.subtitles

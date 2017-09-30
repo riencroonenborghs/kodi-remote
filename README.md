@@ -2,11 +2,11 @@
 
 ## What is it?
 
-kodiRemote is a Chrome extension to browse Kodi and acts as a remote control
+kodiRemote is a Chrome extension to browse Kodi and acts as a remote control.
 
 ## Build
 
-The extension comes pre-built, but you can easily build it yourself. See `build.sh` for instructions.
+`gulp`
 
 ## Install
 

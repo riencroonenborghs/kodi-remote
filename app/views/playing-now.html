@@ -24,9 +24,32 @@
     <div flex></div>
 
     <div>
-      <md-button class="md-icon-button subtitle-button" ng-click="switchSubtitle()" aria-label="Switch subtitle tracks">
-        <ng-md-icon icon="subtitles" style="fill: {{subtitles.enabled ? '#96DFA0' : '#DF9696'}};" size="20"></ng-md-icon>
-      </md-button>
+      <md-menu md-position-mode="target-right target" ng-if="subtitles.available.length > 1">
+        <md-button aria-label="Subtitles" class="md-icon-button" ng-click="openMenu($mdOpenMenu, $event)">
+          <ng-md-icon icon="subtitles" size="20" style="fill: {{subtitles.enabled ? '#96DFA0' : '#DF9696'}};"></ng-md-icon>
+        </md-button>
+        <md-menu-content width="4">
+          <md-menu-item ng-if="!subtitles.enabled">
+            <md-button class="topbar-menu-button" aria-label="Search" ng-click="enableSubtitles()">
+              <ng-md-icon icon="subtitles"></ng-md-icon>
+              Enable Subtitles
+            </md-button>
+          </md-menu-item>
+          <md-menu-item ng-if="subtitles.enabled && subtitles.available.length > 1">
+            <md-button class="topbar-menu-button" aria-label="Search" ng-click="nextSubtitles()">
+              <ng-md-icon icon="subtitles"></ng-md-icon>
+              Next Subtitle
+            </md-button>
+          </md-menu-item>
+          <md-menu-item ng-if="subtitles.enabled">
+            <md-button class="topbar-menu-button" aria-label="Remote Control" ng-click="disableSubtitles()">
+              <ng-md-icon icon="subtitles"></ng-md-icon>                
+              Disable Subtitles
+            </md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+
       <md-button class="md-icon-button audio-button" ng-click="switchAudioStream()" aria-label="Switch audio tracks">
         <ng-md-icon icon="audiotrack" style="fill: white;" size="20"></ng-md-icon>
       </md-button>
@@ -45,7 +68,10 @@
         {{playing.title}}
         <span ng-if="playing.year">({{playing.year}})</span>
       </h1>
-    </div>          
+    </div>      
+    <div ng-if="playing.type == 'song'" class="pointer">
+      <h1>{{playing.label}}</h1>
+    </div>    
   </div>
 
   <div id="progress">
@@ -53,7 +79,7 @@
     <div id="time" layout="row">
       <span id="elapsed" ng-if="timeElapsed">{{timeElapsed.hours | zeroPrepend : 2}}:{{timeElapsed.minutes | zeroPrepend : 2}}:{{timeElapsed.seconds | zeroPrepend : 2}}</span>
       <span flex></span>
-      <span id="remaining" ng-if="timeRemaining">{{timeRemaining.hours | zeroPrepend : 2}}:{{timeRemaining.minutes | zeroPrepend : 2}}:{{timeRemaining.seconds | zeroPrepend : 2}}</span>
+      <span id="remaining" ng-if="timeRemaining.seconds">{{timeRemaining.hours | zeroPrepend : 2}}:{{timeRemaining.minutes | zeroPrepend : 2}}:{{timeRemaining.seconds | zeroPrepend : 2}}</span>
     </div>
   </div>
 

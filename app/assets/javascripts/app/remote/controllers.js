@@ -26,14 +26,17 @@ app.controller("PlayingNowRemoteController", [
       valid: ["on", "next", "off"],
       current: 0
     };
-    $scope.switchSubtitle = function() {
-      var subtitle;
-      subtitle = $scope.subtitles.valid[$scope.subtitles.current];
-      Player.setSubtitle($scope.playerId, subtitle);
-      $scope.subtitles.current += 1;
-      if ($scope.subtitles.current === $scope.subtitles.valid.length) {
-        return $scope.subtitles.current = 0;
-      }
+    $scope.openMenu = function($mdOpenMenu, ev) {
+      return $mdOpenMenu(ev);
+    };
+    $scope.disableSubtitles = function() {
+      return Player.setSubtitle($scope.playerId, "off");
+    };
+    $scope.enableSubtitles = function() {
+      return Player.setSubtitle($scope.playerId, "on");
+    };
+    $scope.nextSubtitles = function() {
+      return Player.setSubtitle($scope.playerId, "next");
     };
     $scope.audioStreams = {
       valid: ["next", "previous"],

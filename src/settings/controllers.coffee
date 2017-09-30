@@ -8,7 +8,7 @@ app.controller "SettingsController", [ "$scope", "$location", ($scope, $location
       requestType: kodiRemote.settings.requestType
 
   $scope.save = ->
-    chrome.storage.local.clear()
+    # chrome.storage.local.clear()
     hash =
       server: $scope.model.server.ipAddress
       port: $scope.model.server.port
